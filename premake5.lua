@@ -1,11 +1,13 @@
-project_name = io.readfile("../project_name");
+require "progcalc"
+
+project_name = io.readfile("./project_name");
 print("Project Name: " .. project_name);
 
-loaded_bin = io.readfile("../loaded_bin");
+loaded_bin = io.readfile("./loaded_bin");
 print("Loaded Binary: " .. loaded_bin);
 
 workspace(project_name)
-	location "../build/"
+	location "./build/"
 	targetdir "%{wks.location}/bin/%{cfg.buildcfg}-%{cfg.platform}/"
 	objdir "%{wks.location}/obj/%{prj.name}/%{cfg.buildcfg}-%{cfg.platform}/"
 	buildlog "%{wks.location}/obj/%{cfg.platform}/%{cfg.buildcfg}-%{prj.name}.log"
@@ -58,22 +60,25 @@ workspace(project_name)
 		kind "consoleapp"
 		warnings "off"
 
-		pchheader "stdafx.cpp"
-		pchsource "../src/game/stdafx.cpp"
-		forceincludes "stdafx.cpp"
+		pchheader "stdafx.hpp"
+		pchsource "./src/game/stdafx.cpp"
+		forceincludes "stdafx.hpp"
 
 		defines {
 			"LOADED_BIN=\"".. loaded_bin .. "\"",
 		}
 
 		includedirs {
-			"../src/loader/",
-			"../src/game/",
+			"./src/loader/",
+			"./src/game/",
+			"./src/memory/",
+			"./src/"
 		}
 
 		files {
-			"../src/loader/**",
-			"../src/game/**",
+			"./src/loader/**",
+			"./src/game/**",
+			"./src/memory/**",
 		}
 
 		linkoptions {

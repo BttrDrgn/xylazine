@@ -5,22 +5,9 @@
 #include <fstream>
 #include <functional>
 
-extern "C"
-{
-#include "loader.h"
+#include "loader.hpp"
 #include "main.hpp"
-}
-
-template <typename T> inline std::function<T> call(std::uintptr_t callback)
-{
-    return std::function<T>(reinterpret_cast<T*>(callback));
-}
-
-inline auto replace(std::uint32_t address, std::uint32_t function) -> void
-{
-    *reinterpret_cast<std::uint8_t*>(address) = 0xE9;
-    *reinterpret_cast<std::uint32_t*>(address + 1) = (function - address - 5);
-}
+#include "memory.hpp"
 
 inline int run(std::uint32_t address)
 {
@@ -179,7 +166,7 @@ void verify_tls()
     }
 }
 
-void load_(const char* bin_name)
+void load(const char* bin_name)
 {
     memset(tls_data, 0, sizeof tls_data);
 
@@ -253,29 +240,6 @@ void load_(const char* bin_name)
     if (has_tls)
     {
         verify_tls();
-    }
-}
-
-int entry_point_(uint32_t address)
-{
-    return call<int()>(address)();
-}
-
-void replace_func_(uint32_t address, uint32_t function)
-{
-    replace(address, function);
-}
-
-extern "C"
-{
-    void load(const char* bin_name)
-    {
-        load_(bin_name);
-    }
-
-    void replace_func(uint32_t address, uint32_t function)
-    {
-        replace_func_(address, function);
     }
 }
 
