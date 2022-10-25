@@ -9,11 +9,6 @@ template <typename T> inline std::function<T> call(std::uintptr_t callback)
     return std::function<T>(reinterpret_cast<T*>(callback));
 }
 
-template <typename T> inline std::function<T> this_call(std::uintptr_t callback)
-{
-    return reinterpret_cast<T(__thiscall*)>(reinterpret_cast<T*>(callback));
-}
-
 template <typename T> inline void set(std::uint32_t address, T value)
 {
 	DWORD protecc;
