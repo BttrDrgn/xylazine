@@ -17,7 +17,7 @@ workspace(project_name)
 	staticruntime "on"
 
 	systemversion "latest"
-	characterset "unicode"
+	characterset "ascii"
 	warnings "extra"
 
 	flags {

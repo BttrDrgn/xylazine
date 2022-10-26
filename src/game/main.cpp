@@ -63,27 +63,21 @@ void ServiceQueuedFiles()
     call<void()>(0x0057E800)();
 }
 
-//THUNK : 0x00579B90
-_DWORD* sub_00579B90(_DWORD* a1, char a2)
-{
-    return call<_DWORD*(_DWORD*, char)>(0x00579B90)(a1, a2);
-}
-
 //DONE : 0x0057CD70
 void InitBigFiles()
 {
-    _DWORD* v0; // eax
+    bFile* v0; // eax
     int v1; // esi
     int v2; // eax
 
     v0 = bOpen("NFSUNDER\\ZDIR.BIN", 1);
     if (v0)
     {
-        v1 = v0[1];
-        if (v0[6] <= 0)
-            sub_00579B90(v0, 1);
+        v1 = *((_DWORD*)v0 + 1);
+        if (*((int*)v0 + 6) <= 0)
+            bClose(v0, 1);
         else
-            v0[5] = 1;
+            *((_DWORD*)v0 + 5) = 1;
         if (v1 != -1)
         {
             v2 = bInitDisculatorDriver("NFSUNDER\\ZDIR.BIN", "NFSUNDER\\ZZDATA");
@@ -374,8 +368,13 @@ void ShutdownTheGame()
 //DONE : 0x00580E00
 void _main(int argc, char* argv[])
 {
+#ifdef MATCHING
     if (PlatformIsProcessRunning("speed2.exe", 1))
     {
+#else
+    if (PlatformIsProcessRunning("BB2.exe", 1))
+    {
+#endif
         _exit(0);
     }
 

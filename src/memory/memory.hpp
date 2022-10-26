@@ -33,6 +33,14 @@ template <typename T> inline void set(std::uint32_t address, T value)
 #define UINT32_PTR (std::uint32_t*)0
 #endif
 
+#ifndef UINT8
+#define UINT8 (std::uint8_t)0
+#endif
+
+#ifndef UINT8_PTR
+#define UINT8_PTR (std::uint8_t*)0
+#endif
+
 #ifndef FLOAT
 #define FLOAT 0.0f
 #endif

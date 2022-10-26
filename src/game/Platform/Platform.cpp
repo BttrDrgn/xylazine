@@ -18,17 +18,103 @@ bool& MemoryInitialized = GET(BOOL, 0x00828510);
 HANDLE& TargetHandle = GET((HANDLE)0, 0x008AD410);
 _DWORD& g_thMain = GET(UINT32, 0x008AD40C);
 bool& ThreadInitalized = GET(BOOL, 0x008AD408);
+char& byte_008AD918 = GET(CHAR, 0x008AD918);
+char& byte_00814580 = GET(CHAR, 0x00814580);
+char& byte_0081437C = GET(CHAR, 0x0081437C);
+_DWORD& dword_008145E0 = GET(UINT32, 0x008145E0);
+auto& funcs_6FBE26 = *reinterpret_cast<int(__cdecl**)(int, int)>(0x0081457C);
+_DWORD& unk_008145C4 = GET(UINT32, 0x008145C4);
+_DWORD& unk_008145DC = GET(UINT32, 0x008145DC);
+std::uint8_t& unk_0081447D = GET(UINT8, 0x0081447D);
 
-//THUNK : 0x005B7B20
+//DONE : 0x005B7B20
 bool PlatformIsProcessRunning(char* exe, int count)
 {
-    return call<bool(char*, int)>(0x005B7B20)(exe, count);
+    int v2;
+    int v3;
+    HANDLE v4;
+    char* v5;
+    char* v6;
+    char* v7;
+    char v8;
+    int v9;
+    char v10;
+    PROCESSENTRY32 pe;
+    char String2[260];
+
+    pe.dwSize = 0;
+    memset(&pe.cntUsage, 0, 0x124u);
+    v2 = 0;
+    v3 = 3;
+    v4 = CreateToolhelp32Snapshot(2u, 0);
+    if (v4 == (HANDLE)-1)
+        return 0;
+    while (1)
+    {
+        pe.dwSize = 296;
+        if (Process32First(v4, &pe))
+        {
+            do
+            {
+                v5 = strrchr(pe.szExeFile, 92);
+                if (v5)
+                {
+                    v6 = v5 + 1;
+                    v7 = (char*)(String2 - v6);
+                    do
+                    {
+                        v8 = *v6;
+                        v6[(_DWORD)v7] = *v6;
+                        ++v6;
+                    } while (v8);
+                }
+                else
+                {
+                    v9 = 0;
+                    do
+                    {
+                        v10 = pe.szExeFile[v9];
+                        String2[v9++] = v10;
+                    } while (v10);
+                }
+                if (!_stricmp(exe, String2))
+                    ++v2;
+            } while (Process32Next(v4, &pe));
+        }
+        CloseHandle(v4);
+        --v3;
+        if (v2 <= count || v3 < 0)
+            break;
+        Sleep(0x3E8u);
+        v2 = 0;
+        v4 = CreateToolhelp32Snapshot(2u, 0);
+        if (v4 == (HANDLE)-1)
+            return 0;
+    }
+    return v2 > count;
+}
+
+//THUNK : 0x00579B90
+void bClose(bFile* file, char a2)
+{
+    call<void(bFile*, char)>(0x00579B90)(file, a2);
 }
 
 //THUNK : 0x0057CAC0
 int bFileExists(char* Str)
 {
-    return call<int(char*)>(0x0057CAC0)(Str);
+    bFile* FileHandle; // eax
+    int v2; // esi
+
+    FileHandle = bOpen(Str, 1);
+    if (!FileHandle)
+        return 0;
+    v2 = *((_DWORD*)FileHandle + 1);
+    if (*((int*)FileHandle + 6) <= 0)
+        bClose(FileHandle, 1);
+    else
+        *((_DWORD*)FileHandle + 5) = 1;
+    return v2 + 1;
 }
 
 //THUNK : 0x00440540
@@ -44,9 +130,9 @@ void bPListInit(int expected_nodes)
 }
 
 //THUNK : 0x0057CA10
-std::uint32_t* bOpen(char* Str, int a2)
+bFile* bOpen(char* Str, int a2)
 {
-    return call<std::uint32_t*(char*, int)>(0x0057CA10)(Str, a2);
+    return call<bFile*(char*, int)>(0x0057CA10)(Str, a2);
 }
 
 //THUNK : 0x0057B640
@@ -55,10 +141,21 @@ int bInitDisculatorDriver(char* Str, char* a2)
     return call<int(char*, char*)>(0x0057B640)(Str, a2);
 }
 
-//THUNK : 0x0043DB50
-std::uint32_t bStringHash(const char* str)
+//DONE : 0x0043DB50
+std::uint32_t bStringHash(const char* string)
 {
-    return call<std::uint32_t(const char*)>(0x0043DB50)(str);
+    const char* v1; // edx
+    uint8_t v2; // cl
+    uint32_t hash; // eax
+
+    v1 = string;
+    v2 = *string;
+    for (hash = -1; v2; ++v1)
+    {
+        hash = v2 + 33 * hash;
+        v2 = v1[1];
+    }
+    return hash;
 }
 
 //THUNK : 0x005BF3D0
@@ -105,6 +202,7 @@ int bInitMemoryPool(int a1, void* a2, int a3, const char* a4)
 }
 
 //The proper method is working, whatever the PC version is doing is wrong and needs to be fixed
+//it looks like the wrapper for InitMemoryPool was inlined or the code was not updated when it was made
 //TODO : 0x00440360
 void bMemoryInit()
 {
@@ -137,10 +235,58 @@ int bStrCmp(char* str1, char* str2)
     return v4 - v5;
 }
 
-//THUNK : 0x006FBE2C
+//THUNK : 0x006FBD9E
+void sub_006FBD9E(int a1, char a2)
+{
+    call<void(int, char)>(0x006FBD9E)(a1, a2);
+}
+
+//THUNK : 0x006FBD0C
+void sub_006FBD0C(int a1, char a2)
+{
+    call<void(int, char)>(0x006FBD0C)(a1, a2);
+}
+
+//DONE : 0x006FBE2C
 void sub_006FBE2C()
 {
-    call<void()>(0x006FBE2C)();
+    char* v0;
+    char* v1;
+    _DWORD* v2;
+    _BYTE* v3;
+
+    if (!byte_008AD918)
+    {
+        byte_008AD918 = 1;
+        v0 = &byte_00814580;
+        do
+        {
+            *v0 = 0;
+            v0 += 12;
+        } while ((int)v0 < (int)&dword_008145E0);
+        v1 = &byte_0081437C;
+        do
+        {
+            *v1 = 0;
+            v1 += 8;
+        } while ((int)v1 < (int)&funcs_6FBE26);
+        v2 = &unk_008145C4;
+        do
+        {
+            *(v2 - 1) = 0;
+            *v2 = 0;
+            v2 += 3;
+        } while ((int)v2 < (int)&unk_008145DC);
+        v3 = &unk_0081447D;
+        do
+        {
+            *(_DWORD*)(v3 - 5) = 0;
+            *v3 = 0;
+            v3 += 8;
+        } while ((int)v3 < 8471933);
+        sub_006FBD9E(2, 1);
+        sub_006FBD0C(0, 1);
+    }
 }
 
 //DONE : 0x006F57EA
