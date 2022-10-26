@@ -51,7 +51,7 @@ workspace(project_name)
 	filter "Debug"
 		defines "DEBUG"
 		optimize "debug"
-		runtime "debug"
+		runtime "release"
 		symbols "on"
 
 	project(project_name)

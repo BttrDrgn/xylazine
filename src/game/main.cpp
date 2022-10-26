@@ -5,6 +5,12 @@
 #include "RaceStarter/RaceStarter.hpp"
 #include "GameFlowManager/GameFlowManager.hpp"
 #include "ReplayManager/ReplayManager.hpp"
+#include "SlotPool/SlotPool.hpp"
+#include "RealFile/RealFile.hpp"
+#include "DragCamera/DragCamera.hpp"
+#include "cFrontendDatabase/cFrontendDatabase.hpp"
+#include "eModel/eModel.hpp"
+#include "EAXSound/EAXSound.hpp"
 
 int& GlobalMemoryFile = *reinterpret_cast<int*>(0x00864F98);
 int& QueuedFileNumReadsInProgress = *reinterpret_cast<int*>(0x008650F4);
@@ -13,11 +19,36 @@ int& unused_init_0 = *reinterpret_cast<int*>(0x0086534C);
 int& unused_init_1 = *reinterpret_cast<int*>(0x00865354);
 _DWORD& dword_008709F8 = *reinterpret_cast<_DWORD*>(0x008709F8);
 _DWORD& dword_0089CF48 = *reinterpret_cast<_DWORD*>(0x0089CF48);
+char*& dword_00865128 = *reinterpret_cast<char**>(0x00865128);
+bool& WindowedMode = *reinterpret_cast<bool*>(0x0087098C);
+int& CarPartModelPool = *reinterpret_cast<int*>(0x008A1BE4);
+int& AcidActiveGroupSlotPool = *reinterpret_cast<int*>(0x0082DA3C);
+int& AcidEmitterSlotPool = *reinterpret_cast<int*>(0x0082DA40);
+SlotPool*& SpaceNodeSlotPool = GET((SlotPool*)0, 0x008A1BCC);
+SlotPool*& AnimCtrlSlotPool = GET((SlotPool*)0, 0x00827B54);
+bool& AnimBankSlotPoolInitialized = GET(BOOL, 0x00827B50);
+SlotPool*& AnimBankSlotPool = GET((SlotPool*)0, 0x00827B4C);
+bool& AnimPartSlotPoolInitialized = GET(BOOL, 0x00827B68);
+SlotPool*& AnimPartSlotPool = GET((SlotPool*)0, 0x00827B64);
+bool& AnimSkelSlotPoolInitialized = GET(BOOL, 0x00827B60);
+SlotPool*& AnimSkelSlotPool = GET((SlotPool*)0, 0x00827B5C);
+SlotPool*& ResourceFileSlotPool = GET((SlotPool*)0, 0x00864F78);
+SlotPool*& EventSlotPool = GET((SlotPool*)0, 0x00883E38);
+SlotPool*& EventHandlerSlotPool = GET((SlotPool*)0, 0x00883E3C);
+SlotPool*& QueuedFileSlotPool = GET((SlotPool*)0, 0x008650F0);
 
 //DONE : 0x004022C0
-void TickLoadingScreen(void* unused)
+void nullsub(void* unused)
 {
 
+}
+
+//While this can be macroed or just a normal call, I have opted to call the game's malloc
+//incase for whatever reason CRT mismatch causes issues
+//THUNK : 0x0075C6C8
+void* j__malloc(size_t size)
+{
+    return call<void*(size_t)>(0x00575620)(size);
 }
 
 //THUNK : 0x005811C0
@@ -26,22 +57,43 @@ void MainLoop()
     call<void()>(0x005811C0)();
 }
 
-//THUNK
+//THUNK : 0x0057E800
 void ServiceQueuedFiles()
 {
     call<void()>(0x0057E800)();
 }
 
-//THUNK : 0x00452EC0
-void sub_00452EC0()
+//THUNK : 0x00579B90
+_DWORD* sub_00579B90(_DWORD* a1, char a2)
 {
-    call<void()>(0x00452EC0)();
+    return call<_DWORD*(_DWORD*, char)>(0x00579B90)(a1, a2);
 }
 
-//THUNK : 0x0057CD70
+//DONE : 0x0057CD70
 void InitBigFiles()
 {
-    call<void()>(0x0057CD70)();
+    _DWORD* v0; // eax
+    int v1; // esi
+    int v2; // eax
+
+    v0 = bOpen("NFSUNDER\\ZDIR.BIN", 1);
+    if (v0)
+    {
+        v1 = v0[1];
+        if (v0[6] <= 0)
+            sub_00579B90(v0, 1);
+        else
+            v0[5] = 1;
+        if (v1 != -1)
+        {
+            v2 = bInitDisculatorDriver("NFSUNDER\\ZDIR.BIN", "NFSUNDER\\ZZDATA");
+            if (v2)
+            {
+                RealFile::AddDevice(v2);
+                RealFile::AddSearchLocation("discu:", 1);
+            }
+        }
+    }
 }
 
 //THUNK : 0x005B7EA0
@@ -62,16 +114,17 @@ void SeedRandomNumber()
     call<void()>(0x0057ECB0)();
 }
 
-//THUNK : 0x005736D0
+//DONE : 0x005736D0
 void InitQueuedFiles()
 {
-    call<void()>(0x005736D0)();
+    QueuedFileSlotPool = bNewSlotPool(124, 100, "QueuedFileSlotPool", 0);
 }
 
-//THUNK : 0x005D7AF0
+//DONE : 0x005D7AF0
 void emEventManagerInit()
 {
-    call<void()>(0x005D7AF0)();
+    EventSlotPool = bNewSlotPool(36, 60, "EventSlotPool", 0);
+    EventHandlerSlotPool = bNewSlotPool(24, 20, "EventHandlerSlotPool", 0);
 }
 
 //THUNK : 0x005EFE30
@@ -92,16 +145,19 @@ void eInitEngine()
     call<void()>(0x0048CD60)();
 }
 
-//THUNK : 0x004886E0
+//DONE : 0x004886E0
 void afxInit()
 {
-    call<void()>(0x004886E0)();
+    AcidActiveGroupSlotPool = (int)bNewSlotPool(44, 400, "AcidActiveGroupSlotPool", 0);
+    AcidEmitterSlotPool = (int)bNewSlotPool(208, 250, "AcidEmitterSlotPool", 0);
+    *(_DWORD*)(AcidActiveGroupSlotPool + 20) &= 0xFFFFFFFE;
+    *(_DWORD*)(AcidActiveGroupSlotPool + 20) &= 0xFFFFFFFD;
 }
 
-//THUNK : 0x00570F80
+//DONE : 0x00570F80
 void InitResourceLoader()
 {
-    call<void()>(0x00570F80)();
+    ResourceFileSlotPool = bNewSlotPool(240, 80, "ResourceFileSlotPool", 0);
 }
 
 //THUNK : 0x00579550
@@ -140,28 +196,36 @@ void LoadGlobalChunks()
     call<void()>(0x0057FB40)();
 }
 
-//THUNK : 0x0x00486910
+//DONE : 0x00486910
 void InitializeSoundLoad()
 {
-    call<void()>(0x00486910)();
+    EAXSound::InitializeFromAemsManager(g_pEAXSound);
 }
 
-//THUNK : 0x0060C680
-void InitCarInfo()
+//DONE : 0x0060C680
+void InitCarRender()
 {
-    call<void()>(0x0060C680)();
+    CarPartModelPool = (int)bNewSlotPool(24, 1024, "CarPartModelPool", 0);
 }
 
-//THUNK : 0x0060C820
+//TODO : 0x0060C820
 void InitStandardModels()
 {
-    call<void()>(0x0060C820)();
+#if 0
+    unsigned int v0;
+
+    eModel::Init(&StandardCubeModel, 0xC7395A8);
+    v0 = bStringHash("DEBUG_LOD_CUBE");
+    eModel::Init(&StandardDebugModel, v0);
+#else
+    call<void()>(0x0060C820);
+#endif
 }
 
-//THUNK : 0x00534840
+//DONE : 0x00534840
 void InitFrontendDatabase()
 {
-    call<void()>(0x00534840)();
+    cFrontendDatabase::Default(&FEDatabase);
 }
 
 //THUNK : 0x0061C700
@@ -170,40 +234,67 @@ void InitCarLoader()
     call<void()>(0x0061C700)();
 }
 
-//THUNK : 0x0057B870
+//DONE : 0x0057B870
 void InitStomper()
 {
-    call<void()>(0x0057B870)();
+    char* v0;
+    char* v1;
+
+    v0 = (char*)malloc(0xCu);
+    v1 = v0;
+    if (v0)
+    {
+        *v0 = 1;
+        *(char**)((_DWORD*)v0 + 1) = (char*)malloc(0x400u);
+        *((_DWORD*)v1 + 2) = 0;
+        dword_00865128 = v1;
+    }
+    else
+    {
+        dword_00865128 = 0;
+    }
 }
 
-//THUNK : 0x0060BC70
+//DONE : 0x0060BC70
 void InitSpaceNodes()
 {
-    call<void()>(0x0060BC70)();
+    SpaceNodeSlotPool = bNewSlotPool(240, 224, "SpaceNodeSlotPool", 0);
 }
 
-//THUNK : 0x004313B0
+//DONE : 0x004313B0
 void InitAnimCtrls()
 {
-    call<void()>(0x004313B0)();
+    AnimCtrlSlotPool = bNewSlotPool(128, 64, "AnimCtrlSlotPool", 0);
 }
 
-//THUNK : 0x00431380
+//DONE : 0x00431380
 void InitAnimBankSlotPool()
 {
-    call<void()>(0x00431380)();
+    if (!AnimBankSlotPoolInitialized)
+    {
+        AnimBankSlotPool = bNewSlotPool(60, 81, "Anim_CNFSAnimBank_SlotPool", 0);
+        AnimBankSlotPoolInitialized = 1;
+    }
 }
 
-//THUNK : 0x0x00431580
+//DONE : 0x00431580
 void InitAnimPartSlotPool()
 {
-    call<void()>(0x00431580)();
+    if (!AnimPartSlotPoolInitialized)
+    {
+        AnimPartSlotPool = bNewSlotPool(20, 8, "Anim_CAnimPart_SlotPool", 0);
+        AnimPartSlotPoolInitialized = 1;
+    }
 }
 
-//THUNK : 0x0x004314E0
+//DONE : 0x004314E0
 void InitAnimSkelSlotPool()
 {
-    call<void()>(0x004314E0)();
+    if (!AnimSkelSlotPoolInitialized)
+    {
+        AnimSkelSlotPool = bNewSlotPool(40, 8, "Anim_CAnimSkeleton_SlotPool", 0);
+        AnimSkelSlotPoolInitialized = 1;
+    }
 }
 
 //DONE : 0x0057ED10
@@ -216,11 +307,15 @@ void InitializeEverything(int argc, char* argv[])
     _DWORD* v6 = 0; // ecx
     _DWORD* v7 = 0; // eax
 
+#if !defined(MATCHING) || DEBUG
+    WindowedMode = true;
+#endif
+
     InitPlatform();
     InitBigFiles();
     sub_005B7EA0(&dword_008709F8, argc, argv);
     bPListInit(0x1400);
-    TickLoadingScreen(v2);
+    nullsub(v2);
     InitJoylog();
     SeedRandomNumber();
     InitQueuedFiles();
@@ -228,7 +323,7 @@ void InitializeEverything(int argc, char* argv[])
     InitOnline(&dword_0089CF48, argc, argv);
     eMathInit();
     eInitEngine();
-    TickLoadingScreen(v3);
+    nullsub(v3);
     afxInit();
     InitResourceLoader();
     InitJoystick();
@@ -238,8 +333,8 @@ void InitializeEverything(int argc, char* argv[])
     InitLocalization();
     LoadGlobalChunks();
     InitializeSoundLoad();
-    TickLoadingScreen(v4);
-    InitCarInfo();
+    nullsub(v4);
+    InitCarRender();
     InitStandardModels();
     InitFrontendDatabase();
     InitCarLoader();
@@ -249,7 +344,7 @@ void InitializeEverything(int argc, char* argv[])
     InitAnimBankSlotPool();
     InitAnimPartSlotPool();
     InitAnimSkelSlotPool();
-    sub_00452EC0();
+    DragCamera::Init();
     unused_init_0 = 1;
     unused_init_1 = 0;
 
