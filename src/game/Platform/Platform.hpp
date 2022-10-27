@@ -6,6 +6,13 @@ extern char& a_char;
 
 struct bFile;
 
+struct bList
+{
+	void* next;
+	void* prev;
+};
+
+
 int bFileExists(char* Str);
 void bFree(char* a1);
 void bPListInit(int expected_nodes);
@@ -15,9 +22,11 @@ bFile* bOpen(char* Str, int a2);
 int bInitDisculatorDriver(char* Str, char* a2);
 std::uint32_t bStringHash(const char* string);
 void bClose(bFile* file, char a2);
+LONGLONG bGetTicker();
 
 void InitPlatform();
 bool PlatformCDCheckBinDat(bool a1);
 bool PlatformCDCheck();
 bool PlatformDRM();
 bool PlatformIsProcessRunning(char* exe, int count);
+void PlatformPresent();

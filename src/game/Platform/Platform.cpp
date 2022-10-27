@@ -100,7 +100,7 @@ void bClose(bFile* file, char a2)
     call<void(bFile*, char)>(0x00579B90)(file, a2);
 }
 
-//THUNK : 0x0057CAC0
+//DONE : 0x0057CAC0
 int bFileExists(char* Str)
 {
     bFile* FileHandle; // eax
@@ -156,6 +156,15 @@ std::uint32_t bStringHash(const char* string)
         v2 = v1[1];
     }
     return hash;
+}
+
+//DONE : 0x0043BDF0
+LONGLONG bGetTicker()
+{
+    LARGE_INTEGER PerformanceCount; // [esp+0h] [ebp-8h] BYREF
+
+    QueryPerformanceCounter(&PerformanceCount);
+    return PerformanceCount.QuadPart >> dword_008284E4;
 }
 
 //THUNK : 0x005BF3D0
@@ -396,4 +405,10 @@ bool PlatformDRM()
 #else
     return true;
 #endif
+}
+
+//THUNK : 0x005CEC80
+void PlatformPresent()
+{
+    call<void()>(0x005CEC80)();
 }

@@ -19,6 +19,7 @@ workspace(project_name)
 	systemversion "latest"
 	characterset "ascii"
 	warnings "extra"
+	exceptionhandling "off"
 
 	flags {
 		"noincrementallink",

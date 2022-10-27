@@ -246,6 +246,15 @@ void load(const char* bin_name)
 //Our entry point is here so the loader can do its thing then load our new "main" (init)
 int __cdecl main(int argc, char* argv[])
 {
+#ifdef DEBUG
+    std::ios_base::sync_with_stdio(false);
+    AllocConsole();
+    SetConsoleTitleA("Console");
+
+    std::freopen("CONOUT$", "w", stdout);
+    std::freopen("CONIN$", "r", stdin);
+#endif
+
     load(LOADED_BIN);           //Load the main binary into memory
     init(argc, argv);           //Load the edited-memory code
     return run(entry_point);    //Launch with memory edits
