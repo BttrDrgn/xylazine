@@ -15,6 +15,7 @@
 #include "RaceCoordinator/RaceCoordinator.hpp"
 #include "TrackStreamer/TrackStreamer.hpp"
 #include "FEPackageManager/FEPackageManager.hpp"
+#include "ReplayMenu/ReplayMenu.hpp"
 
 int& GlobalMemoryFile = *reinterpret_cast<int*>(0x00864F98);
 int& QueuedFileNumReadsInProgress = *reinterpret_cast<int*>(0x008650F4);
@@ -55,11 +56,16 @@ bool& SkipMovies = GET(BOOL, 0x008650A8);
 int& dword_00869084 = GET(INT, 0x00869084);
 int& dword_008669F4 = GET(INT, 0x008669F4);
 int& dword_00866A14 = GET(INT, 0x00866A14);
+int& dword_00872ED8 = GET(INT, 0x00872ED8);
 int& dword_00865488 = GET(INT, 0x00865488);
+int& dword_00872F0C = GET(INT, 0x00872F0C);
 int& dword_0086511C = GET(INT, 0x0086511C);
 _DWORD& dword_00828770 = GET(UINT32, 0x00828770);
 int& dword_00865120 = GET(INT, 0x00865120);
 int& dword_00865118 = GET(INT, 0x00865118);
+int& dword_008650CC = GET(INT, 0x008650CC);
+int& dword_00872EE0 = GET(INT, 0x00872EE0);
+int& dword_008650DC = GET(INT, 0x008650DC);
 float& flt_0078435C = GET(FLOAT, 0x0078435C);
 bool& byte_007FBE78 = GET(BOOL, 0x007FBE78);
 auto& unused_MainLoop_func = *reinterpret_cast<int(**)()>(0x00865490);
@@ -84,22 +90,80 @@ void GenerateJoyEvents()
     call<void()>(0x005809C0)();
 }
 
-//THUNK : 0x005BCFA0
+//DONE : 0x005BCFA0
 void sub_005BCFA0()
 {
-    call<void()>(0x005BCFA0)();
+    int v0; // edx
+
+    v0 = dword_00872EE0;
+    memset(&dword_00872ED8, 0, 0x3Cu);
+    dword_00872F0C = v0;
 }
 
-//THUNK : 0x0057D860
+//THUNK : 0x006F876C
+void sub_006F876C(int a1, int a2, int a3, int a4, int a5)
+{
+    call<void(int, int, int, int, int)>(0x006F876C)(a1, a2, a3, a4, a5);
+}
+
+//DONE : 0x0057CB70
+void sub_0057CB70(char* Str, int a2, int a3)
+{
+    bFile* v3; // eax
+    bFile* v4; // esi
+    int v5; // ecx
+    int v6; // edx
+
+    v3 = bOpen(Str, 2);
+    v4 = v3;
+    if (v3)
+    {
+        sub_006F876C(*((_DWORD*)v3 + 3), *((_DWORD*)v3 + 2), a2, a3, 100);
+        v5 = *((_DWORD*)v4 + 1);
+        v6 = a3 + *((_DWORD*)v4 + 2);
+        *((_DWORD*)v4 + 2) = v6;
+        if (v6 > v5)
+            *((_DWORD*)v4 + 1) = v6;
+        if (*((int*)v4 + 6) <= 0)
+            bClose(v4, 1);
+        else
+            *((_DWORD*)v4 + 5) = 1;
+    }
+}
+
+//DONE : 0x0057D860
 void sub_0057D860(void* a1)
 {
-    call<void(void*)>(0x0057D860)(a1);
+    _DWORD* v1; // edi
+    int v2; // ecx
+    _DWORD* v3; // esi
+
+    if (dword_008650CC)
+    {
+        if (dword_008650DC)
+        {
+            v1 = (_DWORD*)(dword_008650DC + 12);
+            v2 = *(_DWORD*)dword_008650DC - *(_DWORD*)(dword_008650DC + 12);
+            v3 = (_DWORD*)dword_008650DC;
+            if (v2 > 0)
+            {
+                sub_0057CB70((char*)(dword_008650DC + 36), dword_008650DC + 296, v2);
+                *v1 = *v3;
+                v3[1] = 0;
+            }
+        }
+        dword_008650CC = 0;
+        nullsub(a1);
+    }
 }
 
-//THUNK : 0x004C1210
+//DONE : 0x004C1210
 void UpdateReplayUserInterface()
 {
-    call<void()>(0x004C1210)();
+    if (gReplayMenu)
+    {
+        ReplayMenu::ServiceLoading(gReplayMenu);
+    }
 }
 
 //THUNK : 0x0057EE00
@@ -114,10 +178,15 @@ void sub_005EB390()
     call<void()>(0x005EB390)();
 }
 
-//THUNK : 0x0043BE20
+//DONE : 0x0043BE20
 float sub_0043BE20(int a1, int a2)
 {
-    return call<float(int, int)>(0x0043BE20)(a1, a2);
+    int a2a; // [esp+8h] [ebp+8h]
+
+    a2a = a2 - a1;
+    if (a2a < 0)
+        a2a = 0;
+    return (double)(1 << dword_008284E4) * (double)a2a * flt_00828028;
 }
 
 //THUNK : 0x0057EAD0
@@ -132,10 +201,10 @@ void sub_00456940(std::uint32_t* a1)
     reinterpret_cast<void(__thiscall*)(std::uint32_t*)>(0x00456940)(a1);
 }
 
-//THUNK : 0x005F00F0
+//DONE : 0x005F00F0
 bool sub_005F00F0(_DWORD* a1)
 {
-    return reinterpret_cast<bool(__thiscall*)(_DWORD*)>(0x005F00F0)(a1);
+    return *((_BYTE*)a1 + 33) || dword_008669F4 > 0 || dword_00866A14 > 0;
 }
 
 //THUNK : 0x005F1390

@@ -2,6 +2,8 @@
 
 extern int& PlatformSkipDRM;
 extern int& dword_00800B98;
+extern int& dword_008284E4;
+extern float& flt_00828028;
 extern char& a_char;
 
 struct bFile;
@@ -23,6 +25,7 @@ int bInitDisculatorDriver(char* Str, char* a2);
 std::uint32_t bStringHash(const char* string);
 void bClose(bFile* file, char a2);
 LONGLONG bGetTicker();
+double GetDebugRealTime();
 
 void InitPlatform();
 bool PlatformCDCheckBinDat(bool a1);

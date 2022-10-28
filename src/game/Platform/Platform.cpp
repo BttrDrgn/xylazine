@@ -167,6 +167,12 @@ LONGLONG bGetTicker()
     return PerformanceCount.QuadPart >> dword_008284E4;
 }
 
+//THUNK : 0x0057A1A0
+double GetDebugRealTime()
+{
+    return call<double()>(0x0057A1A0)();
+}
+
 //THUNK : 0x005BF3D0
 bool PlatformCDCheckBinDat(bool a1)
 {
