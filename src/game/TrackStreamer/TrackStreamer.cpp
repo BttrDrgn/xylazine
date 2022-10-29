@@ -1,5 +1,6 @@
 #include "TrackStreamer.hpp"
 #include "Platform/Platform.hpp"
+#include "RaceCoordinator/RaceCoordinator.hpp"
 #include "memory.hpp"
 
 extern std::uint32_t& TheTrackStreamer = *reinterpret_cast<std::uint32_t*>(0x0088EB00);

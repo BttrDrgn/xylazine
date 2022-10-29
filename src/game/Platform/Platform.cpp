@@ -237,6 +237,7 @@ void bMemoryInit()
 //DONE : 0x0043DC30
 int bStrCmp(char* str1, char* str2)
 {
+#if 0
     char v4;
     char v5;
 
@@ -248,6 +249,12 @@ int bStrCmp(char* str1, char* str2)
         ++str2;
     } while (v4 && v5 && v4 == v5);
     return v4 - v5;
+#else
+    while (*str1 == *str2++)
+        if (*str1++ == 0)
+            return (0);
+    return (*(unsigned char*)str1 - *(unsigned char*)--str2);
+#endif
 }
 
 //THUNK : 0x006FBD9E
