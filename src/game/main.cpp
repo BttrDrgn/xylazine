@@ -16,53 +16,72 @@
 #include "TrackStreamer/TrackStreamer.hpp"
 #include "FEPackageManager/FEPackageManager.hpp"
 #include "ReplayMenu/ReplayMenu.hpp"
+#include "DemoDiscManager/DemoDiscManager.hpp"
+#include "OnlineManager/OnlineManager.hpp"
 
-int& GlobalMemoryFile = *reinterpret_cast<int*>(0x00864F98);
-int& QueuedFileNumReadsInProgress = *reinterpret_cast<int*>(0x008650F4);
-int& WaitingQueuedFileList = *reinterpret_cast<int*>(0x00865220);
-int& unused_init_0 = *reinterpret_cast<int*>(0x0086534C);
-int& unused_init_1 = *reinterpret_cast<int*>(0x00865354);
-_DWORD& dword_008709F8 = *reinterpret_cast<_DWORD*>(0x008709F8);
-_DWORD& dword_0089CF48 = *reinterpret_cast<_DWORD*>(0x0089CF48);
-char*& dword_00865128 = *reinterpret_cast<char**>(0x00865128);
-bool& WindowedMode = *reinterpret_cast<bool*>(0x0087098C);
-int& CarPartModelPool = *reinterpret_cast<int*>(0x008A1BE4);
-SlotPool*& AcidActiveGroupSlotPool = GET((SlotPool*)0, 0x0082DA3C);
-SlotPool*& AcidEmitterSlotPool = GET((SlotPool*)0, 0x0082DA40);
-SlotPool*& SpaceNodeSlotPool = GET((SlotPool*)0, 0x008A1BCC);
-SlotPool*& AnimCtrlSlotPool = GET((SlotPool*)0, 0x00827B54);
-bool& AnimBankSlotPoolInitialized = GET(BOOL, 0x00827B50);
-SlotPool*& AnimBankSlotPool = GET((SlotPool*)0, 0x00827B4C);
-bool& AnimPartSlotPoolInitialized = GET(BOOL, 0x00827B68);
-SlotPool*& AnimPartSlotPool = GET((SlotPool*)0, 0x00827B64);
-bool& AnimSkelSlotPoolInitialized = GET(BOOL, 0x00827B60);
-SlotPool*& AnimSkelSlotPool = GET((SlotPool*)0, 0x00827B5C);
-SlotPool*& ResourceFileSlotPool = GET((SlotPool*)0, 0x00864F78);
-SlotPool*& EventSlotPool = GET((SlotPool*)0, 0x00883E38);
-SlotPool*& EventHandlerSlotPool = GET((SlotPool*)0, 0x00883E3C);
-SlotPool*& QueuedFileSlotPool = GET((SlotPool*)0, 0x008650F0);
-bool& ExitTheGameFlag = GET(BOOL, 0x00864F4C);
-int& MainLoopTimingStartTime = GET(INT, 0x00864F44);
-int& FrameCounter = GET(INT, 0x00865138);
-int& TweakerStepWorld = GET(INT, 0x00890088);
-int& last_frame_count_8872 = GET(INT, 0x00866640);
-int& NumTextureCreatedThisFrame = GET(INT, 0x00864F50);
-int& MainLoopTimingLimitFrameRate = GET(INT, 0x00864F48);
-bool& SkipMovies = GET(BOOL, 0x008650A8);
-int& dword_00869084 = GET(INT, 0x00869084);
-int& dword_00872ED8 = GET(INT, 0x00872ED8);
-int& dword_00865488 = GET(INT, 0x00865488);
-int& dword_00872F0C = GET(INT, 0x00872F0C);
-int& dword_0086511C = GET(INT, 0x0086511C);
-_DWORD& dword_00828770 = GET(UINT32, 0x00828770);
-int& dword_00865120 = GET(INT, 0x00865120);
-int& dword_00865118 = GET(INT, 0x00865118);
-int& dword_008650CC = GET(INT, 0x008650CC);
-int& dword_00872EE0 = GET(INT, 0x00872EE0);
-int& dword_008650DC = GET(INT, 0x008650DC);
-float& flt_0078435C = GET(FLOAT, 0x0078435C);
-bool& byte_007FBE78 = GET(BOOL, 0x007FBE78);
+auto& GlobalMemoryFile = *reinterpret_cast<int*>(0x00864F98);
+auto& QueuedFileNumReadsInProgress = *reinterpret_cast<int*>(0x008650F4);
+auto& WaitingQueuedFileList = *reinterpret_cast<int*>(0x00865220);
+auto& unused_init_0 = *reinterpret_cast<int*>(0x0086534C);
+auto& unused_init_1 = *reinterpret_cast<int*>(0x00865354);
+auto& dword_008709F8 = *reinterpret_cast<_DWORD*>(0x008709F8);
+auto& dword_0089CF48 = *reinterpret_cast<_DWORD*>(0x0089CF48);
+auto*& dword_00865128 = *reinterpret_cast<char**>(0x00865128);
+auto& WindowedMode = *reinterpret_cast<bool*>(0x0087098C);
+auto& CarPartModelPool = *reinterpret_cast<int*>(0x008A1BE4);
+auto*& AcidActiveGroupSlotPool = GET((SlotPool*)0, 0x0082DA3C);
+auto*& AcidEmitterSlotPool = GET((SlotPool*)0, 0x0082DA40);
+auto*& SpaceNodeSlotPool = GET((SlotPool*)0, 0x008A1BCC);
+auto*& AnimCtrlSlotPool = GET((SlotPool*)0, 0x00827B54);
+auto& AnimBankSlotPoolInitialized = GET(BOOL, 0x00827B50);
+auto*& AnimBankSlotPool = GET((SlotPool*)0, 0x00827B4C);
+auto& AnimPartSlotPoolInitialized = GET(BOOL, 0x00827B68);
+auto*& AnimPartSlotPool = GET((SlotPool*)0, 0x00827B64);
+auto& AnimSkelSlotPoolInitialized = GET(BOOL, 0x00827B60);
+auto*& AnimSkelSlotPool = GET((SlotPool*)0, 0x00827B5C);
+auto*& ResourceFileSlotPool = GET((SlotPool*)0, 0x00864F78);
+auto*& EventSlotPool = GET((SlotPool*)0, 0x00883E38);
+auto*& EventHandlerSlotPool = GET((SlotPool*)0, 0x00883E3C);
+auto*& QueuedFileSlotPool = GET((SlotPool*)0, 0x008650F0);
+auto& ExitTheGameFlag = GET(BOOL, 0x00864F4C);
+auto& MainLoopTimingStartTime = GET(INT, 0x00864F44);
+auto& FrameCounter = GET(INT, 0x00865138);
+auto& TweakerStepWorld = GET(INT, 0x00890088);
+auto& last_frame_count_8872 = GET(INT, 0x00866640);
+auto& NumTextureCreatedThisFrame = GET(INT, 0x00864F50);
+auto& MainLoopTimingLimitFrameRate = GET(INT, 0x00864F48);
+auto& SkipMovies = GET(BOOL, 0x008650A8);
+auto& dword_00869084 = GET(INT, 0x00869084);
+auto& dword_00872ED8 = GET(INT, 0x00872ED8);
+auto& dword_00865488 = GET(INT, 0x00865488);
+auto& dword_00872F0C = GET(INT, 0x00872F0C);
+auto& dword_0086511C = GET(INT, 0x0086511C);
+auto& dword_00828770 = GET(UINT32, 0x00828770);
+auto& dword_00865120 = GET(INT, 0x00865120);
+auto& dword_00865118 = GET(INT, 0x00865118);
+auto& dword_008650CC = GET(INT, 0x008650CC);
+auto& dword_00872EE0 = GET(INT, 0x00872EE0);
+auto& dword_008650DC = GET(INT, 0x008650DC);
+auto& flt_0078435C = GET(FLOAT, 0x0078435C);
+auto& byte_007FBE78 = GET(BOOL, 0x007FBE78);
 auto& unused_MainLoop_func = *reinterpret_cast<int(**)()>(0x00865490);
+auto& eMathZeroMatrix = *reinterpret_cast<char**>(0x00876480);
+auto& eMathIdentityMatrix = *reinterpret_cast<float*>(0x00872E90);
+auto& dword_872E94 = *reinterpret_cast<int*>(0x00872E94);
+auto& dword_872E98 = *reinterpret_cast<int*>(0x00872E98);
+auto& dword_872E9C = *reinterpret_cast<int*>(0x00872E9C);
+auto& dword_872EA0 = *reinterpret_cast<int*>(0x00872EA0);
+auto& dword_872EA4 = *reinterpret_cast<float*>(0x00872EA4);
+auto& dword_872EA8 = *reinterpret_cast<int*>(0x00872EA8);
+auto& dword_872EAC = *reinterpret_cast<int*>(0x00872EAC);
+auto& dword_872EB0 = *reinterpret_cast<int*>(0x00872EB0);
+auto& dword_872EB4 = *reinterpret_cast<int*>(0x00872EB4);
+auto& dword_872EB8 = *reinterpret_cast<float*>(0x00872EB8);
+auto& dword_872EBC = *reinterpret_cast<int*>(0x00872EBC);
+auto& dword_872EC0 = *reinterpret_cast<int*>(0x00872EC0);
+auto& dword_872EC4 = *reinterpret_cast<int*>(0x00872EC4);
+auto& dword_872EC8 = *reinterpret_cast<int*>(0x00872EC8);
+auto& dword_872ECC = *reinterpret_cast<float*>(0x00872ECC);
 
 //DONE : 0x004022C0
 void nullsub(void* unused)
@@ -156,7 +175,7 @@ void UpdateReplayUserInterface()
 {
     if (gReplayMenu)
     {
-        ReplayMenu::ServiceLoading(gReplayMenu);
+        gReplayMenu->ServiceLoading();
     }
 }
 
@@ -340,7 +359,7 @@ void ServiceResourceLoading()
     call<void()>(0x0057EF60)();
 }
 
-//THUNK : 0x005811C0
+//DONE : 0x005811C0
 void __cdecl MainLoop()
 {
     void* v0; // esi
@@ -388,15 +407,19 @@ void __cdecl MainLoop()
                     v2 = SingleFunction_Inlined;
                 } while (SingleFunction_Inlined != v3 && SingleFunction_Inlined);
             }
+
             if (unused_MainLoop_func)               // Never assgiend to?
                 unused_MainLoop_func();
+
             UpdateReplayUserInterface();
+
             if (pRaceCoordinator)
             {
-                RaceCoordinator::ExecuteQueuedMessages(pRaceCoordinator);
-                RaceCoordinator::RCSendMessage(pRaceCoordinator, 3, 0);
+                pRaceCoordinator->ExecuteQueuedMessages();
+                pRaceCoordinator->RCSendMessage(3, 0);
             }
             v4 = SingleFunction_Inlined;
+
             if (SingleFunction_Inlined)
             {
                 do
@@ -410,14 +433,26 @@ void __cdecl MainLoop()
                     v4 = SingleFunction_Inlined;
                 } while (SingleFunction_Inlined != v5 && SingleFunction_Inlined);
             }
+
             if (unused_MainLoop_func)
+            {
                 unused_MainLoop_func();
+            }
+
             nullsub(v13);
+
             if (GameFlowManagerState != 6)
+            {
                 VerifyJoylogChecksum();
+            }
+
             sub_005EB390();
+
             if (pReplayManager)
-                ReplayManager::DoFancyJoylogDebugging(pReplayManager);
+            {
+                pReplayManager->DoFancyJoylogDebugging();
+            }
+
             v6 = bGetTicker();
             v10 = sub_0043BE20(Ticker, v6) * flt_0078435C;
             sub_0057EAD0(v10);
@@ -439,43 +474,44 @@ void __cdecl MainLoop()
             std::strcpy(prev_callback, callback);
 #endif
 
-            if (!sub_005F00F0(&dword_0089CF48) && pRaceCoordinator && *(_DWORD*)pRaceCoordinator == 6)
+            if (!sub_005F00F0(&dword_0089CF48) && pRaceCoordinator && pRaceCoordinator->State == 6)
             {
-                WorldTimeElapsed = World::GetTimestep(pCurrentWorld, 0.0);
+                WorldTimeElapsed = pCurrentWorld->GetTimestep(0.0);
             }
             else
             {
                 if (GameFlowManagerState == 6)
                 {
-                    World::UpdateWorldPaused(pCurrentWorld);
-                    if (World::IsWorldPaused(pCurrentWorld) || *(_DWORD*)pRaceCoordinator == 1)
+                    pCurrentWorld->UpdateWorldPaused();
+
+                    if (pCurrentWorld->IsWorldPaused() || pRaceCoordinator->State == 1)
                     {
-                        WorldTimeElapsed = World::GetTimestep(pCurrentWorld, 0.0);
+                        WorldTimeElapsed = pCurrentWorld->GetTimestep(0.0);
                         NeedToPrepareWorldTimestep = 0;
                         GenerateJoyEvents();
                         sub_005F1390(pCurrentWorld);
                     }
                     else
                     {
-                        ReplayManager::BeginFrame(pReplayManager);
-                        if (*((_DWORD*)pReplayManager + 7))
+                        pReplayManager->BeginFrame();
+                        if (pReplayManager->unk_28)
                         {
-                            WorldTimeElapsed = World::GetTimestep(pCurrentWorld, 0.0);
+                            WorldTimeElapsed = pCurrentWorld->GetTimestep(0.0);
                             NeedToPrepareWorldTimestep = 0;
                             GenerateJoyEvents();
                         }
                         else
                         {
                             v11 = sub_005EA360(pCurrentWorld);
-                            a2 = World::GetTimestep(pCurrentWorld, v11);
+                            a2 = pCurrentWorld->GetTimestep(v11);
                             WorldTimeElapsed = a2;
                             NeedToPrepareWorldTimestep = 0;
                             GenerateJoyEvents();
                             sub_005F0130();
-                            World::DoTimestep(pCurrentWorld, a2);
+                            pCurrentWorld->DoTimestep(a2);
                             v19 = 0;
                         }
-                        ReplayManager::EndFrame(pReplayManager);
+                        pReplayManager->EndFrame();
                     }
 
                     if (TweakerStepWorld)
@@ -498,11 +534,15 @@ void __cdecl MainLoop()
             FEngUpdate();
             UpdatePlayersNonGameState();
             UpdateCameraMovers();
+
             if (g_pEAXSound)
-                EAXSound::Update(g_pEAXSound, RealTimeElapsed);
+            {
+                g_pEAXSound->EAXSound::Update(RealTimeElapsed);
+            }
+
             UpdatePortRumblers();
             UpdateCameraShakers();
-            TrackStreamer::ServiceNonGameState((TrackStreamer*)&TheTrackStreamer);
+            TheTrackStreamer.ServiceNonGameState();
             NumTextureCreatedThisFrame = 0;
             ServiceResourceLoading();
             sub_005CE850();
@@ -570,12 +610,6 @@ void InitBigFiles()
     }
 }
 
-//THUNK : 0x005B7EA0
-int sub_005B7EA0(_DWORD* a1, int a2, char** a3)
-{
-    return reinterpret_cast<int(__thiscall*)(_DWORD*, int, char**)>(0x005B7EA0)(a1, a2, a3);
-}
-
 //THUNK : 0x00580D90
 int InitJoylog()
 {
@@ -601,16 +635,26 @@ void emEventManagerInit()
     EventHandlerSlotPool = bNewSlotPool(24, 20, "EventHandlerSlotPool", 0);
 }
 
-//THUNK : 0x005EFE30
-int InitOnline(_DWORD* a1, int a2, char** a3)
-{
-    return reinterpret_cast<int(__thiscall*)(_DWORD*, int, char**)>(0x005EFE30)(a1, a2, a3);
-}
-
-//THUNK : 0x005BA7F0
+//DONE : 0x005BA7F0
 void eMathInit()
 {
-    call<void()>(0x005BA7F0)();
+    memset(&eMathZeroMatrix, 0, 0x40u);
+    eMathIdentityMatrix = 1.0;
+    dword_872E94 = 0;
+    dword_872E98 = 0;
+    dword_872E9C = 0;
+    dword_872EA0 = 0;
+    dword_872EA4 = 1.0;
+    dword_872EA8 = 0;
+    dword_872EAC = 0;
+    dword_872EB0 = 0;
+    dword_872EB4 = 0;
+    dword_872EB8 = 1.0;
+    dword_872EBC = 0;
+    dword_872EC0 = 0;
+    dword_872EC4 = 0;
+    dword_872EC8 = 0;
+    dword_872ECC = 1.0;
 }
 
 //THUNK : 0x0048CD60
@@ -673,7 +717,7 @@ void LoadGlobalChunks()
 //DONE : 0x00486910
 void InitializeSoundLoad()
 {
-    EAXSound::InitializeFromAemsManager(g_pEAXSound);
+    g_pEAXSound->InitializeFromAemsManager();
 }
 
 //DONE : 0x0060C680
@@ -696,10 +740,16 @@ void InitStandardModels()
 #endif
 }
 
+//THUNK : 0x00452EC0
+void InitDragCameraManager()
+{
+    call<void()>(0x00452EC0)();
+}
+
 //DONE : 0x00534840
 void InitFrontendDatabase()
 {
-    cFrontendDatabase::Default(&FEDatabase);
+    FEDatabase.Default();
 }
 
 //THUNK : 0x0061C700
@@ -788,14 +838,14 @@ void InitializeEverything(int argc, char* argv[])
 
     InitPlatform();
     InitBigFiles();
-    sub_005B7EA0(&dword_008709F8, argc, argv);
+    TheDemoDiscManager->Init(argc, argv);
     bPListInit(0x1400);
     nullsub(v2);
     InitJoylog();
     SeedRandomNumber();
     InitQueuedFiles();
     emEventManagerInit();
-    InitOnline((std::uint32_t*)&dword_0089CF48, argc, argv);
+    TheOnlineManager->InitOnline(argc, argv);
     eMathInit();
     eInitEngine();
     nullsub(v3);
@@ -819,7 +869,7 @@ void InitializeEverything(int argc, char* argv[])
     InitAnimBankSlotPool();
     InitAnimPartSlotPool();
     InitAnimSkelSlotPool();
-    DragCamera::Init();
+    InitDragCameraManager();
     unused_init_0 = 1;
     unused_init_1 = 0;
 
@@ -893,5 +943,4 @@ void _main(int argc, char* argv[])
 void __cdecl init(int argc, char* argv[])
 {
     replace(0x00580E00, (std::uint32_t)_main);
-    replace(0x00601A60, (std::uint32_t)World::GetTimestep);
 }

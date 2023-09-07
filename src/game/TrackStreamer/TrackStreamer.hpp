@@ -4,9 +4,9 @@
 class TrackStreamer
 {
 public:
-	static void ServiceNonGameState(TrackStreamer* _this);
-	static void HandleLoading(TrackStreamer* _this);
-	static void CheckLoadingBar(TrackStreamer* _this);
+	void ServiceNonGameState();
+	void HandleLoading();
+	void CheckLoadingBar();
 };
 
-extern std::uint32_t& TheTrackStreamer;
+extern TrackStreamer& TheTrackStreamer;

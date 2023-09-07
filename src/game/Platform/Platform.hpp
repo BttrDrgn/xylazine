@@ -6,7 +6,18 @@ extern int& dword_008284E4;
 extern float& flt_00828028;
 extern char& a_char;
 
-struct bFile;
+class bFile
+{
+public:
+	int unk_0;
+	int unk_4;
+
+	//THUNK : 0x0057C5B0
+	bFile(char* path, int a2)
+	{
+		reinterpret_cast<void(__thiscall*)(bFile*)>(0x0057C5B0)(this);
+	}
+};
 
 struct bList
 {

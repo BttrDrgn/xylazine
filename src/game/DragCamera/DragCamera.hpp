@@ -3,5 +3,5 @@
 class DragCamera
 {
 public:
-	static void Init();
+
 };

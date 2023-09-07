@@ -3,7 +3,7 @@
 class cFrontendDatabase
 {
 public:
-	static void Default(cFrontendDatabase* _this);
+	void Default();
 };
 
 extern cFrontendDatabase& FEDatabase;

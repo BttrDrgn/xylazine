@@ -1,5 +1,7 @@
 #include "Platform.hpp"
 #include "MemoryPool/MemoryPool.hpp"
+#include "RealSystem/RealSystem.hpp"
+#include "SlotPool/SlotPool.hpp"
 #include "memory.hpp"
 #include "ida_defs.hpp"
 
@@ -126,13 +128,31 @@ void bFree(char* a1)
 //THUNK : 0x00440E60
 void bPListInit(int expected_nodes)
 {
-    call<int()>(0x00440E60)();
+    call<int(int)>(0x00440E60)(expected_nodes);
+}
+
+//DONE : 0x0043DBB0
+int __cdecl bStrLen(const char* a1)
+{
+    int result; // eax
+
+    result = 0;
+    if (a1 && *a1)
+    {
+        while (a1[++result]);
+    }
+    return result;
+}
+
+SlotPool* bOMalloc(SlotPool* pool)
+{
+    return pool->Malloc();
 }
 
 //THUNK : 0x0057CA10
-bFile* bOpen(char* Str, int a2)
+bFile* bOpen(char* path, int a2)
 {
-    return call<bFile*(char*, int)>(0x0057CA10)(Str, a2);
+    return call<bFile*(char*, int)>(0x0057CA10)(path, a2);
 }
 
 //THUNK : 0x0057B640

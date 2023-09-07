@@ -63,21 +63,21 @@ void AdvanceWorldTime()
 }
 
 //THUNK : 0x005EA2B0
-void World::UpdateWorldPaused(World* _this)
+void World::UpdateWorldPaused()
 {
-	call<void(World*)>(0x005EA2B0)(_this);
+	call<void(World*)>(0x005EA2B0)(this);
 }
 
 //THUNK : 0x00609CE0
-void World::DoTimestep(World* _this, float a2)
+void World::DoTimestep(float a2)
 {
-	reinterpret_cast<void(__thiscall*)(World*, float)>(0x00609CE0)(_this, a2);
+	reinterpret_cast<void(__thiscall*)(World*, float)>(0x00609CE0)(this, a2);
 }
 
 //THUNK : 0x005EA320
-int World::IsWorldPaused(World* a1)
+int World::IsWorldPaused()
 {
-	return call<bool(World*)>(0x005EA320)(a1);
+	return call<bool(World*)>(0x005EA320)(this);
 }
 
 //THUNK : 0x004EC570
@@ -112,7 +112,7 @@ void sub_005F9010(_WORD* a1, int a2)
 
 //Fix the actual PC function, somehow this works fine
 //TODO : 0x00601A60
-float World::GetTimestep(World* _this, float a2)
+float World::GetTimestep(float a2)
 {
 	//non matching
 	return flt_007A5730 * a2;

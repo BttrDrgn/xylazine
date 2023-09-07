@@ -3,9 +3,9 @@
 class RaceCoordinator
 {
 public:
-	static void ExecuteQueuedMessages(RaceCoordinator* _this);
-	static void RCSendMessage(RaceCoordinator* _this, int a2, int a3);
-	char padding[5000];
+	int State;
+	void ExecuteQueuedMessages();
+	void RCSendMessage(int a2, int a3);
 };
 
 extern RaceCoordinator*& pRaceCoordinator;

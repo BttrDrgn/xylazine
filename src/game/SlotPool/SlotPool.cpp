@@ -2,11 +2,12 @@
 #include "memory.hpp"
 #include "ida_defs.hpp"
 
-char*& LoadedTexturePackSlotPool = *reinterpret_cast<char**>(0x008A1CF4);
-char*& LoadedSolidPackSlotPool = *reinterpret_cast<char**>(0x008A1CF8);
-char*& LoadedSkinLayerSlotPool = *reinterpret_cast<char**>(0x008A1CFC);
-char*& LoadedRideInfoSlotPool = *reinterpret_cast<char**>(0x008A1D00);
-char*& LoadedPartsAnim = *reinterpret_cast<char**>(0x008A32E8);
+SlotPool*& LoadedTexturePackSlotPool = *reinterpret_cast<SlotPool**>(0x008A1CF4);
+SlotPool*& LoadedSolidPackSlotPool = *reinterpret_cast<SlotPool**>(0x008A1CF8);
+SlotPool*& LoadedSkinLayerSlotPool = *reinterpret_cast<SlotPool**>(0x008A1CFC);
+SlotPool*& LoadedRideInfoSlotPool = *reinterpret_cast<SlotPool**>(0x008A1D00);
+SlotPool*& LoadedPartsAnim = *reinterpret_cast<SlotPool**>(0x008A32E8);
+SlotPool*& bFileSlotPool = *reinterpret_cast<SlotPool**>(0x00865104);
 int& TheSlotPoolManager = GET(INT, 0x00828530);
 SlotPool*& dword_00828538 = GET((SlotPool*)0, 0x00828538);
 SlotPool*& unk_00828534 = GET((SlotPool*)0, 0x00828534);
@@ -36,4 +37,10 @@ SlotPool* bNewSlotPool(int slot_size, int slot_count, const char* debug_name, in
         }
     }
     return result;
+}
+
+//THUNK : 0x00440D40
+SlotPool* SlotPool::Malloc()
+{
+    return reinterpret_cast<SlotPool*(__thiscall*)(SlotPool*)>(0x00440D40)(this);
 }

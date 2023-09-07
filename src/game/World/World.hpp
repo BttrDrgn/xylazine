@@ -3,10 +3,10 @@
 class World
 {
 public:
-	static void UpdateWorldPaused(World* _this);
-	static void DoTimestep(World* _this, float a2);
-	static int IsWorldPaused(World* a1);
-	static float GetTimestep(World* _this, float a2);
+	void UpdateWorldPaused();
+	void DoTimestep(float a2);
+	int IsWorldPaused();
+	float GetTimestep(float a2);
 };
 
 extern World*& pCurrentWorld;

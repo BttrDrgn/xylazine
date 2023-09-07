@@ -3,11 +3,13 @@
 class ReplayManager
 {
 public:
+	int padding_0[7];
+	int unk_28;
+
 	static bool DetectJoylogReplaySnapshot();
-	static void DoFancyJoylogDebugging(ReplayManager* _this);
-	static void BeginFrame(ReplayManager* _this);
-	static void EndFrame(ReplayManager* _this);
-	char padding[5000];
+	void DoFancyJoylogDebugging();
+	void BeginFrame();
+	void EndFrame();
 };
 
 extern ReplayManager*& pReplayManager;
