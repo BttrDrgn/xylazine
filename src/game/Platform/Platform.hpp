@@ -34,7 +34,7 @@ int bStrCmp(char* str1, char* str2);
 bFile* bOpen(char* Str, int a2);
 int bInitDisculatorDriver(char* Str, char* a2);
 std::uint32_t bStringHash(const char* string);
-void bClose(bFile* file, char a2);
+bFile* bClose(bFile* file, char a2);
 LONGLONG bGetTicker();
 double GetDebugRealTime();
 

@@ -97,9 +97,9 @@ bool PlatformIsProcessRunning(char* exe, int count)
 }
 
 //THUNK : 0x00579B90
-void bClose(bFile* file, char a2)
+bFile* bClose(bFile* file, char a2)
 {
-    call<void(bFile*, char)>(0x00579B90)(file, a2);
+    return call<bFile*(bFile*, char)>(0x00579B90)(file, a2);
 }
 
 //DONE : 0x0057CAC0

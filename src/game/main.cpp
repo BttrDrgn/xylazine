@@ -82,6 +82,13 @@ auto& dword_872EC0 = *reinterpret_cast<int*>(0x00872EC0);
 auto& dword_872EC4 = *reinterpret_cast<int*>(0x00872EC4);
 auto& dword_872EC8 = *reinterpret_cast<int*>(0x00872EC8);
 auto& dword_872ECC = *reinterpret_cast<float*>(0x00872ECC);
+auto& FrameMemoryBuffer = *reinterpret_cast<int**>(0x0082CC24);
+auto& dword_82CC28 = *reinterpret_cast<int**>(0x0082CC28);
+auto& CurrentBufferPos = *reinterpret_cast<void**>(0x0082DA5C);
+auto& FrameMemoryBufferSize = *reinterpret_cast<int*>(0x0082DA54);
+auto& CurrentBufferEnd = *reinterpret_cast<int*>(0x0082DA60);
+auto& FrameMallocAllocNum = *reinterpret_cast<int*>(0x0082DA68);
+auto& DefaultLightMaterial = *reinterpret_cast<void**>(0x007F399C);
 
 //DONE : 0x004022C0
 void nullsub(void* unused)
@@ -114,34 +121,36 @@ void sub_005BCFA0()
 }
 
 //THUNK : 0x006F876C
-void sub_006F876C(int a1, int a2, int a3, int a4, int a5)
+void FILESYS_writesync(int a1, int a2, int a3, int a4, int a5)
 {
     call<void(int, int, int, int, int)>(0x006F876C)(a1, a2, a3, a4, a5);
 }
 
 //DONE : 0x0057CB70
-void sub_0057CB70(char* Str, int a2, int a3)
+bFile* sub_0057CB70(char* path, int a2, int a3)
 {
-    bFile* v3; // eax
+    bFile* result; // eax
     bFile* v4; // esi
     int v5; // ecx
     int v6; // edx
 
-    v3 = bOpen(Str, 2);
-    v4 = v3;
-    if (v3)
+    result = bOpen(path, 2);
+    v4 = result;
+    if (result)
     {
-        sub_006F876C(*((_DWORD*)v3 + 3), *((_DWORD*)v3 + 2), a2, a3, 100);
-        v5 = *((_DWORD*)v4 + 1);
-        v6 = a3 + *((_DWORD*)v4 + 2);
-        *((_DWORD*)v4 + 2) = v6;
+        FILESYS_writesync(result[1].unk_4, result[1].unk_0, a2, a3, 100);
+        v5 = v4->unk_4;
+        v6 = a3 + v4[1].unk_0;
+        v4[1].unk_0 = v6;
         if (v6 > v5)
-            *((_DWORD*)v4 + 1) = v6;
-        if (*((int*)v4 + 6) <= 0)
-            bClose(v4, 1);
+            v4->unk_4 = v6;
+        result = (bFile*)v4[3].unk_0;
+        if ((int)result <= 0)
+            result = bClose(v4, 1);
         else
-            *((_DWORD*)v4 + 5) = 1;
+            v4[2].unk_4 = 1;
     }
+    return result;
 }
 
 //DONE : 0x0057D860
@@ -657,10 +666,89 @@ void eMathInit()
     dword_872ECC = 1.0;
 }
 
-//THUNK : 0x0048CD60
+//DONE : 0x00488EF0
+void eInitModels()
+{
+    eModelSlotPool = bNewSlotPool(24, 5000, "eModelSlotPool", 0);
+}
+
+//DONE : 0x0048B1F0
+void eInitTextures()
+{
+    TexturePackSlotPool = bNewSlotPool(124, 128, "TexturePackSlotPool", 0);
+}
+
+//THUNK : 0x0048DE90
+void eInitSolids()
+{
+    call<void()>(0x0048DE90)();
+}
+
+//THUNK : 0x005C2F90
+void epInitViews()
+{
+    call<void()>(0x005C2F90)();
+}
+
+//DONE : 0x005BB700
+void elInitPlat()
+{
+    eLightMaterialPlatInfoSlotPool = bNewSlotPool(128, 220, "eLightMaterialPlatInfoSlotPool", 0);
+}
+
+//THUNK : 0x0048AB60
+void eInitLightFlarePool()
+{
+    call<void()>(0x0048AB60)();
+}
+
+//THUNK : 0x005C33D0
+void eInitEnvMap()
+{
+    call<void()>(0x005C33D0)();
+}
+
+//THUNK : 0x00431840
+void InitNFSAnimEngine()
+{
+    call<void()>(0x00431840)();
+}
+
+//THUNK : 0x005D24F0
+void eInitEnginePlat()
+{
+    call<void()>(0x005D24F0)();
+}
+
+//nullsub
+//DONE : 0x004022C0
+void _return()
+{
+
+}
+
+//DONE : 0x0048CD60
 void eInitEngine()
 {
-    call<void()>(0x0048CD60)();
+    FrameMemoryBuffer = (int*)j__malloc(0x64000u);
+    dword_82CC28 = (int*)j__malloc(0x64000u);
+    CurrentBufferPos = FrameMemoryBuffer;
+    FrameMemoryBufferSize = 409600;
+    CurrentBufferEnd = (int)(FrameMemoryBuffer + 409600);
+    FrameMallocAllocNum = 0;
+    ePolySlotPool = bNewSlotPool(128, 32, "ePolySlotPool", 0);
+    ePolySlotPool[1].unk_4 &= 0xFFFFFFFD;
+    eInitModels();
+    eInitTextures();
+    eInitSolids();
+    epInitViews();
+    memset(DefaultLightMaterial, 0, 0xA0u);
+    elInitPlat();
+    eInitLightFlarePool();
+    eInitEnvMap();
+    _return();                                    // eEnvEffectsInit
+    InitNFSAnimEngine();
+    eInitEnginePlat();
 }
 
 //DONE : 0x004886E0

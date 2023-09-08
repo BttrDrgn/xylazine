@@ -3,8 +3,14 @@
 class SlotPool
 {
 public:
-	static SlotPool* NewSlotPool(int a1, int a2, const char* a3, int a4);
+	int unk_0;
+	int unk_4;
+	int unk_8;
+	int unk_12;
+	
 	SlotPool* Malloc();
+
+	static SlotPool* NewSlotPool(int a1, int a2, const char* a3, int a4);
 };
 
 extern SlotPool*& LoadedTexturePackSlotPool;
@@ -14,5 +20,9 @@ extern SlotPool*& LoadedRideInfoSlotPool;
 extern SlotPool*& LoadedPartsAnim;
 extern int& TheSlotPoolManager;
 extern SlotPool*& bFileSlotPool;
+extern SlotPool*& ePolySlotPool;
+extern SlotPool*& eModelSlotPool;
+extern SlotPool*& TexturePackSlotPool;
+extern SlotPool*& eLightMaterialPlatInfoSlotPool;
 
 SlotPool* bNewSlotPool(int slot_size, int slot_count, const char* debug_name, int memory_pool);
