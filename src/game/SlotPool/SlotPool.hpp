@@ -7,6 +7,9 @@ public:
 	int unk_4;
 	int unk_8;
 	int unk_12;
+	int unk_16;
+	int unk_20;
+	int unk_24;
 	
 	SlotPool* Malloc();
 

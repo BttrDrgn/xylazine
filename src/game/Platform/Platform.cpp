@@ -439,9 +439,3 @@ bool PlatformDRM()
     return true;
 #endif
 }
-
-//THUNK : 0x005CEC80
-void PlatformPresent()
-{
-    call<void()>(0x005CEC80)();
-}

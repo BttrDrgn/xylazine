@@ -18,6 +18,8 @@
 #include "ReplayMenu/ReplayMenu.hpp"
 #include "DemoDiscManager/DemoDiscManager.hpp"
 #include "OnlineManager/OnlineManager.hpp"
+#include "eModel/eModel.hpp"
+#include "Stomper/Stomper.hpp"
 
 auto& GlobalMemoryFile = *reinterpret_cast<int*>(0x00864F98);
 auto& QueuedFileNumReadsInProgress = *reinterpret_cast<int*>(0x008650F4);
@@ -217,12 +219,6 @@ void sub_0057EAD0(float a1)
     call<void(float)>(0x0057EAD0)(a1);
 }
 
-//THUNK : 0x00456940
-void sub_00456940(std::uint32_t* a1)
-{
-    reinterpret_cast<void(__thiscall*)(std::uint32_t*)>(0x00456940)(a1);
-}
-
 //DONE : 0x005F00F0
 bool sub_005F00F0(_DWORD* a1)
 {
@@ -368,11 +364,36 @@ void ServiceResourceLoading()
     call<void()>(0x0057EF60)();
 }
 
+//THUNK : 0x005CE4C0
+void sub_5CE4C0()
+{
+    call<void()>(0x005CE4C0)();
+}
+
+//THUNK : 0x005BF1C0
+void sub_5BF1C0()
+{
+    call<void()>(0x005BF1C0)();
+}
+
+//DONE : 0x005CEC80
+void sub_5CEC80()
+{
+    sub_5CE4C0();
+    sub_5BF1C0();
+}
+
+//THUNK : 0x00456940
+void sub_00456940(std::uint32_t* a1)
+{
+    reinterpret_cast<void(__thiscall*)(std::uint32_t*)>(0x00456940)(a1);
+}
+
 //DONE : 0x005811C0
 void __cdecl MainLoop()
 {
     void* v0; // esi
-    int Ticker; // edi
+    int ticker; // edi
     uint32_t* v2; // eax
     uint32_t* v3; // esi
     uint32_t* v4; // eax
@@ -392,7 +413,7 @@ void __cdecl MainLoop()
     bool v19; // [esp+10h] [ebp-Ch]
     float a2; // [esp+18h] [ebp-4h]
 
-    Ticker = bGetTicker();
+    ticker = bGetTicker();
     if (!ExitTheGameFlag)
     {
         v12 = v0;
@@ -463,9 +484,9 @@ void __cdecl MainLoop()
             }
 
             v6 = bGetTicker();
-            v10 = sub_0043BE20(Ticker, v6) * flt_0078435C;
+            v10 = sub_0043BE20(ticker, v6) * flt_0078435C;
             sub_0057EAD0(v10);
-            Ticker = bGetTicker();
+            ticker = bGetTicker();
             sub_00456940(&dword_00828770);
             v19 = 1;
 
@@ -581,7 +602,7 @@ void __cdecl MainLoop()
                 dword_00865118 = 0;
                 nullsub(v12);
             }
-            PlatformPresent();
+            sub_5CEC80();
         } while (!ExitTheGameFlag);
     }
 }
@@ -737,7 +758,7 @@ void eInitEngine()
     CurrentBufferEnd = (int)(FrameMemoryBuffer + 409600);
     FrameMallocAllocNum = 0;
     ePolySlotPool = bNewSlotPool(128, 32, "ePolySlotPool", 0);
-    ePolySlotPool[1].unk_4 &= 0xFFFFFFFD;
+    ePolySlotPool->unk_20 &= 0xFFFFFFFD;
     eInitModels();
     eInitTextures();
     eInitSolids();
@@ -756,8 +777,8 @@ void afxInit()
 {
     AcidActiveGroupSlotPool = bNewSlotPool(44, 400, "AcidActiveGroupSlotPool", 0);
     AcidEmitterSlotPool = bNewSlotPool(208, 250, "AcidEmitterSlotPool", 0);
-    *(_DWORD*)(AcidActiveGroupSlotPool + 20) &= 0xFFFFFFFE;
-    *(_DWORD*)(AcidActiveGroupSlotPool + 20) &= 0xFFFFFFFD;
+    AcidActiveGroupSlotPool->unk_20 &= 0xFFFFFFFE;
+    AcidActiveGroupSlotPool->unk_20 &= 0xFFFFFFFD;
 }
 
 //DONE : 0x00570F80
@@ -814,18 +835,10 @@ void InitCarRender()
     CarPartModelPool = (int)bNewSlotPool(24, 1024, "CarPartModelPool", 0);
 }
 
-//TODO : 0x0060C820
+//THUNK : 0x0060C820
 void InitStandardModels()
 {
-#if 0
-    unsigned int v0;
-
-    eModel::Init(&StandardCubeModel, 0xC7395A8);
-    v0 = bStringHash("DEBUG_LOD_CUBE");
-    eModel::Init(&StandardDebugModel, v0);
-#else
     call<void()>(0x0060C820);
-#endif
 }
 
 //THUNK : 0x00452EC0
@@ -849,21 +862,21 @@ void InitCarLoader()
 //DONE : 0x0057B870
 void InitStomper()
 {
-    char* v0;
-    char* v1;
+    Stomper* v0;
+    Stomper* v1;
 
-    v0 = (char*)malloc(0xCu);
+    v0 = (Stomper*)malloc(0xCu);
     v1 = v0;
     if (v0)
     {
-        *v0 = 1;
-        *(char**)((_DWORD*)v0 + 1) = (char*)malloc(0x400u);
-        *((_DWORD*)v1 + 2) = 0;
-        dword_00865128 = v1;
+        LOBYTE(v0->unk_0) = 1;
+        v0->unk_4 = (int*)malloc(0x400u);
+        v1->unk_8 = 0;
+        pStomper = v1;
     }
     else
     {
-        dword_00865128 = 0;
+        pStomper = 0;
     }
 }
 

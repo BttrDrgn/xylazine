@@ -14,3 +14,9 @@ void EAXSound::Update(float a2)
 {
 	reinterpret_cast<void(__thiscall*)(EAXSound*, float)>(0x00483B40)(this, a2);
 }
+
+//THUNK : 0x004810F0
+void EAXSound::EnterPauseMenu(int a2, bool a3)
+{
+	reinterpret_cast<void(__thiscall*)(EAXSound*, int, bool)>(0x004810F0)(this, a2, a3);
+}

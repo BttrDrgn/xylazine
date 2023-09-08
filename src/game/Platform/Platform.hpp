@@ -43,4 +43,3 @@ bool PlatformCDCheckBinDat(bool a1);
 bool PlatformCDCheck();
 bool PlatformDRM();
 bool PlatformIsProcessRunning(char* exe, int count);
-void PlatformPresent();
