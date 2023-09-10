@@ -24,13 +24,20 @@ newaction {
     description = "Calculate progress of the reimplementation project by completed functions",
 
     onEnd = function()
-		files = os.matchfiles("src/game/**.c*")
+		srcFiles = os.matchfiles("src/game/**.c*")
+		headerFiles = os.matchfiles("src/game/**.h*")
 		
 		totalDone = 0
 		totalThunks = 0
 		totalTodo = 0
 		
-		for index, name in pairs(files) do
+		for index, name in pairs(srcFiles) do
+			totalDone = totalDone + tablelength(findAll(io.open(name, "r"):read("*all"), "//DONE : 0x"))
+			totalThunks = totalThunks + tablelength(findAll(io.open(name, "r"):read("*all"), "//THUNK : 0x"))
+			totalTodo = totalTodo + tablelength(findAll(io.open(name, "r"):read("*all"), "//TODO : 0x"))
+		end
+
+		for index, name in pairs(headerFiles) do
 			totalDone = totalDone + tablelength(findAll(io.open(name, "r"):read("*all"), "//DONE : 0x"))
 			totalThunks = totalThunks + tablelength(findAll(io.open(name, "r"):read("*all"), "//THUNK : 0x"))
 			totalTodo = totalTodo + tablelength(findAll(io.open(name, "r"):read("*all"), "//TODO : 0x"))
