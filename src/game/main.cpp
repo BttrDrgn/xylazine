@@ -1026,5 +1026,20 @@ void _main(int argc, char* argv[])
 
 void __cdecl init(int argc, char* argv[])
 {
+    while (*++argv != 0)
+    {
+        if (!strcmp("--skipfe", *argv))
+        {
+            SkipFE = true;
+            continue;
+        }
+        else if (!strcmp("--pause", *argv))
+        {
+            //Prevent game from running to attach debugger
+            MessageBoxA(nullptr, "Pause requested", "BB2", 0);
+            continue;
+        }
+    }
+
     replace(0x00580E00, (std::uint32_t)_main);
 }
