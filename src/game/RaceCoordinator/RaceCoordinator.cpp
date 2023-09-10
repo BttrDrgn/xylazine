@@ -1,7 +1,7 @@
 #include "RaceCoordinator.hpp"
 #include "memory.hpp"
 
-extern RaceCoordinator*& pRaceCoordinator = GET((RaceCoordinator*)0, 0x008900D8);
+extern RaceCoordinator*& pRaceCoordinator = *reinterpret_cast<RaceCoordinator**>(0x008900D8);
 
 //THUNK : 0x00600FA0
 void RaceCoordinator::ExecuteQueuedMessages()

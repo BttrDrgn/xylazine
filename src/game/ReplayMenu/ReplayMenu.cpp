@@ -1,7 +1,7 @@
 #include "ReplayMenu.hpp"
 #include "memory.hpp"
 
-ReplayMenu*& gReplayMenu = GET((ReplayMenu*)0, 0x008363EC);
+ReplayMenu*& gReplayMenu = *reinterpret_cast<ReplayMenu**>(0x008363EC);
 
 //THUNK :  
 void ReplayMenu::ServiceLoading()

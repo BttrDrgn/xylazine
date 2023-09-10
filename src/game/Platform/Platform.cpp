@@ -5,29 +5,29 @@
 #include "memory.hpp"
 #include "ida_defs.hpp"
 
-int& PlatformSkipDRM = GET(INT, 0x0079DC60);
-int& dword_00800B98 = GET(INT, 0x00800B98);
-int& dword_008709CC = GET(INT, 0x008709CC);
-char& a_char = GET(CHAR, 0x0080057F);
-int& dword_008284E4 = GET(INT, 0x008284E4);
-float& flt_00784550 = GET(FLOAT, 0x00784550);
-float& flt_00828028 = GET(FLOAT, 0x00828028);
-float& flt_00786D84 = GET(FLOAT, 0x00786D84);
-float& flt_00786D80 = GET(FLOAT, 0x00786D80);
-_DWORD*& dword_00828154 = GET(UINT32_PTR, 0x00828154);
-_DWORD*& dword_00828218 = GET(UINT32_PTR, 0x00828218);
-bool& MemoryInitialized = GET(BOOL, 0x00828510);
-HANDLE& TargetHandle = GET((HANDLE)0, 0x008AD410);
-_DWORD& g_thMain = GET(UINT32, 0x008AD40C);
-bool& ThreadInitalized = GET(BOOL, 0x008AD408);
-char& byte_008AD918 = GET(CHAR, 0x008AD918);
-char& byte_00814580 = GET(CHAR, 0x00814580);
-char& byte_0081437C = GET(CHAR, 0x0081437C);
-_DWORD& dword_008145E0 = GET(UINT32, 0x008145E0);
+int& PlatformSkipDRM = *reinterpret_cast<int*>(0x0079DC60);
+int& dword_00800B98 = *reinterpret_cast<int*>(0x00800B98);
+int& dword_008709CC = *reinterpret_cast<int*>(0x008709CC);
+int& dword_008284E4 = *reinterpret_cast<int*>(0x008284E4);
+char& a_char = *reinterpret_cast<char*>(0x0080057F);
+char& byte_008AD918 = *reinterpret_cast<char*>(0x008AD918);
+char& byte_00814580 = *reinterpret_cast<char*>(0x00814580);
+char& byte_0081437C = *reinterpret_cast<char*>(0x0081437C);
+float& flt_00784550 = *reinterpret_cast<float*>(0x00784550);
+float& flt_00828028 = *reinterpret_cast<float*>(0x00828028);
+float& flt_00786D84 = *reinterpret_cast<float*>(0x00786D84);
+float& flt_00786D80 = *reinterpret_cast<float*>(0x00786D80);
+bool& ThreadInitalized = *reinterpret_cast<bool*>(0x008AD408);
+bool& MemoryInitialized = *reinterpret_cast<bool*>(0x00828510);
+std::uint32_t*& dword_00828154 = *reinterpret_cast<std::uint32_t**>(0x00828154);
+std::uint32_t*& dword_00828218 = *reinterpret_cast<std::uint32_t**>(0x00828218);
+HANDLE& TargetHandle = *reinterpret_cast<HANDLE*>(0x008AD410);
+_DWORD& g_thMain = *reinterpret_cast<std::uint32_t*>(0x008AD40C);
+_DWORD& dword_008145E0 = *reinterpret_cast<std::uint32_t*>(0x008145E0);
+_DWORD& unk_008145C4 = *reinterpret_cast<std::uint32_t*>(0x008145C4);
+_DWORD& unk_008145DC = *reinterpret_cast<std::uint32_t*>(0x008145DC);
+char& unk_0081447D = *reinterpret_cast<char*>(0x0081447D);
 auto& funcs_6FBE26 = *reinterpret_cast<int(__cdecl**)(int, int)>(0x0081457C);
-_DWORD& unk_008145C4 = GET(UINT32, 0x008145C4);
-_DWORD& unk_008145DC = GET(UINT32, 0x008145DC);
-std::uint8_t& unk_0081447D = GET(UINT8, 0x0081447D);
 
 //DONE : 0x005B7B20
 bool PlatformIsProcessRunning(char* exe, int count)
@@ -295,7 +295,7 @@ void sub_006FBE2C()
     char* v0;
     char* v1;
     _DWORD* v2;
-    _BYTE* v3;
+    char* v3;
 
     if (!byte_008AD918)
     {

@@ -1,4 +1,4 @@
 #include "DragCameraManager.hpp"
 #include "memory.hpp"
 
-extern DragCameraManager*& TheDragCameraManager = GET((DragCameraManager*)0, 0x00828770);
+extern DragCameraManager*& TheDragCameraManager = *reinterpret_cast<DragCameraManager**>(0x00828770);

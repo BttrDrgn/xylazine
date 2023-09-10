@@ -1,8 +1,8 @@
 #include "MemoryPool.hpp"
 #include "memory.hpp"
 
-MemoryPool*& MemoryPoolMem = GET((MemoryPool*)0, 0x00828218);
-MemoryPool*& MemoryPools = GET((MemoryPool*)0, 0x00828154);
+MemoryPool*& MemoryPoolMem = *reinterpret_cast<MemoryPool**>(0x00828218);
+MemoryPool*& MemoryPools = *reinterpret_cast<MemoryPool**>(0x00828154);
 
 //Uses this
 //THUNK : 0x004402C0

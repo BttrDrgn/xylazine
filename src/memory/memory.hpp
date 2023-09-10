@@ -17,58 +17,6 @@ template <typename T> inline void set(std::uint32_t address, T value)
 	VirtualProtect(reinterpret_cast<void*>(address), sizeof(T), protecc, &protecc);
 }
 
-#ifndef INT
-#define INT 0
-#endif
-
-#ifndef INT_PTR
-#define INT_PTR (int*)0
-#endif
-
-#ifndef UINT32
-#define UINT32 (std::uint32_t)0
-#endif
-
-#ifndef UINT32_PTR
-#define UINT32_PTR (std::uint32_t*)0
-#endif
-
-#ifndef UINT8
-#define UINT8 (std::uint8_t)0
-#endif
-
-#ifndef UINT8_PTR
-#define UINT8_PTR (std::uint8_t*)0
-#endif
-
-#ifndef FLOAT
-#define FLOAT 0.0f
-#endif
-
-#ifndef DOUBLE
-#define DOUBLE 0.0
-#endif
-
-#ifndef BOOL
-#define BOOL false
-#endif
-
-#ifndef CHAR
-#define CHAR '\0'
-#endif
-
-#ifndef CHAR_PTR
-#define CHAR_PTR (char*)0
-#endif
-
-#ifndef typeof
-#define typeof(x) decltype(x)
-#endif
-
-#ifndef GET
-#define GET(T, addr) *reinterpret_cast<typeof(T)*>(addr)
-#endif
-
 inline void replace(std::uint32_t address, std::uint32_t function)
 {
     DWORD protecc;

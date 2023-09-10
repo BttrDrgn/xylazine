@@ -594,7 +594,7 @@ void sub_5BE690()
     }*/
 }
 
-//TODO : 0x005BCFF0
+//DONE : 0x005BCFF0
 void InitSlotPools()
 {
     eAnimTextureSlotPool = bNewSlotPool(4, 256, "eAnimTextureSlotPool", 0);

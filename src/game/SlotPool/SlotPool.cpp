@@ -18,9 +18,21 @@ SlotPool*& eAnimTextureSlotPool = *reinterpret_cast<SlotPool**>(0x00870790);
 SlotPool*& eTextureBucketSlotPool = *reinterpret_cast<SlotPool**>(0x00870918);
 SlotPool*& eDataRenderSlotPool = *reinterpret_cast<SlotPool**>(0x0087091C);
 SlotPool*& eLightMaterialPlatInfoSlotPool = *reinterpret_cast<SlotPool**>(0x008708B8);
-int& TheSlotPoolManager = GET(INT, 0x00828530);
-SlotPool*& dword_00828538 = GET((SlotPool*)0, 0x00828538);
-SlotPool*& unk_00828534 = GET((SlotPool*)0, 0x00828534);
+SlotPool*& AcidActiveGroupSlotPool = *reinterpret_cast<SlotPool**>(0x0082DA3C);
+SlotPool*& AcidEmitterSlotPool = *reinterpret_cast<SlotPool**>(0x0082DA40);
+SlotPool*& SpaceNodeSlotPool = *reinterpret_cast<SlotPool**>(0x008A1BCC);
+SlotPool*& AnimCtrlSlotPool = *reinterpret_cast<SlotPool**>(0x00827B54);
+SlotPool*& AnimBankSlotPool = *reinterpret_cast<SlotPool**>(0x00827B4C);
+SlotPool*& AnimPartSlotPool = *reinterpret_cast<SlotPool**>(0x00827B64);
+SlotPool*& AnimSkelSlotPool = *reinterpret_cast<SlotPool**>(0x00827B5C);
+SlotPool*& ResourceFileSlotPool = *reinterpret_cast<SlotPool**>(0x00864F78);
+SlotPool*& EventSlotPool = *reinterpret_cast<SlotPool**>(0x00883E38);
+SlotPool*& EventHandlerSlotPool = *reinterpret_cast<SlotPool**>(0x00883E3C);
+SlotPool*& QueuedFileSlotPool = *reinterpret_cast<SlotPool**>(0x008650F0);
+
+int& TheSlotPoolManager = *reinterpret_cast<int*>(0x00828530);
+SlotPool*& dword_00828538 = *reinterpret_cast<SlotPool**>(0x00828538);
+SlotPool*& unk_00828534 = *reinterpret_cast<SlotPool**>(0x00828534);
 
 //THUNK : 0x00440B40
 SlotPool* SlotPool::NewSlotPool(int a1, int a2, const char* a3, int a4)

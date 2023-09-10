@@ -1,7 +1,7 @@
 #include "ReplayManager.hpp"
 #include "memory.hpp"
 
-ReplayManager*& pReplayManager = GET((ReplayManager*)0, 0x008650B8);
+ReplayManager*& pReplayManager = *reinterpret_cast<ReplayManager**>(0x008650B8);
 
 //THUNK : 0x00580880
 bool ReplayManager::DetectJoylogReplaySnapshot()
