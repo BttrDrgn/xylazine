@@ -20,121 +20,30 @@
 #include "OnlineManager/OnlineManager.hpp"
 #include "eModel/eModel.hpp"
 #include "Stomper/Stomper.hpp"
-
-auto& GlobalMemoryFile = *reinterpret_cast<int*>(0x00864F98);
-auto& QueuedFileNumReadsInProgress = *reinterpret_cast<int*>(0x008650F4);
-auto& WaitingQueuedFileList = *reinterpret_cast<int*>(0x00865220);
-auto& unused_init_0 = *reinterpret_cast<int*>(0x0086534C);
-auto& unused_init_1 = *reinterpret_cast<int*>(0x00865354);
-auto& dword_008709F8 = *reinterpret_cast<_DWORD*>(0x008709F8);
-auto& dword_0089CF48 = *reinterpret_cast<_DWORD*>(0x0089CF48);
-auto*& dword_00865128 = *reinterpret_cast<char**>(0x00865128);
-auto& WindowedMode = *reinterpret_cast<bool*>(0x0087098C);
-auto& CarPartModelPool = *reinterpret_cast<int*>(0x008A1BE4);
-auto*& AcidActiveGroupSlotPool = GET((SlotPool*)0, 0x0082DA3C);
-auto*& AcidEmitterSlotPool = GET((SlotPool*)0, 0x0082DA40);
-auto*& SpaceNodeSlotPool = GET((SlotPool*)0, 0x008A1BCC);
-auto*& AnimCtrlSlotPool = GET((SlotPool*)0, 0x00827B54);
-auto& AnimBankSlotPoolInitialized = GET(BOOL, 0x00827B50);
-auto*& AnimBankSlotPool = GET((SlotPool*)0, 0x00827B4C);
-auto& AnimPartSlotPoolInitialized = GET(BOOL, 0x00827B68);
-auto*& AnimPartSlotPool = GET((SlotPool*)0, 0x00827B64);
-auto& AnimSkelSlotPoolInitialized = GET(BOOL, 0x00827B60);
-auto*& AnimSkelSlotPool = GET((SlotPool*)0, 0x00827B5C);
-auto*& ResourceFileSlotPool = GET((SlotPool*)0, 0x00864F78);
-auto*& EventSlotPool = GET((SlotPool*)0, 0x00883E38);
-auto*& EventHandlerSlotPool = GET((SlotPool*)0, 0x00883E3C);
-auto*& QueuedFileSlotPool = GET((SlotPool*)0, 0x008650F0);
-auto& ExitTheGameFlag = GET(BOOL, 0x00864F4C);
-auto& MainLoopTimingStartTime = GET(INT, 0x00864F44);
-auto& FrameCounter = GET(INT, 0x00865138);
-auto& TweakerStepWorld = GET(INT, 0x00890088);
-auto& last_frame_count_8872 = GET(INT, 0x00866640);
-auto& NumTextureCreatedThisFrame = GET(INT, 0x00864F50);
-auto& MainLoopTimingLimitFrameRate = GET(INT, 0x00864F48);
-auto& SkipMovies = GET(BOOL, 0x008650A8);
-auto& dword_00869084 = GET(INT, 0x00869084);
-auto& dword_00872ED8 = GET(INT, 0x00872ED8);
-auto& dword_00865488 = GET(INT, 0x00865488);
-auto& dword_00872F0C = GET(INT, 0x00872F0C);
-auto& dword_0086511C = GET(INT, 0x0086511C);
-auto& dword_00828770 = GET(UINT32, 0x00828770);
-auto& dword_00865120 = GET(INT, 0x00865120);
-auto& dword_00865118 = GET(INT, 0x00865118);
-auto& dword_008650CC = GET(INT, 0x008650CC);
-auto& dword_00872EE0 = GET(INT, 0x00872EE0);
-auto& dword_008650DC = GET(INT, 0x008650DC);
-auto& flt_0078435C = GET(FLOAT, 0x0078435C);
-auto& byte_007FBE78 = GET(BOOL, 0x007FBE78);
-auto& unused_MainLoop_func = *reinterpret_cast<int(**)()>(0x00865490);
-auto& eMathZeroMatrix = *reinterpret_cast<char**>(0x00876480);
-auto& eMathIdentityMatrix = *reinterpret_cast<float*>(0x00872E90);
-auto& dword_872E94 = *reinterpret_cast<int*>(0x00872E94);
-auto& dword_872E98 = *reinterpret_cast<int*>(0x00872E98);
-auto& dword_872E9C = *reinterpret_cast<int*>(0x00872E9C);
-auto& dword_872EA0 = *reinterpret_cast<int*>(0x00872EA0);
-auto& dword_872EA4 = *reinterpret_cast<float*>(0x00872EA4);
-auto& dword_872EA8 = *reinterpret_cast<int*>(0x00872EA8);
-auto& dword_872EAC = *reinterpret_cast<int*>(0x00872EAC);
-auto& dword_872EB0 = *reinterpret_cast<int*>(0x00872EB0);
-auto& dword_872EB4 = *reinterpret_cast<int*>(0x00872EB4);
-auto& dword_872EB8 = *reinterpret_cast<float*>(0x00872EB8);
-auto& dword_872EBC = *reinterpret_cast<int*>(0x00872EBC);
-auto& dword_872EC0 = *reinterpret_cast<int*>(0x00872EC0);
-auto& dword_872EC4 = *reinterpret_cast<int*>(0x00872EC4);
-auto& dword_872EC8 = *reinterpret_cast<int*>(0x00872EC8);
-auto& dword_872ECC = *reinterpret_cast<float*>(0x00872ECC);
-auto& FrameMemoryBuffer = *reinterpret_cast<int**>(0x0082CC24);
-auto& dword_82CC28 = *reinterpret_cast<int**>(0x0082CC28);
-auto& CurrentBufferPos = *reinterpret_cast<void**>(0x0082DA5C);
-auto& FrameMemoryBufferSize = *reinterpret_cast<int*>(0x0082DA54);
-auto& CurrentBufferEnd = *reinterpret_cast<int*>(0x0082DA60);
-auto& FrameMallocAllocNum = *reinterpret_cast<int*>(0x0082DA68);
-auto& DefaultLightMaterial = *reinterpret_cast<void**>(0x007F399C);
+#include "Player/Player.hpp"
+#include "thunks.hpp"
+#include "variables.hpp"
 
 //DONE : 0x004022C0
-void nullsub(void* unused)
-{
-
-}
-
-//While this can be macroed or just a normal call, I have opted to call the game's malloc
-//incase for whatever reason CRT mismatch causes issues
-//THUNK : 0x0075C6C8
-void* j__malloc(size_t size)
-{
-    return call<void*(size_t)>(0x00575620)(size);
-}
-
-//THUNK : 0x005809C0
-void GenerateJoyEvents()
-{
-    call<void()>(0x005809C0)();
-}
+void nullsub(void* unused) {}
 
 //DONE : 0x005BCFA0
 void sub_005BCFA0()
 {
-    int v0; // edx
+    int v0;
 
     v0 = dword_00872EE0;
     memset(&dword_00872ED8, 0, 0x3Cu);
     dword_00872F0C = v0;
 }
 
-//THUNK : 0x006F876C
-void FILESYS_writesync(int a1, int a2, int a3, int a4, int a5)
-{
-    call<void(int, int, int, int, int)>(0x006F876C)(a1, a2, a3, a4, a5);
-}
-
 //DONE : 0x0057CB70
 bFile* sub_0057CB70(char* path, int a2, int a3)
 {
-    bFile* result; // eax
-    bFile* v4; // esi
-    int v5; // ecx
-    int v6; // edx
+    bFile* result;
+    bFile* v4;
+    int v5;
+    int v6;
 
     result = bOpen(path, 2);
     v4 = result;
@@ -158,9 +67,9 @@ bFile* sub_0057CB70(char* path, int a2, int a3)
 //DONE : 0x0057D860
 void sub_0057D860(void* a1)
 {
-    _DWORD* v1; // edi
-    int v2; // ecx
-    _DWORD* v3; // esi
+    _DWORD* v1;
+    int v2;
+    _DWORD* v3;
 
     if (dword_008650CC)
     {
@@ -190,22 +99,10 @@ void UpdateReplayUserInterface()
     }
 }
 
-//THUNK : 0x0057EE00
-void VerifyJoylogChecksum()
-{
-    call<void()>(0x0057EE00)();
-}
-
-//THUNK : 0x005EB390
-void sub_005EB390()
-{
-    call<void()>(0x005EB390)();
-}
-
 //DONE : 0x0043BE20
 float sub_0043BE20(int a1, int a2)
 {
-    int a2a; // [esp+8h] [ebp+8h]
+    int a2a;
 
     a2a = a2 - a1;
     if (a2a < 0)
@@ -213,80 +110,39 @@ float sub_0043BE20(int a1, int a2)
     return (double)(1 << dword_008284E4) * (double)a2a * flt_00828028;
 }
 
-//THUNK : 0x0057EAD0
-void sub_0057EAD0(float a1)
-{
-    call<void(float)>(0x0057EAD0)(a1);
-}
-
 //DONE : 0x005F00F0
 bool sub_005F00F0(_DWORD* a1)
 {
-    return *((_BYTE*)a1 + 33) || dword_008669F4 > 0 || dword_00866A14 > 0;
-}
-
-//THUNK : 0x005F1390
-bool sub_005F1390(World* a1)
-{
-    return call<bool(World*)>(0x005F1390)(a1);
-}
-
-//THUNK : 0x005EA360
-float sub_005EA360(World* _this)
-{
-    return call<float(World*)>(0x005EA360)(_this);
+    return *((_BYTE*)a1 + 33) || dword_8669F4 > 0 || dword_866A14 > 0;
 }
 
 //DONE : 0x005838A0
 bool sub_005838A0()
 {
-    return dword_008669F4 > 0 || dword_00866A14 > 0;
-}
-
-//THUNK : 0x00585B20
-void sub_00585B20()
-{
-    call<void()>(0x00585B20)();
-}
-
-//THUNK : 0x005877D0
-void sub_005877D0()
-{
-    call<void()>(0x005877D0)();
-}
-
-//THUNK : 0x0058EBC0
-void sub_0058EBC0()
-{
-    call<void()>(0x0058EBC0)();
+    return dword_8669F4 > 0 || dword_866A14 > 0;
 }
 
 //DONE : 0x0058F690
-bool sub_0058F690()
+void sub_0058F690()
 {
-    bool result; // al
-
-    result = byte_007FBE78;
-    if (byte_007FBE78)
+    if (byte_7FBE78)
     {
-        if (dword_008669F4 > 0)
-            sub_00585B20();
-        if (dword_00866A14 > 0)
+        if (dword_8669F4 > 0)
         {
-            sub_005877D0();
-            if (dword_00866A14 > 0)
-                sub_0058EBC0();
+            sub_585B20();
         }
-        result = RealTimer;
-        dword_00869084 = RealTimer;
-    }
-    return result;
-}
 
-//THUNK : 0x0060AEE0
-void sub_0060AEE0(_DWORD* a1, bool a2)
-{
-    reinterpret_cast<void(__thiscall*)(_DWORD*, bool)>(0x0060AEE0)(a1, a2);
+        if (dword_866A14 > 0)
+        {
+            sub_5877D0();
+
+            if (dword_866A14 > 0)
+            {
+                sub_58EBC0();
+            }
+        }
+        dword_869084 = RealTimer;
+    }
 }
 
 //DONE : 0x005F0130
@@ -298,84 +154,6 @@ void __cdecl sub_005F0130()
     }
 }
 
-//THUNK : 0x00600900
-void UpdatePlayersNonGameState()
-{
-    call<void()>(0x00600900)();
-}
-
-//THUNK : 0x0044EFE0
-void UpdateCameraMovers()
-{
-    call<void()>(0x0044EFE0)();
-}
-
-//THUNK : 0x00572610
-void UpdatePortRumblers()
-{
-    call<void()>(0x00572610)();
-}
-
-//THUNK : 0x005728C0
-void UpdateCameraShakers()
-{
-    call<void()>(0x005728C0)();
-}
-
-//THUNK : 0x00570C00
-void DisplayDebugScreenPrints()
-{
-    call<void()>(0x00570C00)();
-}
-
-//THUNK : 0x005F0140
-void sub_005F0140()
-{
-    call<void()>(0x005F0140)();
-}
-
-//THUNK : 0x0057A050
-void sub_0057A050()
-{
-    call<void()>(0x0057A050)();
-}
-
-//THUNK : 0x005CE850
-void sub_005CE850()
-{
-    call<void()>(0x005CE850)();
-}
-
-//THUNK : 0x005D2850
-void sub_005D2850()
-{
-    call<void()>(0x005D2850)();
-}
-
-//THUNK : 0x005CE8A0
-void sub_005CE8A0()
-{
-    call<void()>(0x005CE8A0)();
-}
-
-//THUNK : 0x0057EF60
-void ServiceResourceLoading()
-{
-    call<void()>(0x0057EF60)();
-}
-
-//THUNK : 0x005CE4C0
-void sub_5CE4C0()
-{
-    call<void()>(0x005CE4C0)();
-}
-
-//THUNK : 0x005BF1C0
-void sub_5BF1C0()
-{
-    call<void()>(0x005BF1C0)();
-}
-
 //DONE : 0x005CEC80
 void sub_5CEC80()
 {
@@ -383,35 +161,29 @@ void sub_5CEC80()
     sub_5BF1C0();
 }
 
-//THUNK : 0x00456940
-void sub_00456940(std::uint32_t* a1)
-{
-    reinterpret_cast<void(__thiscall*)(std::uint32_t*)>(0x00456940)(a1);
-}
-
 //DONE : 0x005811C0
 void __cdecl MainLoop()
 {
-    void* v0; // esi
-    int ticker; // edi
-    uint32_t* v2; // eax
-    uint32_t* v3; // esi
-    uint32_t* v4; // eax
-    uint32_t* v5; // esi
-    int v6; // eax
-    int v8; // [esp+0h] [ebp-1Ch]
-    int v9; // [esp+0h] [ebp-1Ch]
-    float v10; // [esp+0h] [ebp-1Ch]
-    float v11; // [esp+0h] [ebp-1Ch]
-    void* v12; // [esp+4h] [ebp-18h]
-    void* v13; // [esp+4h] [ebp-18h]
-    void* v14; // [esp+4h] [ebp-18h]
-    void* v15; // [esp+4h] [ebp-18h]
-    void* v16; // [esp+4h] [ebp-18h]
-    void* v17; // [esp+4h] [ebp-18h]
-    void* v18; // [esp+4h] [ebp-18h]
-    bool v19; // [esp+10h] [ebp-Ch]
-    float a2; // [esp+18h] [ebp-4h]
+    void* v0;
+    int ticker;
+    uint32_t* v2;
+    uint32_t* v3;
+    uint32_t* v4;
+    uint32_t* v5;
+    int v6;
+    int v8;
+    int v9;
+    float v10;
+    float v11;
+    void* v12;
+    void* v13;
+    void* v14;
+    void* v15;
+    void* v16;
+    void* v17;
+    void* v18;
+    bool v19;
+    float a2;
 
     ticker = bGetTicker();
     if (!ExitTheGameFlag)
@@ -476,7 +248,7 @@ void __cdecl MainLoop()
                 VerifyJoylogChecksum();
             }
 
-            sub_005EB390();
+            DetermineAllPlayersInputModes();
 
             if (pReplayManager)
             {
@@ -491,7 +263,6 @@ void __cdecl MainLoop()
             v19 = 1;
 
 #if DEBUG
-            //non matching
             static char callback[32];
             static char prev_callback[32];
             std::strcpy(callback, GameFlowCallback);
@@ -607,12 +378,6 @@ void __cdecl MainLoop()
     }
 }
 
-//THUNK : 0x0057E800
-void ServiceQueuedFiles()
-{
-    call<void()>(0x0057E800)();
-}
-
 //DONE : 0x0057CD70
 void InitBigFiles()
 {
@@ -638,18 +403,6 @@ void InitBigFiles()
             }
         }
     }
-}
-
-//THUNK : 0x00580D90
-int InitJoylog()
-{
-    return call<int()>(0x00580D90)();
-}
-
-//THUNK : 0x0057ECB0
-void SeedRandomNumber()
-{
-    call<void()>(0x0057ECB0)();
 }
 
 //DONE : 0x005736D0
@@ -699,54 +452,351 @@ void eInitTextures()
     TexturePackSlotPool = bNewSlotPool(124, 128, "TexturePackSlotPool", 0);
 }
 
-//THUNK : 0x0048DE90
-void eInitSolids()
-{
-    call<void()>(0x0048DE90)();
-}
-
-//THUNK : 0x005C2F90
-void epInitViews()
-{
-    call<void()>(0x005C2F90)();
-}
-
 //DONE : 0x005BB700
 void elInitPlat()
 {
     eLightMaterialPlatInfoSlotPool = bNewSlotPool(128, 220, "eLightMaterialPlatInfoSlotPool", 0);
 }
 
-//THUNK : 0x0048AB60
-void eInitLightFlarePool()
+//DONE : 0x005BF610
+void PCGetResolution(LONG* width, LONG* height)
 {
-    call<void()>(0x0048AB60)();
+    switch (*&g_RacingResolution)
+    {
+    case 0:
+        *width = 640;
+        *height = 480;
+        break;
+    case 1:
+        *width = 800;
+        *height = 600;
+        break;
+    case 2:
+        *width = 1024;
+        *height = 768;
+        break;
+    case 3:
+        *width = 1280;
+        *height = 960;
+        break;
+    case 4:
+        *width = 1280;
+        *height = 1024;
+        break;
+    case 5:
+        *width = 1600;
+        *height = 1200;
+        break;
+    default:
+        return;
+    }
 }
 
-//THUNK : 0x005C33D0
-void eInitEnvMap()
+//DONE : 0x005B9A60
+void PCEnableD3DFeatures(int width, int height)
 {
-    call<void()>(0x005C33D0)();
+    ZeroMemory(&D3D_PP, sizeof(D3D_PP));
+
+    if (PCWindowed)
+    {
+        GetWindowRect(PCHwnd, &PCWindowRect);
+        GetClientRect(PCHwnd, &PCClientRect);
+    }
+
+    D3D_PP.Windowed = PCWindowed;
+    D3D_PP.BackBufferWidth = width;
+    D3D_PP.BackBufferHeight = height;
+
+    if ((D3D_DEVICE_CAPS.Caps3 & 0x20) != 0 || (D3D_PP.SwapEffect = D3DSWAPEFFECT_COPY, dword_8709A0))
+    {
+        D3D_PP.SwapEffect = D3DSWAPEFFECT_DISCARD;
+    }
+
+    D3D_PP.BackBufferFormat = D3D_BACK_BUF_FMT;
+    D3D_PP.AutoDepthStencilFormat = D3D_DEPTH_STENCIL != 0 ? D3DFMT_D16 : D3DFMT_D24S8;
+    D3D_PP.PresentationInterval = *&g_VSyncOn != 0 ? 1 : 0x80000000;
+    D3D_PP.hDeviceWindow = PCHwnd;
+    D3D_PP.EnableAutoDepthStencil = 1;
+    D3D_PP.Flags = 0;
+    ScreenHeight = height;
+    ScreenWidth = width;
+
+    if (*&g_FSAALevel <= 0)
+    {
+        D3D_PP.MultiSampleType = D3DMULTISAMPLE_NONE;
+        D3D_PP.MultiSampleQuality = 0;
+    }
+    else
+    {
+        D3D_PP.MultiSampleType = D3DMULTISAMPLE_NONMASKABLE;
+        D3D_PP.MultiSampleQuality = *&g_FSAALevel;
+    }
+}   
+
+//DONE : 0x005B9B70
+void PCCreateD3DDevice()
+{
+    HRESULT results; // esi
+
+    results = D3D->CreateDevice(D3D_ADAPTER_DEFAULT, D3DDEVTYPE_HAL, PCHwnd, D3DCREATE_MIXED_VERTEXPROCESSING, &D3D_PP, &D3D_DEVICE);
+
+    if (results != D3D_OK)
+    {
+        results = D3D->CreateDevice(D3D_ADAPTER_DEFAULT, D3DDEVTYPE_HAL, PCHwnd, 32, &D3D_PP, &D3D_DEVICE);
+    }
+
+    if (results == D3D_OK)
+    {
+        D3D_DEVICE->BeginScene();
+        D3D_DEVICE->Clear(0, 0, 7, 0, 0x3F800000, 0);
+        D3D_DEVICE->EndScene();
+        D3D_DEVICE->Present(0, 0, 0, 0);
+    }
 }
 
-//THUNK : 0x00431840
-void InitNFSAnimEngine()
+//TODO : 0x005BE690
+void sub_5BE690()
 {
-    call<void()>(0x00431840)();
+    if (dword_8764D0 < *&g_CarEnvironmentMapEnable) *&g_CarEnvironmentMapEnable = dword_8764D0;
+    if (dword_8764D4 < *&g_CarEnvironmentMapUpdateData) *&g_CarEnvironmentMapUpdateData = dword_8764D4;
+    if (dword_8764D8 < *&g_CarShadowEnable) *&g_CarShadowEnable = dword_8764D8;
+    if (dword_8764DC < *&g_CarHeadlightEnable) *&g_CarHeadlightEnable = dword_8764DC;
+    if (dword_8764E0 < *&g_CarLightingEnable) *&g_CarLightingEnable = dword_8764E0;
+    if (dword_8764E4 < *&g_CarDamageEnable) *&g_CarDamageEnable = dword_8764E4;
+    if (dword_8764E8 < *&g_CrowdEnable) *&g_CrowdEnable = dword_8764E8;
+    if (dword_8764EC < *&g_RoadReflectionEnable) *&g_RoadReflectionEnable = dword_8764EC;
+    if (dword_8764F0 < *&g_FogEnable) *&g_FogEnable = dword_8764F0;
+    if (dword_8764F4 < *&g_MotionBlurEnable) *&g_MotionBlurEnable = dword_8764F4;
+    if (dword_8764F8 < *&g_LightStreaksEnable) *&g_LightStreaksEnable = dword_8764F8;
+    if (dword_8764FC < *&g_LightGlowEnable) *&g_LightGlowEnable = dword_8764FC;
+    if (dword_876500 < *&g_AnimatedTextureEnable) *&g_AnimatedTextureEnable = dword_876500;
+    if (dword_876504 < *&g_ParticleSystemEnable) *&g_ParticleSystemEnable = dword_876504;
+    if (dword_876508 < *&g_DepthOfFieldEnable) *&g_DepthOfFieldEnable = dword_876508;
+    if (dword_87650C < *&g_WorldLodLevel) *&g_WorldLodLevel = dword_87650C;
+    if (dword_876510 < *&g_CarLodLevel) *&g_CarLodLevel = dword_876510;
+    if (PCAAQuality < *&g_FSAALevel) *&g_FSAALevel = PCAAQuality;
+    if (dword_876518 < *&g_BleachByPassEnable) *&g_BleachByPassEnable = dword_876518;
+    if (dword_876514 < *&g_OverBrightEnable) *&g_OverBrightEnable = dword_876514;
+    if (dword_876524 < *&g_HorizonFogEnable) *&g_HorizonFogEnable = dword_876524;
+    if (dword_876528 < *&g_RainEnable) *&g_RainEnable = dword_876528;
+    if (dword_87652C < dword_870D14) dword_870D14 = dword_87652C;
+    if (dword_876530 < *&g_TextureFiltering) *&g_TextureFiltering = dword_876530;
+
+    /*int v0 = *&g_RacingResolution;
+    if (!dword_86E880[*&g_RacingResolution] && *&g_RacingResolution >= 0)
+    {
+        while (!dword_86E880[v0])
+        {
+            if (--v0 < 0)
+                return;
+        }
+        *&g_RacingResolution = v0;
+    }*/
 }
 
-//THUNK : 0x005D24F0
+//TODO : 0x005BCFF0
+void InitSlotPools()
+{
+    eAnimTextureSlotPool = bNewSlotPool(4, 256, "eAnimTextureSlotPool", 0);
+    eAnimTextureSlotPool->unk_20 &= 0xFFFFFFFD;
+
+    eTextureBucketSlotPool = bNewSlotPool(32, 1024, "eTextureBucketSlotPool", 0);
+    eTextureBucketSlotPool->unk_20 &= 0xFFFFFFFD;
+
+    eDataRenderSlotPool = bNewSlotPool(44, 4096, "eMeshRender", 0);
+    eDataRenderSlotPool->unk_20 &= 0xFFFFFFFD;
+}
+
+//DONE : 0x005BDFB0
+void InitStripSlotPool()
+{
+    eStripSlotPool = bNewSlotPool(1540, 32, "eStripSlotPool", 0);
+    eStripSlotPool->unk_20 &= 0xFFFFFFFD;
+}
+
+//TODO : 0x005BB220
+void sub_5BB220(IDirect3DVertexBuffer9* this_, LONG* a2, LONG* a3)
+{
+    //reinterpret_cast<void(__thiscall*)(IDirect3DVertexBuffer9*, LONG*, LONG*)>(0x005BB220)(this_, a2, a3);
+}
+
+//DONE : 0x005BF6E0
+void DinputInit(LPDIRECTINPUTDEVICE8A* device)
+{
+    bool data_format_set; // sf
+    LPDIRECTINPUTDEVICE8A device_2; // eax
+
+    if (PCDirectInput)
+    {
+        if (PCDirectInput->CreateDevice(GUID_SysMouse, device, 0) < 0)
+        {
+            *device = 0;
+        }
+
+        data_format_set = (*device)->SetDataFormat(&c_dfDIMouse2) < 0;
+
+        device_2 = *device;
+
+        if (data_format_set)
+        {
+            if (device_2)
+            {
+                device_2->Unacquire();
+            }
+
+            if (*device)
+            {
+                (*device)->Release();
+                *device = 0;
+            }
+        }
+        else
+        {
+            device_2->SetCooperativeLevel(PCHwnd, 6);
+            (*device)->Acquire();
+        }
+    }
+}
+
+//DONE : 0x005D24F0
 void eInitEnginePlat()
 {
-    call<void()>(0x005D24F0)();
+    EnginePlatState = 1;
+    D3D = Direct3DCreate9(D3D_SDK_VERSION);
+    D3D->GetDeviceCaps(0, D3DDEVTYPE_HAL, &D3D_DEVICE_CAPS);
+
+    sub_5BE5A0();
+    LoadRegistrySettings();
+    _controlfp(3u, 0x8001Fu);
+
+    TextureHeaderSlotPool = bNewSlotPool(4, 1024, "g_textureHeaderPool", 0);
+    TextureHeaderSlotPool->unk_20 &= 0xFFFFFFFD;
+    VertexBufferHeaderPool = bNewSlotPool(4, 1024, "g_vertexBufferHeaderPool", 0);
+    VertexBufferHeaderPool->unk_20 &= 0xFFFFFFFD;
+
+    WNDCLASSEX wc = {};
+    wc.cbSize = sizeof(WNDCLASSEX);
+    wc.style = 0;
+    wc.lpfnWndProc = WindowProc;
+    wc.cbClsExtra = 0;
+    wc.cbWndExtra = 0;
+    wc.hInstance = GetModuleHandleA(0);
+    wc.hIcon = LoadIconA(GetModuleHandleA(0), "IDI_ICON1");
+    wc.hCursor = LoadCursorA(GetModuleHandleA(0), IDC_ARROW);
+    wc.hbrBackground = 0;
+    wc.lpszMenuName = NULL;
+    wc.lpszClassName = "GameFrame";
+    wc.hIconSm = LoadIconA(GetModuleHandleA(0), IDI_APPLICATION);
+    RegisterClassExA(&wc);
+
+    LONG screen_width;
+    LONG screen_height;
+    PCGetResolution(&screen_width, &screen_height);
+
+    struct tagRECT rect;
+    rect.left = 100;
+    rect.top = 100;
+    ScreenWidth = screen_width;
+    ScreenHeight = screen_height;
+    rect.right = screen_width + 100;
+    rect.bottom = screen_height + 100;
+    AdjustWindowRect(&rect, 0x80000000, 0);
+
+    PCHwnd = CreateWindowExA
+    (
+        0,
+        "GameFrame",
+        "NFS Underground 2",
+        0x80000000,
+        rect.left,
+        rect.top,
+        rect.right - rect.left,
+        rect.bottom - rect.top,
+        GetDesktopWindow(),
+        0,
+        wc.hInstance,
+        0
+    );
+
+    UpdateWindow(PCHwnd);
+
+    if (!PCWindowed)
+    {
+        SetCursor(0);
+        ShowCursor(0);
+    }
+
+    SetFocus(PCHwnd);
+    SetForegroundWindow(PCHwnd);
+    GetWindowRect(PCHwnd, &PCWindowRect);
+    GetClientRect(PCHwnd, &PCClientRect);
+
+    D3DDISPLAYMODE d3d_display;
+    D3D->GetAdapterDisplayMode(D3D_ADAPTER_DEFAULT, &d3d_display);
+    D3D_BACK_BUF_FMT = D3DFMT_A8R8G8B8;
+
+    D3D->CheckDeviceMultiSampleType(
+        D3D_ADAPTER_DEFAULT,
+        D3DDEVTYPE_HAL,
+        D3DFMT_A8R8G8B8,
+        0,
+        D3DMULTISAMPLE_NONMASKABLE,
+        &PCAAQuality
+    );
+
+    --PCAAQuality;
+    if (D3D_IDENTIFIER.VendorId == 4098 && sub_5BF5A0())
+    {
+        PCAAQuality = 0;
+    }
+
+    PCEnableD3DFeatures(screen_width, screen_height);
+    PCCreateD3DDevice();
+
+    if (*&g_FSAALevel > 0)
+    {
+        *&g_FSAALevel = 0;
+        PCAAQuality = 0;
+        *&g_RacingResolution = 0;
+        PCEnableD3DFeatures(screen_width, screen_height);
+        PCCreateD3DDevice();
+    }
+
+    D3D_DEVICE->GetAvailableTextureMem();
+
+    ShowWindow(PCHwnd, 1);
+    SetWindowLongA(PCHwnd, -16, 0x10000000);
+    eInitD3D();
+    sub_5D21F0();
+    sub_5CED60();
+    sub_5BE690();
+    InitSlotPools();
+    SetScreenBuffers();
+
+    D3D_DEVICE->GetAvailableTextureMem();
+
+    screen_height = 1000;
+    screen_width = 0;
+    sub_5BB220(dword_86B7A4, &screen_width, &screen_height);
+
+    if (PCDirectInput)
+    {
+        PCDirectInput->Release();
+        PCDirectInput = 0;
+    }
+
+    if (DirectInput8Create(GetModuleHandleA(0), DIRECTINPUT_VERSION, IID_IDirectInput8, (LPVOID*)&PCDirectInput, 0) < 0)
+    {
+        PCDirectInput = 0;
+    }
+
+    DinputInit(&TheDinputDevice);
+    InitStripSlotPool();
 }
 
 //nullsub
 //DONE : 0x004022C0
-void _return()
-{
-
-}
+void _return() {}
 
 //DONE : 0x0048CD60
 void eInitEngine()
@@ -787,42 +837,6 @@ void InitResourceLoader()
     ResourceFileSlotPool = bNewSlotPool(240, 80, "ResourceFileSlotPool", 0);
 }
 
-//THUNK : 0x00579550
-void InitJoystick()
-{
-    call<void()>(0x00579550)();
-}
-
-//THUNK : 0x004859B0
-void InitializeSoundDriver()
-{
-    call<void()>(0x004859B0)();
-}
-
-//THUNK : 0x00537830
-void FEngInitSystem()
-{
-    call<void()>(0x00537830)();
-}
-
-//THUNK : 0x0057FB00
-void sub_0057FB00()
-{
-    call<void()>(0x0057FB00)();
-}
-
-//THUNK : 0x004FF680
-void InitLocalization()
-{
-    call<void()>(0x004FF680)();
-}
-
-//THUNK : 0x0057FB40
-void LoadGlobalChunks()
-{
-    call<void()>(0x0057FB40)();
-}
-
 //DONE : 0x00486910
 void InitializeSoundLoad()
 {
@@ -835,28 +849,10 @@ void InitCarRender()
     CarPartModelPool = (int)bNewSlotPool(24, 1024, "CarPartModelPool", 0);
 }
 
-//THUNK : 0x0060C820
-void InitStandardModels()
-{
-    call<void()>(0x0060C820);
-}
-
-//THUNK : 0x00452EC0
-void InitDragCameraManager()
-{
-    call<void()>(0x00452EC0)();
-}
-
 //DONE : 0x00534840
 void InitFrontendDatabase()
 {
     FEDatabase.Default();
-}
-
-//THUNK : 0x0061C700
-void InitCarLoader()
-{
-    call<void()>(0x0061C700)();
 }
 
 //DONE : 0x0057B870
@@ -933,7 +929,6 @@ void InitializeEverything(int argc, char* argv[])
     _DWORD* v7 = 0; // eax
 
 #if DEBUG
-    //non matching
     WindowedMode = true;
 #endif
 
@@ -991,27 +986,15 @@ void InitializeEverything(int argc, char* argv[])
     GlobalMemoryFile = 0;
 }
 
-//THUNK : 0x005CF960
-void ShutdownTheGame()
-{
-    call<void()>(0x005CF960)();
-}
-
 //DONE : 0x00580E00
 void _main(int argc, char* argv[])
 {
 #ifdef DEBUG
-    //non matching
     SkipMovies = true;
 #endif
 
-#ifdef MATCHING
-    if (PlatformIsProcessRunning("speed2.exe", 1))
-    {
-#else
     if (PlatformIsProcessRunning("BB2.exe", 1))
     {
-#endif
         _exit(0);
     }
 

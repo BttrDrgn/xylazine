@@ -10,6 +10,7 @@ public:
 	int unk_16;
 	int unk_20;
 	int unk_24;
+	char unk_28[2500];
 	
 	SlotPool* Malloc();
 
@@ -27,5 +28,11 @@ extern SlotPool*& ePolySlotPool;
 extern SlotPool*& eModelSlotPool;
 extern SlotPool*& TexturePackSlotPool;
 extern SlotPool*& eLightMaterialPlatInfoSlotPool;
+extern SlotPool*& TextureHeaderSlotPool;
+extern SlotPool*& VertexBufferHeaderPool;
+extern SlotPool*& eStripSlotPool;
+extern SlotPool*& eAnimTextureSlotPool;
+extern SlotPool*& eTextureBucketSlotPool;
+extern SlotPool*& eDataRenderSlotPool;
 
 SlotPool* bNewSlotPool(int slot_size, int slot_count, const char* debug_name, int memory_pool);

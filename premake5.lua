@@ -69,11 +69,23 @@ workspace(project_name)
 			"LOADED_BIN=\"".. loaded_bin .. "\"",
 		}
 
+		syslibdirs {
+			"$(DXSDK_DIR)Lib/x86",
+		}
+
+		links {
+			"d3d9",
+			"dxguid",
+			"DxErr.lib",
+			"dinput8",
+		}
+
 		includedirs {
 			"./src/loader/",
 			"./src/game/",
 			"./src/memory/",
-			"./src/"
+			"./src/",
+			"$(DXSDK_DIR)Include",
 		}
 
 		files {

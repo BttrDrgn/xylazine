@@ -5,6 +5,8 @@
 #include <Windows.h>
 #include <tlhelp32.h>
 #include <string.h>
+#include <d3d9.h>
+#include <dinput.h>
 
 #ifdef DEBUG
 #include <intrin.h>

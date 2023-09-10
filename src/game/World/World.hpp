@@ -15,8 +15,8 @@ extern float& RealTimeElapsed;
 extern float& WorldTimestep;
 extern int& NeedToPrepareWorldTimestep;
 extern int& RealTimer;
-extern int& dword_008669F4;
-extern int& dword_00866A14;
+extern int& dword_8669F4;
+extern int& dword_866A14;
 extern float& WorldTimeElapsed;
 extern int& WorldLoopCounter;
 
