@@ -10,6 +10,18 @@ void* j__malloc(size_t size)
     return call<void* (size_t)>(0x00575620)(size);
 }
 
+//THUNK : 0x0057CEF0
+ResourceFile* CreateResourceFile(const char* a1, int a2, int a3, int a4, int a5)
+{
+    return call<ResourceFile* (const char*, int, int, int, int)>(0x0057CEF0)(a1, a2, a3, a4, a5);
+}
+
+//THUNK : 0x0057FB00
+void LoadGlobalAChunks()
+{
+    call<void()>(0x0057FB00)();
+}
+
 //THUNK : 0x005809C0
 void GenerateJoyEvents()
 {
@@ -139,7 +151,7 @@ void sub_005CE8A0()
 //THUNK : 0x0057EF60
 void ServiceResourceLoading()
 {
-    call<void()>(0x0057EF60)();
+    reinterpret_cast<void(__thiscall*)()>(0x0057EF60)();
 }
 
 //THUNK : 0x005CE4C0
@@ -272,12 +284,6 @@ void InitializeSoundDriver()
 void FEngInitSystem()
 {
     call<void()>(0x00537830)();
-}
-
-//THUNK : 0x0057FB00
-void sub_0057FB00()
-{
-    call<void()>(0x0057FB00)();
 }
 
 //THUNK : 0x004FF680

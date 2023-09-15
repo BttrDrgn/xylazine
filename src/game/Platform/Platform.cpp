@@ -2,6 +2,7 @@
 #include "MemoryPool/MemoryPool.hpp"
 #include "RealSystem/RealSystem.hpp"
 #include "SlotPool/SlotPool.hpp"
+#include "Platform/bFile.hpp"
 #include "memory.hpp"
 #include "ida_defs.hpp"
 
@@ -96,24 +97,18 @@ bool PlatformIsProcessRunning(char* exe, int count)
     return v2 > count;
 }
 
-//THUNK : 0x00579B90
-bFile* bClose(bFile* file, char a2)
-{
-    return call<bFile*(bFile*, char)>(0x00579B90)(file, a2);
-}
-
 //DONE : 0x0057CAC0
 int bFileExists(char* Str)
 {
     bFile* FileHandle; // eax
     int v2; // esi
 
-    FileHandle = bOpen(Str, 1);
+    FileHandle->bOpen(Str, 1);
     if (!FileHandle)
         return 0;
     v2 = *((_DWORD*)FileHandle + 1);
     if (*((int*)FileHandle + 6) <= 0)
-        bClose(FileHandle, 1);
+        FileHandle->bClose(1);
     else
         *((_DWORD*)FileHandle + 5) = 1;
     return v2 + 1;
@@ -147,12 +142,6 @@ int __cdecl bStrLen(const char* a1)
 SlotPool* bOMalloc(SlotPool* pool)
 {
     return pool->Malloc();
-}
-
-//THUNK : 0x0057CA10
-bFile* bOpen(char* path, int a2)
-{
-    return call<bFile*(char*, int)>(0x0057CA10)(path, a2);
 }
 
 //THUNK : 0x0057B640

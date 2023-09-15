@@ -2,6 +2,7 @@
 #include "memory.hpp"
 #include "ida_defs.hpp"
 #include "Platform/Platform.hpp"
+#include "Platform/bFile.hpp"
 #include "RaceStarter/RaceStarter.hpp"
 #include "GameFlowManager/GameFlowManager.hpp"
 #include "ReplayManager/ReplayManager.hpp"
@@ -21,6 +22,7 @@
 #include "eModel/eModel.hpp"
 #include "Stomper/Stomper.hpp"
 #include "Player/Player.hpp"
+#include "ResourceFile/ResourceFile.hpp"
 #include "thunks.hpp"
 #include "variables.hpp"
 
@@ -45,7 +47,7 @@ bFile* sub_0057CB70(char* path, int a2, int a3)
     int v5;
     int v6;
 
-    result = bOpen(path, 2);
+    result = bFile::bOpen(path, 2);
     v4 = result;
     if (result)
     {
@@ -57,7 +59,7 @@ bFile* sub_0057CB70(char* path, int a2, int a3)
             v4->unk_4 = v6;
         result = (bFile*)v4[3].unk_0;
         if ((int)result <= 0)
-            result = bClose(v4, 1);
+            result->bClose(1);
         else
             v4[2].unk_4 = 1;
     }
@@ -385,14 +387,15 @@ void InitBigFiles()
     int v1; // esi
     int v2; // eax
 
-    v0 = bOpen("NFSUNDER\\ZDIR.BIN", 1);
+    v0 = bFile::bOpen("NFSUNDER\\ZDIR.BIN", 1);
     if (v0)
     {
-        v1 = *((_DWORD*)v0 + 1);
-        if (*((int*)v0 + 6) <= 0)
-            bClose(v0, 1);
+        v1 = v0->unk_4;
+
+        if (v0->unk_24 <= 0)
+            v0->bClose(1);
         else
-            *((_DWORD*)v0 + 5) = 1;
+            v0->unk_20 = 1;
         if (v1 != -1)
         {
             v2 = bInitDisculatorDriver("NFSUNDER\\ZDIR.BIN", "NFSUNDER\\ZZDATA");
@@ -950,7 +953,7 @@ void InitializeEverything(int argc, char* argv[])
     InitJoystick();
     InitializeSoundDriver();
     FEngInitSystem();
-    sub_0057FB00();
+    LoadGlobalAChunks();
     InitLocalization();
     LoadGlobalChunks();
     InitializeSoundLoad();

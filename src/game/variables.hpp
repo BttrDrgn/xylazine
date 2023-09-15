@@ -130,6 +130,7 @@ auto& g_BleachByPassEnable = *reinterpret_cast<bool*>(0x00870D00);
 auto& g_HorizonFogEnable = *reinterpret_cast<bool*>(0x00870D0C);
 auto& g_RainEnable = *reinterpret_cast<bool*>(0x00870D10);
 auto& g_TextureFiltering = *reinterpret_cast<bool*>(0x00870D18);
+auto& NumResourcesBeingLoaded = *reinterpret_cast<int*>(0x00864F54);
 
 //Local memory
 auto D3D_DEPTH_STENCIL = 0;
