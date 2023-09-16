@@ -250,12 +250,6 @@ void sub_5C8320(WPARAM wParam)
     call<void(WPARAM)>(0x005C8320)(wParam);
 }
 
-//THUNK : 0x005B7EE0
-void sub_5B7EE0()
-{
-    call<void()>(0x005B7EE0)();
-}
-
 //THUNK : 0x0052CF60
 bool FEngIsPackagePushed(const char* a4)
 {

@@ -709,6 +709,65 @@ bool IsLoadingScreenUp()
     return FEngIsPackagePushed("PC_Loading.fng");
 }
 
+//DONE : 0x005B7EE0
+void sub_5B7EE0()
+{
+    if (dword_874E70 != -1)
+    {
+        dword_874C48 = -1;
+        dword_874C4C = -1;
+        byte_874C51 = 0;
+        byte_874C50 = 0;
+        byte_874C53 = 128;
+        byte_874C52 = 128;
+    }
+    if (dword_8751E0 != -1)
+    {
+        dword_874FB8 = -1;
+        dword_874FBC = -1;
+        byte_874FC1 = 0;
+        byte_874FC0 = 0;
+        byte_874FC3 = 128;
+        byte_874FC2 = 128;
+    }
+    if (dword_875550 != -1)
+    {
+        dword_875328 = -1;
+        dword_87532C = -1;
+        byte_875331 = 0;
+        byte_875330 = 0;
+        byte_875333 = 128;
+        byte_875332 = 128;
+    }
+    if (dword_8758C0 != -1)
+    {
+        dword_875698 = -1;
+        dword_87569C = -1;
+        byte_8756A1 = 0;
+        byte_8756A0 = 0;
+        byte_8756A3 = 128;
+        byte_8756A2 = 128;
+    }
+    if (dword_875C30 != -1)
+    {
+        dword_875A08 = -1;
+        dword_875A0C = -1;
+        byte_875A11 = 0;
+        byte_875A10 = 0;
+        byte_875A13 = 128;
+        byte_875A12 = 128;
+    }
+    if (dword_875FA0 != -1)
+    {
+        dword_875D78 = -1;
+        dword_875D7C = -1;
+        byte_875D81 = 0;
+        byte_875D80 = 0;
+        byte_875D83 = 128;
+        byte_875D82 = 128;
+    }
+}
+
 //DONE : 0x005CCD60
 LRESULT CALLBACK WindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
