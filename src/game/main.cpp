@@ -31,6 +31,9 @@
 //DONE : 0x004022C0
 void nullsub(void* unused) {}
 
+//nullsub
+//DONE : 0x004022C0
+void _return() {}
 
 //DONE : 0x005BCFA0
 void sub_5BCFA0()
@@ -700,6 +703,158 @@ void DinputInit(LPDIRECTINPUTDEVICE8A* device)
     }
 }
 
+//DONE : 0x004A9330
+bool IsLoadingScreenUp()
+{
+    return FEngIsPackagePushed("PC_Loading.fng");
+}
+
+//DONE : 0x005CCD60
+LRESULT CALLBACK WindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+    //return reinterpret_cast<LRESULT(__stdcall*)(HWND, UINT, WPARAM, LPARAM)>(0x005CCD60)(hWnd, Msg, wParam, lParam);
+    int result; // eax
+
+    if (Msg <= WM_CHAR)
+    {
+        if (Msg == WM_CHAR)
+        {
+            sub_55DBD0(wParam);
+            sub_5C8320(wParam);
+        }
+        else
+        {
+            if (Msg <= WM_CLOSE)
+            {
+                if (Msg != WM_CLOSE)
+                {
+                    switch (Msg)
+                    {
+                    case WM_DESTROY:
+                        CreateRegistrySettings();
+                        PostQuitMessage(0);
+                        result = 0;
+                        break;
+                    case WM_SIZE:
+                        PostMessageA(hWnd, 0xFu, 0, 0);
+                        WParam = !IsIconic(hWnd);
+                        return 0;
+                    case WM_ACTIVATE:
+                        if (g_pEAXSound && (wParam == 0) != IsLostFocus)
+                        {
+                            if (wParam)
+                            {
+                                g_pEAXSound->ExitPauseMenu(ePAUSE_ERROR);
+                                IsLostFocus = 0;
+                            }
+                            else
+                            {
+                                g_pEAXSound->EnterPauseMenu(-1, 1);
+                                g_pEAXSound->Update(0.0);
+                                IsLostFocus = 1;
+                            }
+                        }
+                        return DefWindowProcA(hWnd, Msg, wParam, lParam);
+                    case WM_PAINT:
+                        BeginPaint(hWnd, &Paint);
+                        EndPaint(hWnd, &Paint);
+                        return DefWindowProcA(hWnd, Msg, wParam, lParam);
+                    default:
+                        return DefWindowProcA(hWnd, Msg, wParam, lParam);
+                    }
+                    return result;
+                }
+                if (!IsLoadingScreenUp() && !ExitTheGameFlag)
+                {
+                    ExitTheGameFlag = 1;
+                    return 0;
+                }
+                return 0;
+            }
+
+            if (Msg == WM_ACTIVATEAPP)
+            {
+                WParam = wParam;
+                sub_5B7EE0();
+            }
+            //Unused debug stuff
+            /*else if (Msg == WM_KEYDOWN)
+            {
+                switch (wParam)
+                {
+                case '#':
+                    _return();
+                    sub_5BF3A0(dword_8709C0);
+                    break;
+                case '$':
+                    _return();
+                    sub_5BF3A0(-dword_8709C0);
+                    break;
+                case '%':
+                    _return();
+                    sub_5BF3A0(-1);
+                    break;
+                case '\'':
+                    _return();
+                    sub_5BF3A0(1);
+                    break;
+                case '{':
+                    dword_870994 = 1;
+                    break;
+                default:
+                    break;
+                }
+
+                if (wParam == 17)
+                {
+                    dword_8709D8 = 1;
+                }
+            }
+            else if (Msg == 257 && wParam == 17)
+            {
+                dword_8709D8 = 0;
+            }*/
+        }
+        return DefWindowProcA(hWnd, Msg, wParam, lParam);
+    }
+
+    if (Msg > WM_RBUTTONUP)
+    {
+        if (Msg == WM_MOUSEWHEEL || Msg == WM_QUERYNEWPALETTE || Msg == WM_PALETTECHANGED)
+        {
+            return 0;
+        }
+
+        return DefWindowProcA(hWnd, Msg, wParam, lParam);
+    }
+
+    if (Msg == WM_RBUTTONUP)
+    {
+    LABEL_40:
+        ReleaseCapture();
+        return DefWindowProcA(hWnd, Msg, wParam, lParam);
+    }
+
+    switch (Msg)
+    {
+    case WM_SYSCOMMAND:
+        if (wParam == SC_SCREENSAVE) return 0;
+        if (wParam != SC_MONITORPOWER) return DefWindowProcA(hWnd, Msg, wParam, lParam);
+        result = 0;
+        break;
+    case WM_LBUTTONDOWN:
+    case WM_RBUTTONDOWN:
+        SetCapture(hWnd);
+        return DefWindowProcA(hWnd, Msg, wParam, lParam);
+    case WM_LBUTTONUP:
+        goto LABEL_40;
+    default:
+        return DefWindowProcA(hWnd, Msg, wParam, lParam);
+    }
+    return result;
+}
+
+
 //DONE : 0x005D24F0
 void eInitEnginePlat()
 {
@@ -835,10 +990,6 @@ void eInitEnginePlat()
     DinputInit(&TheDinputDevice);
     InitStripSlotPool();
 }
-
-//nullsub
-//DONE : 0x004022C0
-void _return() {}
 
 //DONE : 0x0048CD60
 void eInitEngine()

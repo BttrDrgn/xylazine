@@ -26,3 +26,9 @@ void EAXSound::Destroy()
 {
 	reinterpret_cast<void(__thiscall*)(EAXSound*)>(0x00481080)(this);
 }
+
+//THUNK : 0x00481210
+void EAXSound::ExitPauseMenu(eSNDPAUSE_REASON pause_reason)
+{
+	reinterpret_cast<void(__thiscall*)(EAXSound*, eSNDPAUSE_REASON)>(0x00481210)(this, pause_reason);
+}

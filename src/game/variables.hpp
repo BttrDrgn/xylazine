@@ -140,6 +140,10 @@ auto& RealTimeFrames = *reinterpret_cast<int*>(0x007FB708);
 auto& RealTimeFramesElapsed = *reinterpret_cast<int*>(0x007FB70C);
 auto& flt_784264 = *reinterpret_cast<float*>(0x00784264);
 auto& flt_784260 = *reinterpret_cast<float*>(0x00784260);
+auto& Paint = *reinterpret_cast<PAINTSTRUCT*>(0x00876868);
+auto& WParam = *reinterpret_cast<WPARAM*>(0x00870988);
+auto& IsLostFocus = *reinterpret_cast<bool*>(0x008709E0);
+auto& dword_870994 = *reinterpret_cast<int*>(0x00870994);
 
 //Local memory
 auto D3D_DEPTH_STENCIL = 0;

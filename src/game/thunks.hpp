@@ -232,10 +232,34 @@ void LoadRegistrySettings()
     call<void()>(0x005BEA20)();
 }
 
-//THUNK : 0x005CCD60
-LRESULT CALLBACK WindowProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
+//THUNK : 0x005BEEA0
+void CreateRegistrySettings()
 {
-    return reinterpret_cast<LRESULT(__stdcall*)(HWND, UINT, WPARAM, LPARAM)>(0x005CCD60)(hWnd, Msg, wParam, lParam);
+    call<void()>(0x005BEEA0)();
+}
+
+//THUNK : 0x0055DBD0
+void sub_55DBD0(WPARAM wParam)
+{
+    call<void(WPARAM)>(0x0055DBD0)(wParam);
+}
+
+//THUNK : 0x005C8320
+void sub_5C8320(WPARAM wParam)
+{
+    call<void(WPARAM)>(0x005C8320)(wParam);
+}
+
+//THUNK : 0x005B7EE0
+void sub_5B7EE0()
+{
+    call<void()>(0x005B7EE0)();
+}
+
+//THUNK : 0x0052CF60
+bool FEngIsPackagePushed(const char* a4)
+{
+    return call<bool(const char*)>(0x0052CF60)(a4);
 }
 
 //THUNK : 0x005BF5A0
