@@ -47,19 +47,31 @@ void DetermineAllPlayersInputModes()
 }
 
 //THUNK : 0x0057EAD0
-void sub_0057EAD0(float a1)
+void sub_57EAD0(float a1)
 {
     call<void(float)>(0x0057EAD0)(a1);
 }
 
+//THUNK : 0x005BA610
+void sub_5BA610()
+{
+    call<void()>(0x005BA610)();
+}
+
+//THUNK : 0x005CF960
+void ShutdownTheGame()
+{
+    call<void()>(0x005CF960)();
+}
+
 //THUNK : 0x005F1390
-bool sub_005F1390(World* a1)
+bool sub_5F1390(World* a1)
 {
     return call<bool(World*)>(0x005F1390)(a1);
 }
 
 //THUNK : 0x005EA360
-float sub_005EA360(World* _this)
+float sub_5EA360(World* _this)
 {
     return call<float(World*)>(0x005EA360)(_this);
 }
@@ -83,7 +95,7 @@ void sub_58EBC0()
 }
 
 //THUNK : 0x0060AEE0
-void sub_0060AEE0(_DWORD* a1, bool a2)
+void sub_60AEE0(_DWORD* a1, bool a2)
 {
     reinterpret_cast<void(__thiscall*)(_DWORD*, bool)>(0x0060AEE0)(a1, a2);
 }
@@ -118,38 +130,26 @@ void DisplayDebugScreenPrints()
     call<void()>(0x00570C00)();
 }
 
-//THUNK : 0x005838A0
-bool sub_5838A0()
-{
-    return call<bool()>(0x005838A0)();
-}
-
 //THUNK : 0x0058C220
 void sub_58C220()
 {
     call<void()>(0x0058C220)();
 }
 
-//THUNK : 0x0057A050
-void sub_0057A050()
-{
-    call<void()>(0x0057A050)();
-}
-
 //THUNK : 0x005CE850
-void sub_005CE850()
+void sub_5CE850()
 {
     call<void()>(0x005CE850)();
 }
 
 //THUNK : 0x005D2850
-void sub_005D2850()
+void sub_5D2850()
 {
     call<void()>(0x005D2850)();
 }
 
 //THUNK : 0x005CE8A0
-void sub_005CE8A0()
+void sub_5CE8A0()
 {
     call<void()>(0x005CE8A0)();
 }

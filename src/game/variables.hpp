@@ -131,6 +131,15 @@ auto& g_RainEnable = *reinterpret_cast<bool*>(0x00870D10);
 auto& g_TextureFiltering = *reinterpret_cast<bool*>(0x00870D18);
 auto& NumResourcesBeingLoaded = *reinterpret_cast<int*>(0x00864F54);
 auto& byte_86B7C4 = *reinterpret_cast<bool*>(0x0086B7C4);
+auto& RealTimeElapsedFrame = *reinterpret_cast<int*>(0x00865144);
+auto& ExpectedFrameRate = *reinterpret_cast<float*>(0x00787590);
+auto& ExpectedFrameTime = *reinterpret_cast<float*>(0x007875BC);
+auto& RealLoopCounter = *reinterpret_cast<int*>(0x0086514C);
+auto& gCardiogram = *reinterpret_cast<int*>(0x007FB704);
+auto& RealTimeFrames = *reinterpret_cast<int*>(0x007FB708);
+auto& RealTimeFramesElapsed = *reinterpret_cast<int*>(0x007FB70C);
+auto& flt_784264 = *reinterpret_cast<float*>(0x00784264);
+auto& flt_784260 = *reinterpret_cast<float*>(0x00784260);
 
 //Local memory
 auto D3D_DEPTH_STENCIL = 0;

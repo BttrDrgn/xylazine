@@ -190,7 +190,7 @@ bool PlatformCDCheckBinDat(bool a1)
 }
 
 //DONE : 0x0043BD90
-void sub_0043BD90()
+void sub_43BD90()
 {
     int v0;
     double v1;
@@ -215,9 +215,9 @@ void sub_0043BD90()
 }
 
 //DONE : 0x0043E5B0
-void sub_0043E5B0()
+void sub_43E5B0()
 {
-    sub_0043BD90();
+    sub_43BD90();
 }
 
 //THUNK : 0x00440330
@@ -268,19 +268,19 @@ int bStrCmp(char* str1, char* str2)
 }
 
 //THUNK : 0x006FBD9E
-void sub_006FBD9E(int a1, char a2)
+void sub_6FBD9E(int a1, char a2)
 {
     call<void(int, char)>(0x006FBD9E)(a1, a2);
 }
 
 //THUNK : 0x006FBD0C
-void sub_006FBD0C(int a1, char a2)
+void sub_6FBD0C(int a1, char a2)
 {
     call<void(int, char)>(0x006FBD0C)(a1, a2);
 }
 
 //DONE : 0x006FBE2C
-void sub_006FBE2C()
+void sub_6FBE2C()
 {
     char* v0;
     char* v1;
@@ -316,8 +316,8 @@ void sub_006FBE2C()
             *v3 = 0;
             v3 += 8;
         } while ((int)v3 < 8471933);
-        sub_006FBD9E(2, 1);
-        sub_006FBD0C(0, 1);
+        sub_6FBD9E(2, 1);
+        sub_6FBD0C(0, 1);
     }
 }
 
@@ -346,7 +346,7 @@ void TIMER_init(int a1)
 }
 
 //THUNK : 0x005B7A70
-void sub_005B7A70()
+void sub_5B7A70()
 {
     call<void()>(0x005B7A70)();
 }
@@ -357,12 +357,12 @@ void InitPlatform()
     int v0 = 0;
     int v1 = 0;
 
-    sub_0043E5B0();
+    sub_43E5B0();
     bMemoryInit();
-    sub_006FBE2C();
+    sub_6FBE2C();
     THREAD_init();
     TIMER_init(100);
-    sub_005B7A70();
+    sub_5B7A70();
 
     if (!PlatformDRM())
     {

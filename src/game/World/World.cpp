@@ -81,31 +81,31 @@ int World::IsWorldPaused()
 }
 
 //THUNK : 0x004EC570
-void sub_004EC570()
+void sub_4EC570()
 {
     call<void()>(0x004EC570)();
 }
 
 //THUNK : 0x005FE4C0
-bool sub_005FE4C0(int* a1)
+bool sub_5FE4C0(int* a1)
 {
     return reinterpret_cast<bool(__thiscall*)(int*)>(0x005FE4C0)(a1);
 }
 
 //THUNK : 0x005FE530
-bool sub_005FE530(int* a1)
+bool sub_5FE530(int* a1)
 {
     return reinterpret_cast<bool(__thiscall*)(int*)>(0x005FE530)(a1);
 }
 
 //THUNK : 0x00401090
-float sub_00401090(float value, float min, float max)
+float sub_401090(float value, float min, float max)
 {
     return call<float(float, float, float)>(0x00401090)(value, min, max);
 }
 
 //THUNK : 0x005F9010
-void sub_005F9010(_WORD* a1, int a2)
+void sub_5F9010(_WORD* a1, int a2)
 {
     call<void(_WORD*, int)>(0x005F9010)(a1, a2);
 }

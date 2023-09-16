@@ -32,17 +32,8 @@
 void nullsub(void* unused) {}
 
 
-//DONE : 0x005F0140
-void FrameRateLoop()
-{
-    if (sub_5838A0())
-    {
-        sub_58C220();
-    }
-}
-
 //DONE : 0x005BCFA0
-void sub_005BCFA0()
+void sub_5BCFA0()
 {
     int v0;
 
@@ -52,7 +43,7 @@ void sub_005BCFA0()
 }
 
 //DONE : 0x0057CB70
-bFile* sub_0057CB70(char* path, int a2, int a3)
+bFile* sub_57CB70(char* path, int a2, int a3)
 {
     bFile* result;
     bFile* v4;
@@ -79,7 +70,7 @@ bFile* sub_0057CB70(char* path, int a2, int a3)
 }
 
 //DONE : 0x0057D860
-void sub_0057D860(void* a1)
+void sub_57D860(void* a1)
 {
     _DWORD* v1;
     int v2;
@@ -94,7 +85,7 @@ void sub_0057D860(void* a1)
             v3 = (_DWORD*)dword_008650DC;
             if (v2 > 0)
             {
-                sub_0057CB70((char*)(dword_008650DC + 36), dword_008650DC + 296, v2);
+                sub_57CB70((char*)(dword_008650DC + 36), dword_008650DC + 296, v2);
                 *v1 = *v3;
                 v3[1] = 0;
             }
@@ -114,7 +105,7 @@ void UpdateReplayUserInterface()
 }
 
 //DONE : 0x0043BE20
-float sub_0043BE20(int a1, int a2)
+float sub_43BE20(int a1, int a2)
 {
     int a2a;
 
@@ -125,19 +116,28 @@ float sub_0043BE20(int a1, int a2)
 }
 
 //DONE : 0x005F00F0
-bool sub_005F00F0(_DWORD* a1)
+bool sub_5F00F0(_DWORD* a1)
 {
     return *((_BYTE*)a1 + 33) || dword_8669F4 > 0 || dword_866A14 > 0;
 }
 
 //DONE : 0x005838A0
-bool sub_005838A0()
+bool sub_5838A0()
 {
     return dword_8669F4 > 0 || dword_866A14 > 0;
 }
 
+//DONE : 0x005F0140
+void FrameRateLoop()
+{
+    if (sub_5838A0())
+    {
+        sub_58C220();
+    }
+}
+
 //DONE : 0x0058F690
-void sub_0058F690()
+void sub_58F690()
 {
     if (byte_7FBE78)
     {
@@ -160,11 +160,11 @@ void sub_0058F690()
 }
 
 //DONE : 0x005F0130
-void __cdecl sub_005F0130()
+void sub_5F0130()
 {
-    if (sub_005838A0())
+    if (sub_5838A0())
     {
-        sub_0058F690();
+        sub_58F690();
     }
 }
 
@@ -173,6 +173,28 @@ void sub_5CEC80()
 {
     sub_5CE4C0();
     sub_5BF1C0();
+}
+
+//DONE : 0x0057A050
+void AdvanceRealTime()
+{
+    double temp; // st7
+    int result; // eax
+
+    temp = RealTimeElapsed + RealTimeElapsedFrame;
+    *&result = (ExpectedFrameRate * temp);
+    RealTimeElapsedFrame = temp - result * ExpectedFrameTime;
+
+    if (!result)
+    {
+        result = 1;
+    }
+
+    RealTimeFrames += result;
+    RealTimeFramesElapsed = result;
+    gCardiogram = RealTimeFrames;
+    RealTimer += (RealTimeElapsed * flt_784264 + flt_784260);
+    ++RealLoopCounter;
 }
 
 //DONE : 0x005811C0
@@ -206,9 +228,9 @@ void __cdecl MainLoop()
         do
         {
             MainLoopTimingStartTime = bGetTicker();
-            sub_005BCFA0();
+            sub_5BCFA0();
             last_frame_count_8872 = FrameCounter;
-            sub_0057D860(v12);
+            sub_57D860(v12);
             v2 = SingleFunction_Inlined;
             if (SingleFunction_Inlined)
             {
@@ -270,8 +292,8 @@ void __cdecl MainLoop()
             }
 
             v6 = bGetTicker();
-            v10 = sub_0043BE20(ticker, v6) * flt_0078435C;
-            sub_0057EAD0(v10);
+            v10 = sub_43BE20(ticker, v6) * flt_0078435C;
+            sub_57EAD0(v10);
             ticker = bGetTicker();
             TheDragCameraManager->Update();
             v19 = 1;
@@ -289,7 +311,7 @@ void __cdecl MainLoop()
             std::strcpy(prev_callback, callback);
 #endif
 
-            if (!sub_005F00F0(&dword_0089CF48) && pRaceCoordinator && pRaceCoordinator->State == 6)
+            if (!sub_5F00F0(&dword_0089CF48) && pRaceCoordinator && pRaceCoordinator->State == 6)
             {
                 WorldTimeElapsed = pCurrentWorld->GetTimestep(0.0);
             }
@@ -304,7 +326,7 @@ void __cdecl MainLoop()
                         WorldTimeElapsed = pCurrentWorld->GetTimestep(0.0);
                         NeedToPrepareWorldTimestep = 0;
                         GenerateJoyEvents();
-                        sub_005F1390(pCurrentWorld);
+                        sub_5F1390(pCurrentWorld);
                     }
                     else
                     {
@@ -317,12 +339,12 @@ void __cdecl MainLoop()
                         }
                         else
                         {
-                            v11 = sub_005EA360(pCurrentWorld);
+                            v11 = sub_5EA360(pCurrentWorld);
                             a2 = pCurrentWorld->GetTimestep(v11);
                             WorldTimeElapsed = a2;
                             NeedToPrepareWorldTimestep = 0;
                             GenerateJoyEvents();
-                            sub_005F0130();
+                            sub_5F0130();
                             pCurrentWorld->DoTimestep(a2);
                             v19 = 0;
                         }
@@ -345,7 +367,7 @@ void __cdecl MainLoop()
         LABEL_38:
             nullsub(v14);                             // ServicePlatform
             nullsub(v15);                             // ServiceScenery
-            sub_0060AEE0(&dword_0089CF48, v19);
+            sub_60AEE0(&dword_0089CF48, v19);
             FEngUpdate();
             UpdatePlayersNonGameState();
             UpdateCameraMovers();
@@ -360,12 +382,12 @@ void __cdecl MainLoop()
             TheTrackStreamer.ServiceNonGameState();
             NumTextureCreatedThisFrame = 0;
             ServiceResourceLoading();
-            sub_005CE850();
-            sub_005CE8A0();
-            sub_005D2850();
+            sub_5CE850();
+            sub_5CE8A0();
+            sub_5D2850();
             nullsub(v16);
             nullsub(v17);
-            sub_0057A050();
+            AdvanceRealTime();
             AdvanceWorldTime();
 
             if (!v19)
@@ -1004,62 +1026,6 @@ void InitializeEverything(int argc, char* argv[])
         bFree(v5);
     }
     GlobalMemoryFile = 0;
-}
-
-//THUNK : 0x005CF960
-void ShutdownTheGame()
-{
-    //call<void()>(0x005CF960)();
-    int v0; // ecx
-
-    DestroyWindow(PCHwnd);
-    g_pEAXSound->Destroy();
-    SYNCTASK_run();
-    bSleep(0);
-    sub_4839C0(g_pEAXSound, 0);
-    SYNCTASK_run();
-    bSleep(0);
-    sub_5CF1C0();
-    sub_5CE400();
-    sub_5CE970();
-
-    if (byte_86B7C4 && dword_86B7A4)
-    {
-        dword_86B7A4->Unlock();
-        byte_86B7C4 = 0;
-    }
-
-    sub_5C57E0(&dword_86B7A4);
-
-    if (dword_86B7A4)
-    {
-        dword_86B7A4->Release();
-    }
-
-    sub_5BA610();
-    sub_5BBCD0();
-    D3D_DEVICE->Release();
-    D3D->Release();
-
-    if (bFileSlotPool)
-    {
-        v0 = dword_865110;
-
-        while (v0)
-        {
-            if (v0)
-            {
-                SYNCTASK_run();
-                sub_57C920();
-                v0 = dword_865110;
-            }
-        }
-
-        sub_57B5D0();
-        bDeleteSlotPool(bFileSlotPool);
-        bFileSlotPool = 0;
-        pRealSystemMutex->Destroy();
-    }
 }
 
 //DONE : 0x00580E00
