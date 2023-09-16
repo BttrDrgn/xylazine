@@ -8,6 +8,7 @@
 #include "ReplayManager/ReplayManager.hpp"
 #include "SlotPool/SlotPool.hpp"
 #include "RealFile/RealFile.hpp"
+#include "RealSystem/RealSystem.hpp"
 #include "DragCamera/DragCamera.hpp"
 #include "cFrontendDatabase/cFrontendDatabase.hpp"
 #include "eModel/eModel.hpp"
@@ -23,11 +24,22 @@
 #include "Stomper/Stomper.hpp"
 #include "Player/Player.hpp"
 #include "ResourceFile/ResourceFile.hpp"
+#include "DragCameraManager/DragCameraManager.hpp"
 #include "thunks.hpp"
 #include "variables.hpp"
 
 //DONE : 0x004022C0
 void nullsub(void* unused) {}
+
+
+//DONE : 0x005F0140
+void FrameRateLoop()
+{
+    if (sub_5838A0())
+    {
+        sub_58C220();
+    }
+}
 
 //DONE : 0x005BCFA0
 void sub_005BCFA0()
@@ -261,7 +273,7 @@ void __cdecl MainLoop()
             v10 = sub_0043BE20(ticker, v6) * flt_0078435C;
             sub_0057EAD0(v10);
             ticker = bGetTicker();
-            sub_00456940(&dword_00828770);
+            TheDragCameraManager->Update();
             v19 = 1;
 
 #if DEBUG
@@ -355,24 +367,28 @@ void __cdecl MainLoop()
             nullsub(v17);
             sub_0057A050();
             AdvanceWorldTime();
+
             if (!v19)
-                sub_005F0140();
+            {
+                FrameRateLoop();
+            }
+
             nullsub(v18);
             MainLoopTimingLimitFrameRate = bGetTicker();
             DisplayDebugScreenPrints();
-            if (dword_0086511C)                     // Possibly gutted memory watchers from console versions
+            if (PrintOneShotProfile)                     // Possibly gutted memory watchers from console versions
             {
-                dword_0086511C = 0;
+                PrintOneShotProfile = 0;
                 nullsub(v12);
             }
-            if (dword_00865120)                     // Unused
+            if (PrintAccumulatedProfile)                     // Unused
             {
-                dword_00865120 = 0;
+                PrintAccumulatedProfile = 0;
                 nullsub(v12);
             }
-            if (dword_00865118)                     // Unused
+            if (ClearAccumulatedProfile)                     // Unused
             {
-                dword_00865118 = 0;
+                ClearAccumulatedProfile = 0;
                 nullsub(v12);
             }
             sub_5CEC80();
@@ -601,26 +617,27 @@ void sub_5BE690()
 void InitSlotPools()
 {
     eAnimTextureSlotPool = bNewSlotPool(4, 256, "eAnimTextureSlotPool", 0);
-    eAnimTextureSlotPool->unk_20 &= 0xFFFFFFFD;
+    eAnimTextureSlotPool->NumAllocatedSlots &= 0xFFFFFFFD;
 
     eTextureBucketSlotPool = bNewSlotPool(32, 1024, "eTextureBucketSlotPool", 0);
-    eTextureBucketSlotPool->unk_20 &= 0xFFFFFFFD;
+    eTextureBucketSlotPool->NumAllocatedSlots &= 0xFFFFFFFD;
 
     eDataRenderSlotPool = bNewSlotPool(44, 4096, "eMeshRender", 0);
-    eDataRenderSlotPool->unk_20 &= 0xFFFFFFFD;
+    eDataRenderSlotPool->NumAllocatedSlots &= 0xFFFFFFFD;
 }
 
 //DONE : 0x005BDFB0
 void InitStripSlotPool()
 {
     eStripSlotPool = bNewSlotPool(1540, 32, "eStripSlotPool", 0);
-    eStripSlotPool->unk_20 &= 0xFFFFFFFD;
+    eStripSlotPool->NumAllocatedSlots &= 0xFFFFFFFD;
 }
 
 //TODO : 0x005BB220
-void sub_5BB220(IDirect3DVertexBuffer9* this_, LONG* a2, LONG* a3)
+void sub_5BB220(IDirect3DVertexBuffer9* this_, int* a2, int* a3)
 {
-    //reinterpret_cast<void(__thiscall*)(IDirect3DVertexBuffer9*, LONG*, LONG*)>(0x005BB220)(this_, a2, a3);
+    //call<void(IDirect3DVertexBuffer9*, int*, int*)>(0x005BB220)(this_, a2, a3);
+    reinterpret_cast<void(__thiscall*)(IDirect3DVertexBuffer9*, int*, int*)>(0x005BB220)(this_, a2, a3);
 }
 
 //DONE : 0x005BF6E0
@@ -673,9 +690,9 @@ void eInitEnginePlat()
     _controlfp(3u, 0x8001Fu);
 
     TextureHeaderSlotPool = bNewSlotPool(4, 1024, "g_textureHeaderPool", 0);
-    TextureHeaderSlotPool->unk_20 &= 0xFFFFFFFD;
+    TextureHeaderSlotPool->NumAllocatedSlots &= 0xFFFFFFFD;
     VertexBufferHeaderPool = bNewSlotPool(4, 1024, "g_vertexBufferHeaderPool", 0);
-    VertexBufferHeaderPool->unk_20 &= 0xFFFFFFFD;
+    VertexBufferHeaderPool->NumAllocatedSlots &= 0xFFFFFFFD;
 
     WNDCLASSEX wc = {};
     wc.cbSize = sizeof(WNDCLASSEX);
@@ -780,7 +797,7 @@ void eInitEnginePlat()
 
     screen_height = 1000;
     screen_width = 0;
-    sub_5BB220(dword_86B7A4, &screen_width, &screen_height);
+    sub_5BB220((IDirect3DVertexBuffer9*)&dword_86B7A4, (int*)&screen_width, (int*)&screen_height);
 
     if (PCDirectInput)
     {
@@ -811,7 +828,7 @@ void eInitEngine()
     CurrentBufferEnd = (int)(FrameMemoryBuffer + 409600);
     FrameMallocAllocNum = 0;
     ePolySlotPool = bNewSlotPool(128, 32, "ePolySlotPool", 0);
-    ePolySlotPool->unk_20 &= 0xFFFFFFFD;
+    ePolySlotPool->NumAllocatedSlots &= 0xFFFFFFFD;
     eInitModels();
     eInitTextures();
     eInitSolids();
@@ -830,8 +847,8 @@ void afxInit()
 {
     AcidActiveGroupSlotPool = bNewSlotPool(44, 400, "AcidActiveGroupSlotPool", 0);
     AcidEmitterSlotPool = bNewSlotPool(208, 250, "AcidEmitterSlotPool", 0);
-    AcidActiveGroupSlotPool->unk_20 &= 0xFFFFFFFE;
-    AcidActiveGroupSlotPool->unk_20 &= 0xFFFFFFFD;
+    AcidActiveGroupSlotPool->NumAllocatedSlots &= 0xFFFFFFFE;
+    AcidActiveGroupSlotPool->NumAllocatedSlots &= 0xFFFFFFFD;
 }
 
 //DONE : 0x00570F80
@@ -987,6 +1004,62 @@ void InitializeEverything(int argc, char* argv[])
         bFree(v5);
     }
     GlobalMemoryFile = 0;
+}
+
+//THUNK : 0x005CF960
+void ShutdownTheGame()
+{
+    //call<void()>(0x005CF960)();
+    int v0; // ecx
+
+    DestroyWindow(PCHwnd);
+    g_pEAXSound->Destroy();
+    SYNCTASK_run();
+    bSleep(0);
+    sub_4839C0(g_pEAXSound, 0);
+    SYNCTASK_run();
+    bSleep(0);
+    sub_5CF1C0();
+    sub_5CE400();
+    sub_5CE970();
+
+    if (byte_86B7C4 && dword_86B7A4)
+    {
+        dword_86B7A4->Unlock();
+        byte_86B7C4 = 0;
+    }
+
+    sub_5C57E0(&dword_86B7A4);
+
+    if (dword_86B7A4)
+    {
+        dword_86B7A4->Release();
+    }
+
+    sub_5BA610();
+    sub_5BBCD0();
+    D3D_DEVICE->Release();
+    D3D->Release();
+
+    if (bFileSlotPool)
+    {
+        v0 = dword_865110;
+
+        while (v0)
+        {
+            if (v0)
+            {
+                SYNCTASK_run();
+                sub_57C920();
+                v0 = dword_865110;
+            }
+        }
+
+        sub_57B5D0();
+        bDeleteSlotPool(bFileSlotPool);
+        bFileSlotPool = 0;
+        pRealSystemMutex->Destroy();
+    }
 }
 
 //DONE : 0x00580E00

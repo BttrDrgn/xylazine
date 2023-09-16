@@ -8,6 +8,7 @@ namespace RealSystem
 		char unk_0;
 		LPCRITICAL_SECTION Section;
 		void Create();
+		void Destroy();
 	};
 };
 

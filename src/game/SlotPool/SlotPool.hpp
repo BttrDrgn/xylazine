@@ -1,20 +1,40 @@
 #pragma once
 
+typedef enum SlotPoolFlags
+{
+	SLOTPOOL_FLAG_OVERFLOW_IF_FULL = 1,
+	SLOTPOOL_FLAG_ZERO_ALLOCATED_MEMORY = 2,
+	SLOTPOOL_FLAG_WARN_IF_OVERFLOW = 4,
+	SLOTPOOL_FLAG_WARN_IF_NONEMPTY_DELETE = 8
+};
+
+struct SlotPoolEntry
+{
+	SlotPoolEntry* Next;
+};
+
 class SlotPool
 {
 public:
 	int unk_0;
 	int unk_4;
-	int unk_8;
-	int unk_12;
-	int unk_16;
-	int unk_20;
-	int unk_24;
-	char unk_28[2500];
+	SlotPool* NextSlotPool;
+	char* DebugName;
+	void** FreeSlots;
+	SlotPoolFlags Flags;
+	int NumAllocatedSlots;
+	int MostNumAllocatedSlots;
+	int MemoryPool;
+	int NumSlots;
+	int SlotSize;
+	int TotalNumSlots;
+	SlotPool* Slots;
+	int padding[7];
 	
 	SlotPool* Malloc();
 
 	static SlotPool* NewSlotPool(int a1, int a2, const char* a3, int a4);
+	static void DeleteSlotPool();
 };
 
 extern SlotPool*& LoadedTexturePackSlotPool;

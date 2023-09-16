@@ -7,5 +7,12 @@ RealSystem::Mutex* &pRealSystemMutex = *reinterpret_cast<RealSystem::Mutex**>(0x
 //THUNK : 0x006F55C7
 void RealSystem::Mutex::Create()
 {
-	//reinterpret_cast<void(__thiscall*)(RealSystem::Mutex*)>(0x006F55C7)(pRealSystemMutex);
+	reinterpret_cast<void(__thiscall*)(RealSystem::Mutex**)>(0x006F55C7)(&pRealSystemMutex);
+}
+
+
+//THUNK : 0x006F55D2
+void RealSystem::Mutex::Destroy()
+{
+	reinterpret_cast<void(__thiscall*)(RealSystem::Mutex**)>(0x006F55D2)(&pRealSystemMutex);
 }

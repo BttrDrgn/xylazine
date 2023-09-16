@@ -88,7 +88,7 @@ bool PlatformIsProcessRunning(char* exe, int count)
         --v3;
         if (v2 <= count || v3 < 0)
             break;
-        Sleep(0x3E8u);
+        Sleep(1000);
         v2 = 0;
         v4 = CreateToolhelp32Snapshot(2u, 0);
         if (v4 == (HANDLE)-1)
@@ -127,7 +127,7 @@ void bPListInit(int expected_nodes)
 }
 
 //DONE : 0x0043DBB0
-int __cdecl bStrLen(const char* a1)
+int bStrLen(const char* a1)
 {
     int result; // eax
 
@@ -139,6 +139,7 @@ int __cdecl bStrLen(const char* a1)
     return result;
 }
 
+//DONE : 0x00440E50
 SlotPool* bOMalloc(SlotPool* pool)
 {
     return pool->Malloc();
@@ -427,4 +428,22 @@ bool PlatformDRM()
 #else
     return true;
 #endif
+}
+
+//THUNK : 0x00440E40
+void bDeleteSlotPool(SlotPool* a1)
+{
+    call<void(SlotPool*)>(0x00440E40)(a1);
+}
+
+//THUNK : 0x006F56BD
+void SYNCTASK_run()
+{
+    call<void()>(0x006F56BD);
+}
+
+//DONE : 0x006F5889
+std::uint32_t bSleep(std::uint32_t dwMilliseconds)
+{
+    return SleepEx(dwMilliseconds, 1);
 }

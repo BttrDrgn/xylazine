@@ -2,9 +2,9 @@
 #include "memory.hpp"
 
 //THUNK : 0x006F7266
-int RealFile::AddDevice(int a1)
+void RealFile::AddDevice(int a1)
 {
-	return call<int(int)>(0x006F7266)(a1);
+	call<void(int)>(0x006F7266)(a1);
 }
 
 //THUNK : 0x006F6E7A

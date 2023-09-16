@@ -20,3 +20,9 @@ void EAXSound::EnterPauseMenu(int a2, bool a3)
 {
 	reinterpret_cast<void(__thiscall*)(EAXSound*, int, bool)>(0x004810F0)(this, a2, a3);
 }
+
+//THUNK : 0x00481080
+void EAXSound::Destroy()
+{
+	reinterpret_cast<void(__thiscall*)(EAXSound*)>(0x00481080)(this);
+}

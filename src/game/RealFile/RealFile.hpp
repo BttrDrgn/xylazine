@@ -1,8 +1,7 @@
 #pragma once
 
-class RealFile
+namespace RealFile
 {
-public:
-	static int AddDevice(int a1);
-	static int AddSearchLocation(const char* a1, char a2);
+	void AddDevice(int a1);
+	int AddSearchLocation(const char* a1, char a2);
 };

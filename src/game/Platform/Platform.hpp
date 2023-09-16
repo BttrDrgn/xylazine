@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SlotPool/SlotPool.hpp"
+
 extern int& PlatformSkipDRM;
 extern int& dword_00800B98;
 extern int& dword_008284E4;
@@ -22,6 +24,9 @@ int bInitDisculatorDriver(char* Str, char* a2);
 std::uint32_t bStringHash(const char* string);
 LONGLONG bGetTicker();
 double GetDebugRealTime();
+void bDeleteSlotPool(SlotPool* a1);
+void SYNCTASK_run();
+std::uint32_t bSleep(std::uint32_t dwMilliseconds);
 
 void InitPlatform();
 bool PlatformCDCheckBinDat(bool a1);

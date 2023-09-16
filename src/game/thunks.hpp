@@ -118,10 +118,16 @@ void DisplayDebugScreenPrints()
     call<void()>(0x00570C00)();
 }
 
-//THUNK : 0x005F0140
-void sub_005F0140()
+//THUNK : 0x005838A0
+bool sub_5838A0()
 {
-    call<void()>(0x005F0140)();
+    return call<bool()>(0x005838A0)();
+}
+
+//THUNK : 0x0058C220
+void sub_58C220()
+{
+    call<void()>(0x0058C220)();
 }
 
 //THUNK : 0x0057A050
@@ -151,7 +157,7 @@ void sub_005CE8A0()
 //THUNK : 0x0057EF60
 void ServiceResourceLoading()
 {
-    reinterpret_cast<void(__thiscall*)()>(0x0057EF60)();
+    call<void()>(0x0057EF60)();
 }
 
 //THUNK : 0x005CE4C0
@@ -164,12 +170,6 @@ void sub_5CE4C0()
 void sub_5BF1C0()
 {
     call<void()>(0x005BF1C0)();
-}
-
-//THUNK : 0x00456940
-void sub_00456940(std::uint32_t* a1)
-{
-    reinterpret_cast<void(__thiscall*)(std::uint32_t*)>(0x00456940)(a1);
 }
 
 //THUNK : 0x0057E800
@@ -316,8 +316,20 @@ void InitCarLoader()
     call<void()>(0x0061C700)();
 }
 
-//THUNK : 0x005CF960
-void ShutdownTheGame()
+//THUNK : 0x0057B5D0
+void sub_57B5D0()
 {
-    call<void()>(0x005CF960)();
+    call<void()>(0x0057B5D0)();
+}
+
+//THUNK : 0x00481080
+void sub_481080(EAXSound* snd)
+{
+    call<void()>(0x00481080)();
+}
+
+//THUNK : 0x0057C920
+void sub_57C920()
+{
+    call<void()>(0x0057C920)();
 }
