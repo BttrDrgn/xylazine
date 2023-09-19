@@ -2,7 +2,7 @@
 #include "memory.hpp"
 
 MemoryPool*& MemoryPoolMem = *reinterpret_cast<MemoryPool**>(0x00828218);
-MemoryPool*& MemoryPools = *reinterpret_cast<MemoryPool**>(0x00828154);
+MemoryPool**& MemoryPools = *reinterpret_cast<MemoryPool***>(0x00828154);
 
 //Uses this
 //THUNK : 0x004402C0

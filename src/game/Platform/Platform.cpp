@@ -1,8 +1,9 @@
 #include "Platform.hpp"
-#include "MemoryPool/MemoryPool.hpp"
-#include "RealSystem/RealSystem.hpp"
-#include "SlotPool/SlotPool.hpp"
+#include "Unsorted/MemoryPool.hpp"
+#include "Realcore/RealSystem.hpp"
+#include "Unsorted/SlotPool.hpp"
 #include "Platform/bFile.hpp"
+#include "Unsorted/MemoryPool.hpp"
 #include "memory.hpp"
 #include "ida_defs.hpp"
 
@@ -221,50 +222,35 @@ void sub_43E5B0()
 }
 
 //THUNK : 0x00440330
-int bInitMemoryPool(int a1, void* a2, int a3, const char* a4)
+void bInitMemoryPool(int pool_num, int* mem, int mem_size, const char* debug_name)
 {
-    return call<int(int, void*, int, const char*)>(0x00440330)(a1, a2, a3, a4);
+    call<void(int, void*, int, const char*)>(0x00440330)(pool_num, mem, mem_size, debug_name);
 }
 
-//The proper method is working, whatever the PC version is doing is wrong and needs to be fixed
-//it looks like the wrapper for InitMemoryPool was inlined or the code was not updated when it was made
 //TODO : 0x00440360
 void bMemoryInit()
 {
     if (!MemoryInitialized)
     {
-#if 0
-        * (_DWORD*)MemoryPools = &MemoryPoolMem;    // bInitMemoryPool inlined
-        MemoryPool::Init((MemoryPool*)&MemoryPoolMem, 0, 0, "Main Pool");
-        MemoryInitialized = 1;
-#else
         bInitMemoryPool(0, 0, 0, "Main Pool");
-#endif
         MemoryInitialized = 1;
     }
 }
 
 //DONE : 0x0043DC30
-int bStrCmp(char* str1, char* str2)
+int bStrCmp(char* s1, char* s2)
 {
-#if 0
-    char v4;
-    char v5;
+    char c1; // al
+    char c2; // cl
 
     do
     {
-        v4 = *str1;
-        v5 = *str2;
-        ++str1;
-        ++str2;
-    } while (v4 && v5 && v4 == v5);
-    return v4 - v5;
-#else
-    while (*str1 == *str2++)
-        if (*str1++ == 0)
-            return (0);
-    return (*(unsigned char*)str1 - *(unsigned char*)--str2);
-#endif
+        c1 = *s1;
+        c2 = *s2;
+        ++s1;
+        ++s2;
+    } while (c1 && c2 && c1 == c2);
+    return c1 - c2;
 }
 
 //THUNK : 0x006FBD9E
@@ -384,7 +370,6 @@ bool PlatformCDCheck()
 //DONE : 0x005C0D30
 bool PlatformDRM()
 {
-#ifdef MATCHING
     char v0;
 
     while (1)
@@ -425,9 +410,6 @@ bool PlatformDRM()
             return 0;
         }
     }
-#else
-    return true;
-#endif
 }
 
 //THUNK : 0x00440E40

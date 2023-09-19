@@ -1,9 +1,10 @@
 #pragma once
 
-//Size = 51
 class TrackStreamer
 {
 public:
+	char padding[0x84c];
+
 	void ServiceNonGameState();
 	void HandleLoading();
 	void CheckLoadingBar();

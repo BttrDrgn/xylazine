@@ -44,10 +44,10 @@ workspace(project_name)
 	--end
 
 	filter "Release"
-		defines "NDEBUG"
-		optimize "full"
+		defines "DEBUG"
+		optimize "debug"
 		runtime "release"
-		symbols "off"
+		symbols "on"
 
 	filter "Debug"
 		defines "DEBUG"
@@ -76,7 +76,6 @@ workspace(project_name)
 		links {
 			"d3d9",
 			"dxguid",
-			"DxErr.lib",
 			"dinput8",
 		}
 

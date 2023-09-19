@@ -3,6 +3,8 @@
 class World
 {
 public:
+	char padding[0x1730];
+
 	void UpdateWorldPaused();
 	void DoTimestep(float a2);
 	int IsWorldPaused();

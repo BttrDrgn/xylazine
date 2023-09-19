@@ -1,5 +1,7 @@
 #pragma once
 
+#include "types.hpp"
+
 ///Unsorted function thunks
 
 //While this can be macroed or just a normal call, I have opted to call the game's malloc
@@ -28,10 +30,10 @@ int eWaitForStreamingTexturePackLoading(const char* a1)
     return call<int(const char*)>(0x00490170)(a1);
 }
 
-//THUNK : 0x00512520
-void LoadCurrentLanguage()
+//THUNK : 0x00512360
+void SetCurrentLanguage(eLanguages new_language)
 {
-    call<void()>(0x00512520)();
+    call<void(eLanguages)>(0x00512360)(new_language);
 }
 
 //THUNK : 0x0051CD10
@@ -74,12 +76,6 @@ int AddMemoryFile(void* pmemory_file)
 void BlockUntilMemoryFileLoaded(void* memory_file)
 {
     call<void(void*)>(0x0057F000)(memory_file);
-}
-
-//THUNK : 0x0057FB00
-void LoadGlobalAChunks()
-{
-    call<void()>(0x0057FB00)();
 }
 
 //THUNK : 0x005809C0

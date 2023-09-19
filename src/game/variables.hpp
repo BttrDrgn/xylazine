@@ -1,5 +1,7 @@
 #pragma once
 
+#include "types.hpp"
+
 ///Unsorted variable thunks
 
 //Game memory
@@ -193,6 +195,8 @@ auto& D3D_VERTEX_DECL_0 = *reinterpret_cast<IDirect3DVertexDeclaration9**>(0x008
 auto& D3D_VERTEX_DECL_1 = *reinterpret_cast<IDirect3DVertexDeclaration9**>(0x0086B910);
 auto& car_loader_size = *reinterpret_cast<int*>(0x007FA9D8);
 auto& LanguageCode = *reinterpret_cast<int*>(0x00864F24);
+auto& dword_7FCA00 = *reinterpret_cast<eLanguages*>(0x007FCA00);
+
 
 //Local memory
 auto D3D_DEPTH_STENCIL = 0;

@@ -3,34 +3,34 @@
 #include "ida_defs.hpp"
 #include "Platform/Platform.hpp"
 #include "Platform/bFile.hpp"
-#include "RaceStarter/RaceStarter.hpp"
-#include "GameFlowManager/GameFlowManager.hpp"
-#include "ReplayManager/ReplayManager.hpp"
-#include "SlotPool/SlotPool.hpp"
-#include "RealFile/RealFile.hpp"
-#include "RealSystem/RealSystem.hpp"
-#include "DragCamera/DragCamera.hpp"
-#include "cFrontendDatabase/cFrontendDatabase.hpp"
-#include "eModel/eModel.hpp"
-#include "EAXSound/EAXSound.hpp"
+#include "Unsorted/RaceStarter.hpp"
+#include "Unsorted/GameFlowManager.hpp"
+#include "Replay/ReplayManager.hpp"
+#include "Unsorted/SlotPool.hpp"
+#include "Realcore/RealFile.hpp"
+#include "Realcore/RealSystem.hpp"
+#include "Camera/DragCamera.hpp"
+#include "FEng/cFrontendDatabase.hpp"
+#include "Unsorted/eModel.hpp"
+#include "EAX/EAXSound.hpp"
 #include "World/World.hpp"
-#include "RaceCoordinator/RaceCoordinator.hpp"
-#include "TrackStreamer/TrackStreamer.hpp"
-#include "FEPackageManager/FEPackageManager.hpp"
-#include "ReplayMenu/ReplayMenu.hpp"
-#include "DemoDiscManager/DemoDiscManager.hpp"
-#include "OnlineManager/OnlineManager.hpp"
-#include "eModel/eModel.hpp"
-#include "Stomper/Stomper.hpp"
-#include "Player/Player.hpp"
-#include "ResourceFile/ResourceFile.hpp"
-#include "DragCameraManager/DragCameraManager.hpp"
+#include "Unsorted/RaceCoordinator.hpp"
+#include "World/TrackStreamer.hpp"
+#include "FEng/FEPackageManager.hpp"
+#include "Replay/ReplayMenu.hpp"
+#include "Unsorted/DemoDiscManager.hpp"
+#include "Misc/OnlineManager.hpp"
+#include "Unsorted/eModel.hpp"
+#include "Misc/Stomper.hpp"
+#include "World/Player.hpp"
+#include "Unsorted/ResourceFile.hpp"
+#include "Camera/DragCameraManager.hpp"
 #include "EAGL/EAGL.hpp"
 #include "EAGL/EAGLAnim.hpp"
 #include "EAGL/EAGLDevice.hpp"
 #include "EAGL/EAGLInternal.hpp"
-#include "CarLoader/CarLoader.hpp"
-#include "QueuedFile/QueuedFIle.hpp"
+#include "Unsorted/CarLoader.hpp"
+#include "Unsorted/QueuedFIle.hpp"
 #include "thunks.hpp"
 #include "variables.hpp"
 
@@ -142,18 +142,31 @@ void LoadMemoryFileCallback(int pmemory_file, int error_status)
     AddMemoryFile((void*)pmemory_file);
 }
 
+//DONE : 0x005B7AF0
+eLanguages PC_GetOSLanguage()
+{
+    return dword_7FCA00 == eLANGUAGE_NONE ? eLANGUAGE_FIRST : dword_7FCA00;
+}
+
+//DONE : 0x00512520
+void LoadCurrentLanguage()
+{
+    eLanguages language;
+
+    language = PC_GetOSLanguage();
+    SetCurrentLanguage(language);
+}
+
 //DONE : 0x0057FB40
 void LoadGlobalChunks()
 {
-    //call<void()>(0x0057FB40)();
-
-    ResourceFile* globalb_r; // esi
-    int memfile_size; // edi
-    void* memfile; // esi
-    ResourceFile* texturesrow_r; // eax
-    ResourceFile* breaktextures_r; // eax
-    ResourceFile* lpmodels_r; // eax
-    ResourceFile* lptextures_r; // eax
+    ResourceFile* globalb_r;
+    int memfile_size;
+    void* memfile;
+    ResourceFile* texturesrow_r;
+    ResourceFile* breaktextures_r;
+    ResourceFile* lpmodels_r;
+    ResourceFile* lptextures_r;
 
     globalb_r = CreateResourceFile("GLOBAL\\GLOBALB.LZC", RESOURCE_FILE_GLOBAL, 9, 0, 0);
     globalb_r->BeginLoading(0, 0);
@@ -212,6 +225,20 @@ void LoadGlobalChunks()
     }
 
     TheCarLoader->CreatePermanentPool(car_loader_size << 10);
+}
+
+//DONE : 0x0057FB00
+void LoadGlobalAChunks()
+{
+    ResourceFile* r; // eax
+
+    r = CreateResourceFile("GLOBAL\\GLOBALA.BUN", RESOURCE_FILE_GLOBAL, 0, 0, 0);
+    r->BeginLoading(0, 0);
+
+    while (NumResourcesBeingLoaded)
+    {
+        ServiceResourceLoading();
+    }
 }
 
 //DONE : 0x005BCFA0
@@ -1376,10 +1403,6 @@ void InitializeEverything(int argc, char* argv[])
     _DWORD* v6 = 0; // ecx
     _DWORD* v7 = 0; // eax
 
-#if DEBUG
-    WindowedMode = true;
-#endif
-
     InitPlatform();
     InitBigFiles();
     TheDemoDiscManager->Init(argc, argv);
@@ -1437,10 +1460,6 @@ void InitializeEverything(int argc, char* argv[])
 //DONE : 0x00580E00
 void _main(int argc, char* argv[])
 {
-#ifdef DEBUG
-    SkipMovies = true;
-#endif
-
     if (PlatformIsProcessRunning("BB2.exe", 1))
     {
         _exit(0);
@@ -1487,7 +1506,22 @@ void __cdecl init(int argc, char* argv[])
             MessageBoxA(nullptr, "Pause requested", "BB2", 0);
             continue;
         }
+        else if (!strcmp("--windowed", *argv))
+        {
+            WindowedMode = true;
+            continue;
+        }
+        else if (!strcmp("--skipmovies", *argv))
+        {
+            SkipMovies = true;
+            continue;
+        }
     }
+
+#if DEBUG
+    WindowedMode = true;
+    SkipMovies = true;
+#endif
 
     replace(0x00580E00, (std::uint32_t)_main);
 }

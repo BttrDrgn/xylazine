@@ -39,27 +39,7 @@ float& WorldTimeElapsed = *reinterpret_cast<float*>(0x00865154);
 //THUNK : 0x0057A0E0
 void AdvanceWorldTime()
 {
-#if 0
 	call<void()>(0x0057A0E0)();
-#else
-    double v0; // st7
-    int v1; // [esp+0h] [ebp-4h]
-
-    NeedToPrepareWorldTimestep = 1;
-    if (WorldTimeElapsed != DisplayLoadTimeStops)
-    {
-        v0 = flt_00865158 + WorldTimeElapsed;
-        v1 = (unsigned __int64)(flt_00787590 * v0);
-        dword_007FB720 += v1;
-        dword_00865150 = v1;
-        dword_007FB71C = dword_007FB720;
-        flt_00865158 = v0 - (double)v1 * flt_007875BC;
-        WorldTimer += (unsigned __int64)(WorldTimeElapsed * flt_00784264 + flt_00784260);
-        WorldTimeElapsed = 0.0;
-        ++WorldLoopCounter;
-        WorldTimeSeconds = (double)WorldTimer * WorldTimestep;
-    }
-#endif
 }
 
 //THUNK : 0x005EA2B0
