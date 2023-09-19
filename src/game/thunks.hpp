@@ -19,9 +19,9 @@ ResourceFile* CreateResourceFile(const char* a1, int a2, int a3, int a4, int a5)
 }
 
 //THUNK : 0x004944D0
-int eLoadStreamingTexturePack(char* a1, void(__cdecl* a2)(unsigned int), int a3, __int16 a4)
+int eLoadStreamingTexturePack(char* filename, void* callback_function, std::uint32_t callback_param, int memory_pool_num)
 {
-    return call<int(char*, void*, int, __int16)>(0x004944D0)(a1, a2, a3, a4);
+    return call<int(char*, void*, int, __int16)>(0x004944D0)(filename, callback_function, callback_param, memory_pool_num);
 }
 
 //THUNK : 0x00490170
