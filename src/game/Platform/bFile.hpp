@@ -14,5 +14,6 @@ public:
 	bFile(char* path, int a2);
 	void bClose(int a2);
 
-	static bFile* bOpen(char* path, int a2);
 };
+
+bFile* bOpen(char* path, int a2);

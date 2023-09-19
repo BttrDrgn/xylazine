@@ -3,7 +3,7 @@
 ///Unsorted variable thunks
 
 //Game memory
-auto& GlobalMemoryFile = *reinterpret_cast<int*>(0x00864F98);
+auto& GlobalMemoryFile = *reinterpret_cast<char**>(0x00864F98);
 auto& QueuedFileNumReadsInProgress = *reinterpret_cast<int*>(0x008650F4);
 auto& WaitingQueuedFileList = *reinterpret_cast<int*>(0x00865220);
 auto& unused_init_0 = *reinterpret_cast<int*>(0x0086534C);
@@ -162,6 +162,9 @@ auto& dword_875A0C = *reinterpret_cast<int*>(0x00875A0C);
 auto& dword_875FA0 = *reinterpret_cast<int*>(0x00875FA0);
 auto& dword_875D78 = *reinterpret_cast<int*>(0x00875D78);
 auto& dword_875D7C = *reinterpret_cast<int*>(0x00875D7C);
+auto& dword_870998 = *reinterpret_cast<int*>(0x00870998);
+auto& dword_870D20 = *reinterpret_cast<int*>(0x00870D20);
+auto& dword_8709CC = *reinterpret_cast<int*>(0x008709CC);
 auto& byte_874C51 = *reinterpret_cast<char*>(0x00874C51);
 auto& byte_874C50 = *reinterpret_cast<char*>(0x00874C50);
 auto& byte_874C53 = *reinterpret_cast<char*>(0x00874C53);
@@ -186,6 +189,10 @@ auto& byte_875D81 = *reinterpret_cast<char*>(0x00875D81);
 auto& byte_875D80 = *reinterpret_cast<char*>(0x00875D80);
 auto& byte_875D83 = *reinterpret_cast<char*>(0x00875D83);
 auto& byte_875D82 = *reinterpret_cast<char*>(0x00875D82);
+auto& D3D_VERTEX_DECL_0 = *reinterpret_cast<IDirect3DVertexDeclaration9**>(0x0086B7D8);
+auto& D3D_VERTEX_DECL_1 = *reinterpret_cast<IDirect3DVertexDeclaration9**>(0x0086B910);
+auto& car_loader_size = *reinterpret_cast<int*>(0x007FA9D8);
+auto& LanguageCode = *reinterpret_cast<int*>(0x00864F24);
 
 //Local memory
 auto D3D_DEPTH_STENCIL = 0;

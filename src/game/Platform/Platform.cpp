@@ -103,7 +103,7 @@ int bFileExists(char* Str)
     bFile* FileHandle; // eax
     int v2; // esi
 
-    FileHandle->bOpen(Str, 1);
+    FileHandle = bOpen(Str, 1);
     if (!FileHandle)
         return 0;
     v2 = *((_DWORD*)FileHandle + 1);
@@ -446,4 +446,62 @@ void SYNCTASK_run()
 std::uint32_t bSleep(std::uint32_t dwMilliseconds)
 {
     return SleepEx(dwMilliseconds, 1);
+}
+
+//THUNK : 0x00440820
+void* bMalloc(int size, int allocation_parameters)
+{
+    return call<void* (int, int)>(0x00440820)(size, allocation_parameters);
+}
+
+//DONE : 0x0043DC00
+char* bStrNCpy(char* to, const char* from, int m)
+{
+    char* result; // eax
+    int v4; // esi
+    char* v5; // edx
+    char v6; // cl
+
+    result = to;
+    v4 = m;
+    if (m)
+    {
+        v5 = to;
+        do
+        {
+            v6 = v5[from - to];
+            --v4;
+            *v5 = v6;
+            if (!v6)
+                break;
+            ++v5;
+        } while (v4);
+    }
+    return result;
+}
+
+//DONE : 0x0057D900
+int __cdecl bFileSize(char* filename)
+{
+    bFile* v1; // eax
+    int v2; // edx
+    int v3; // esi
+    int result; // eax
+
+    v1 = bOpen(filename, 1);
+    if (!v1)
+        return -1;
+    v2 = v1->unk_4 < 0 ? 0 : v1->unk_4;
+    v3 = v2;
+    if (v1->unk_24 <= 0)
+    {
+        v1->bClose(1);
+        result = v3;
+    }
+    else
+    {
+        v1->unk_20 = 1;
+        result = v2;
+    }
+    return result;
 }

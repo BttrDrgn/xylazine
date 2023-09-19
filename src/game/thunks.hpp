@@ -16,6 +16,66 @@ ResourceFile* CreateResourceFile(const char* a1, int a2, int a3, int a4, int a5)
     return call<ResourceFile* (const char*, int, int, int, int)>(0x0057CEF0)(a1, a2, a3, a4, a5);
 }
 
+//THUNK : 0x004944D0
+int eLoadStreamingTexturePack(char* a1, void(__cdecl* a2)(unsigned int), int a3, __int16 a4)
+{
+    return call<int(char*, void*, int, __int16)>(0x004944D0)(a1, a2, a3, a4);
+}
+
+//THUNK : 0x00490170
+int eWaitForStreamingTexturePackLoading(const char* a1)
+{
+    return call<int(const char*)>(0x00490170)(a1);
+}
+
+//THUNK : 0x00512520
+void LoadCurrentLanguage()
+{
+    call<void()>(0x00512520)();
+}
+
+//THUNK : 0x0051CD10
+void FEngSetUseIdleList(char* a4, char a2)
+{
+    call<void(char*, char)>(0x0051CD10)(a4, a2);
+}
+
+//THUNK : 0x0051CD40
+void FEngSetPermanent(char* a4, __int16 a2)
+{
+    call<void(char*, __int16)>(0x0051CD40)(a4, a2);
+}
+
+//THUNK : 0x0048D9D0
+void eWaitForStreamingSolidPackLoading(const char* filename)
+{
+    call<void(const char*)>(0x0048D9D0)(filename);
+}
+
+//THUNK : 0x004901D0
+int GetTextureInfo(std::uint32_t a1, int a2, int a3)
+{
+    return call<int(std::uint32_t, int, int)>(0x004901D0)(a1, a2, a3);
+}
+
+//THUNK : 0x00494D30
+int* eLoadStreamingTexture(unsigned int a1, void(__cdecl* a2)(int), int a3, char a4)
+{
+    return call<int*(unsigned int, void*, int, char)>(0x00494D30)(a1, a2, a3, a4);
+}
+
+//THUNK : 0x00579830
+int AddMemoryFile(void* pmemory_file)
+{
+    return call<int(void*)>(0x00579830)(pmemory_file);
+}
+
+//THUNK : 0x0057F000
+void BlockUntilMemoryFileLoaded(void* memory_file)
+{
+    call<void(void*)>(0x0057F000)(memory_file);
+}
+
 //THUNK : 0x0057FB00
 void LoadGlobalAChunks()
 {
@@ -143,7 +203,7 @@ void sub_5CE850()
 }
 
 //THUNK : 0x005D2850
-void sub_5D2850()
+void eDisplayFrame()
 {
     call<void()>(0x005D2850)();
 }
@@ -155,9 +215,9 @@ void sub_5CE8A0()
 }
 
 //THUNK : 0x0057EF60
-void ServiceResourceLoading()
+int ServiceResourceLoading()
 {
-    call<void()>(0x0057EF60)();
+    return call<int()>(0x0057EF60)();
 }
 
 //THUNK : 0x005CE4C0
@@ -214,12 +274,6 @@ void eInitEnvMap()
     call<void()>(0x005C33D0)();
 }
 
-//THUNK : 0x00431840
-void InitNFSAnimEngine()
-{
-    call<void()>(0x00431840)();
-}
-
 //THUNK : 0x005BE5A0
 void sub_5BE5A0()
 {
@@ -262,22 +316,10 @@ bool sub_5BF5A0()
     return call<bool()>(0x005BF5A0)();
 }
 
-//THUNK : 0x005B9750
-void eInitD3D()
-{
-    call<void()>(0x005B9750)();
-}
-
 //THUNK : 0x005D21F0
 void sub_5D21F0()
 {
     call<void()>(0x005D21F0)();
-}
-
-//THUNK : 0x005CED60
-void sub_5CED60()
-{
-    call<void()>(0x005CED60)();
 }
 
 //THUNK : 0x005BA780
@@ -290,6 +332,18 @@ void SetScreenBuffers()
 void InitJoystick()
 {
     call<void()>(0x00579550)();
+}
+
+//THUNK : 0x005BE200
+void sub_5BE200()
+{
+    call<void()>(0x005BE200)();
+}
+
+//THUNK : 0x005CEC90
+void sub_5CEC90()
+{
+    call<void()>(0x005CEC90)();
 }
 
 //THUNK : 0x004859B0
@@ -310,18 +364,6 @@ void InitLocalization()
     call<void()>(0x004FF680)();
 }
 
-//THUNK : 0x0057FB40
-void LoadGlobalChunks()
-{
-    call<void()>(0x0057FB40)();
-}
-
-//THUNK : 0x0060C820
-void InitStandardModels()
-{
-    call<void()>(0x0060C820);
-}
-
 //THUNK : 0x00452EC0
 void InitDragCameraManager()
 {
@@ -338,12 +380,6 @@ void InitCarLoader()
 void sub_57B5D0()
 {
     call<void()>(0x0057B5D0)();
-}
-
-//THUNK : 0x00481080
-void sub_481080(EAXSound* snd)
-{
-    call<void()>(0x00481080)();
 }
 
 //THUNK : 0x0057C920

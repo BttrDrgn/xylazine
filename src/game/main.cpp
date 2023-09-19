@@ -25,6 +25,12 @@
 #include "Player/Player.hpp"
 #include "ResourceFile/ResourceFile.hpp"
 #include "DragCameraManager/DragCameraManager.hpp"
+#include "EAGL/EAGL.hpp"
+#include "EAGL/EAGLAnim.hpp"
+#include "EAGL/EAGLDevice.hpp"
+#include "EAGL/EAGLInternal.hpp"
+#include "CarLoader/CarLoader.hpp"
+#include "QueuedFile/QueuedFIle.hpp"
 #include "thunks.hpp"
 #include "variables.hpp"
 
@@ -34,6 +40,179 @@ void nullsub(void* unused) {}
 //nullsub
 //DONE : 0x004022C0
 void _return() {}
+
+//DONE : 0x005B9750
+void eInitD3D()
+{
+    D3DVERTEXELEMENT9 v0[4];
+    D3DVERTEXELEMENT9 v1[5];
+
+    v1[0].Type = 2;
+    v1[1].Type = 2;
+    v1[0].Stream = 0;
+    v1[0].Offset = 0;
+    v1[0].Method = 0;
+    v1[0].Usage = 0;
+    v1[0].UsageIndex = 0;
+    v1[1].Stream = 0;
+    v1[1].Offset = 12;
+    v1[1].Method = 0;
+    v1[1].Usage = 3;
+    v1[1].UsageIndex = 0;
+    v1[2].Stream = 0;
+    v1[2].Offset = 24;
+    v1[2].Type = 4;
+    v1[2].Method = 0;
+    v1[2].Usage = 10;
+    v1[2].UsageIndex = 0;
+    v1[3].Stream = 0;
+    v1[3].Offset = 28;
+    v1[3].Type = 1;
+    v1[3].Method = 0;
+    v1[3].Usage = 5;
+    v1[3].UsageIndex = 0;
+    v1[4].Stream = 255;
+    v1[4].Offset = 0;
+    v1[4].Type = 17;
+    v1[4].Method = 0;
+    v1[4].Usage = 0;
+    v1[4].UsageIndex = 0;
+    D3D_DEVICE->CreateVertexDeclaration(v1, &D3D_VERTEX_DECL_0);
+    v0[0].Stream = 0;
+    v0[0].Offset = 0;
+    v0[0].Type = 3;
+    v0[0].Method = 0;
+    v0[0].Usage = 9;
+    v0[0].UsageIndex = 0;
+    v0[1].Stream = 0;
+    v0[1].Offset = 16;
+    v0[1].Type = 4;
+    v0[1].Method = 0;
+    v0[1].Usage = 10;
+    v0[1].UsageIndex = 0;
+    v0[2].Stream = 0;
+    v0[2].Offset = 20;
+    v0[2].Type = 1;
+    v0[2].Method = 0;
+    v0[2].Usage = 5;
+    v0[2].UsageIndex = 0;
+    v0[3].Stream = 255;
+    v0[3].Offset = 0;
+    v0[3].Type = 17;
+    v0[3].Method = 0;
+    v0[3].Usage = 0;
+    v0[3].UsageIndex = 0;
+    D3D_DEVICE->CreateVertexDeclaration(v0, &D3D_VERTEX_DECL_1);
+}
+
+//DONE : 0x005CED60
+void sub_5CED60()
+{
+    DWORD i; // esi
+
+    if (!dword_870998)
+    {
+        D3D_DEVICE->GetDeviceCaps(&D3D_DEVICE_CAPS);
+        sub_5BE200();
+
+        if (!dword_870D20 || dword_8709CC)
+        {
+            sub_5CEC90();
+            if (dword_8709CC)
+            {
+                CreateRegistrySettings();
+            }
+        }
+
+        if (D3D_DEVICE_CAPS.MaxActiveLights != -1)
+        {
+            for (i = 0; i < D3D_DEVICE_CAPS.MaxActiveLights; ++i)
+            {
+                D3D_DEVICE->LightEnable(i, 0);
+            }
+        }
+    }
+
+    dword_870998 = 1;
+}
+
+//DONE : 0x0057A500
+void LoadMemoryFileCallback(int pmemory_file, int error_status)
+{
+    AddMemoryFile((void*)pmemory_file);
+}
+
+//DONE : 0x0057FB40
+void LoadGlobalChunks()
+{
+    //call<void()>(0x0057FB40)();
+
+    ResourceFile* globalb_r; // esi
+    int memfile_size; // edi
+    void* memfile; // esi
+    ResourceFile* texturesrow_r; // eax
+    ResourceFile* breaktextures_r; // eax
+    ResourceFile* lpmodels_r; // eax
+    ResourceFile* lptextures_r; // eax
+
+    globalb_r = CreateResourceFile("GLOBAL\\GLOBALB.LZC", RESOURCE_FILE_GLOBAL, 9, 0, 0);
+    globalb_r->BeginLoading(0, 0);
+    bStrNCpy(globalb_r->AllocationName, "GLOBAL\\GLOBALB.BUN", 59);
+    memfile_size = bFileSize("Global\\GlobalMemoryFile.bin");
+    memfile = bMalloc(memfile_size, 4104);
+    AddQueuedFile(memfile, "Global\\GlobalMemoryFile.bin", 0, memfile_size, LoadMemoryFileCallback, (int)memfile);
+    GlobalMemoryFile = (char*)memfile;
+
+    while (NumResourcesBeingLoaded)
+    {
+        ServiceResourceLoading();
+    }
+
+    BlockUntilMemoryFileLoaded(GlobalMemoryFile);
+    eLoadStreamingTexturePack("GLOBAL\\DYNTEX.BIN", 0, 0, 0);
+    eWaitForStreamingTexturePackLoading("GLOBAL\\DYNTEX.BIN");
+    LoadCurrentLanguage();
+
+    if (!GetTextureInfo(0xAB0E817D, 0, 0))
+    {
+        eLoadStreamingTexture(0xAB0E817D, 0, 0, 0);
+    }
+
+    while (NumResourcesBeingLoaded)
+    {
+        ServiceResourceLoading();
+    }
+
+    FEngSetUseIdleList("PC_Loading.fng", 1);
+    FEngSetPermanent("PC_Loading.fng", 1);
+    eDisplayFrame();
+
+    if (LanguageCode) texturesrow_r = CreateResourceFile("GLOBAL\\GLOBALTEXTURESROW.BIN", RESOURCE_FILE_GLOBAL, 0, 0, 0);
+    else texturesrow_r = CreateResourceFile("GLOBAL\\GLOBALTEXTURESNA.BIN", RESOURCE_FILE_GLOBAL, 0, 0, 0);
+
+    texturesrow_r->BeginLoading(0, 0);
+
+    breaktextures_r = CreateResourceFile("CARS\\BRAKES\\TEXTURES.BIN", RESOURCE_FILE_CAR, 0, 0, 0);
+    breaktextures_r->BeginLoading(0, 0);
+
+    lpmodels_r = CreateResourceFile("CARS\\PLATES\\GEOMETRY.BIN", RESOURCE_FILE_CAR, 0, 0, 0);
+    lpmodels_r->BeginLoading(0, 0);
+
+    lptextures_r = CreateResourceFile("CARS\\PLATES\\TEXTURES.BIN", RESOURCE_FILE_CAR, 0, 0, 0);
+    lptextures_r->BeginLoading(0, 0);
+
+    eLoadStreamingTexturePack("CARS\\TEXTURES.BIN", 0, 0, 0);
+    eLoadStreamingTexturePack("CARS\\WHEELS\\TEXTURES.BIN", 0, 0, 0);
+    eWaitForStreamingTexturePackLoading(0);
+    eWaitForStreamingSolidPackLoading(0);
+
+    while (NumResourcesBeingLoaded)
+    {
+        ServiceResourceLoading();
+    }
+
+    TheCarLoader->CreatePermanentPool(car_loader_size << 10);
+}
 
 //DONE : 0x005BCFA0
 void sub_5BCFA0()
@@ -53,7 +232,7 @@ bFile* sub_57CB70(char* path, int a2, int a3)
     int v5;
     int v6;
 
-    result = bFile::bOpen(path, 2);
+    result = bOpen(path, 2);
     v4 = result;
     if (result)
     {
@@ -387,7 +566,7 @@ void __cdecl MainLoop()
             ServiceResourceLoading();
             sub_5CE850();
             sub_5CE8A0();
-            sub_5D2850();
+            eDisplayFrame();
             nullsub(v16);
             nullsub(v17);
             AdvanceRealTime();
@@ -428,7 +607,7 @@ void InitBigFiles()
     int v1; // esi
     int v2; // eax
 
-    v0 = bFile::bOpen("NFSUNDER\\ZDIR.BIN", 1);
+    v0 = bOpen("NFSUNDER\\ZDIR.BIN", 1);
     if (v0)
     {
         v1 = v0->unk_4;
@@ -576,6 +755,23 @@ void PCEnableD3DFeatures(int width, int height)
         D3D_PP.MultiSampleQuality = *&g_FSAALevel;
     }
 }   
+
+//DONE : 0x00431840
+void InitNFSAnimEngine()
+{
+    EAGL::Device::SetNewOverride(MyEAGLNewOverride);
+    EAGL::Device::SetDeleteOverride(MyEAGLDeleteOverride);
+    EAGLAnim::Initializer::InitInternal(0x19000, false);
+}
+
+//DONE : 0x0060C820
+void InitStandardModels()
+{
+    StandardCubeModel->Init(0xC7395A8);
+
+    unsigned int hashed = bStringHash("DEBUG_LOD_CUBE");
+    StandardDebugModel->Init(hashed);
+}
 
 //DONE : 0x005B9B70
 void PCCreateD3DDevice()
@@ -1230,7 +1426,7 @@ void InitializeEverything(int argc, char* argv[])
     if (GlobalMemoryFile)
     {
         v6 = *(_DWORD**)GlobalMemoryFile;
-        v7 = *(_DWORD**)(GlobalMemoryFile + 4);
+        v7 = (_DWORD*)*((_DWORD*)GlobalMemoryFile + 1);
         *v7 = *(_DWORD*)GlobalMemoryFile;
         v6[1] = *(_DWORD*)v7;
         bFree(v5);

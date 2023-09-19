@@ -9,7 +9,7 @@ bFile::bFile(char* path, int a2)
 }
 
 //THUNK : 0x0057CA10
-bFile* bFile::bOpen(char* path, int a2)
+bFile* bOpen(char* path, int a2)
 {
 	return call<bFile* (char*, int)>(0x0057CA10)(path, a2);
 }

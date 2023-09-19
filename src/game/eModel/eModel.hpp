@@ -6,5 +6,5 @@ public:
 	void Init(std::uint32_t a2);
 };
 
-extern eModel*& StandardCubeModel;
-extern eModel*& StandardDebugModel;
+extern eModel* StandardCubeModel;
+extern eModel* StandardDebugModel;
