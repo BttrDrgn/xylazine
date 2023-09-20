@@ -26,7 +26,7 @@ jobs:
           - x86
         include:
           - arch: x86
-            platform: x86
+            platform: Win32
     steps:
       - name: Check out files
         uses: actions/checkout@v4
