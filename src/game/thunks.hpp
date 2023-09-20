@@ -67,15 +67,9 @@ int* eLoadStreamingTexture(unsigned int a1, void(__cdecl* a2)(int), int a3, char
 }
 
 //THUNK : 0x00579830
-int AddMemoryFile(void* pmemory_file)
+void AddMemoryFile(void* pmemory_file)
 {
-    return call<int(void*)>(0x00579830)(pmemory_file);
-}
-
-//THUNK : 0x0057F000
-void BlockUntilMemoryFileLoaded(void* memory_file)
-{
-    call<void(void*)>(0x0057F000)(memory_file);
+    call<void(void*)>(0x00579830)(pmemory_file);
 }
 
 //THUNK : 0x005809C0
@@ -186,12 +180,6 @@ void DisplayDebugScreenPrints()
     call<void()>(0x00570C00)();
 }
 
-//THUNK : 0x0058C220
-void sub_58C220()
-{
-    call<void()>(0x0058C220)();
-}
-
 //THUNK : 0x005CE850
 void sub_5CE850()
 {
@@ -274,12 +262,6 @@ void eInitEnvMap()
 void sub_5BE5A0()
 {
     call<void()>(0x005BE5A0)();
-}
-
-//THUNK : 0x005BEA20
-void LoadRegistrySettings()
-{
-    call<void()>(0x005BEA20)();
 }
 
 //THUNK : 0x005BEEA0
@@ -382,4 +364,16 @@ void sub_57B5D0()
 void sub_57C920()
 {
     call<void()>(0x0057C920)();
+}
+
+//THUNK : 0x0058BEF0
+void sub_58BEF0()
+{
+    call<void()>(0x0058BEF0)();
+}
+
+//THUNK : 0x005883E0
+void sub_5883E0(unsigned char a1)
+{
+    call<void(char)>(0x005883E0)(a1);
 }

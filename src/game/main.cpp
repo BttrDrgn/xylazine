@@ -41,6 +41,36 @@ void nullsub(void* unused) {}
 //DONE : 0x004022C0
 void _return() {}
 
+//DONE : 0x0057F000
+void BlockUntilMemoryFileLoaded(void* memory_file)
+{
+    if (memory_file)
+    {
+        while (QueuedFileNumReadsInProgress || (int*)WaitingQueuedFileList != &WaitingQueuedFileList)
+        {
+            ServiceQueuedFiles();
+        }
+    }
+}
+
+//DONE : 0x0058C220
+void sub_58C220()
+{
+    if (byte_7FBE78)
+    {
+        if (dword_8669F4 > 0)
+        {
+            sub_58BEF0();
+        }
+
+        if (dword_866A14 > 0 && flt_7A0E48 > zero && one_thousand / flt_7A0E48 <= ((RealTimer - dword_8693C0) * flt_784D28))
+        {
+            sub_5883E0(8u);
+            dword_8693C0 = RealTimer;
+        }
+    }
+}
+
 //DONE : 0x005B9750
 void eInitD3D()
 {
@@ -624,6 +654,53 @@ void __cdecl MainLoop()
             }
             sub_5CEC80();
         } while (!ExitTheGameFlag);
+    }
+}
+
+//DONE : 0x005BEA20
+void LoadRegistrySettings()
+{
+    HKEY phkResult; // [esp+0h] [ebp-Ch] BYREF
+    DWORD cbData; // [esp+4h] [ebp-8h] BYREF
+    DWORD Type; // [esp+8h] [ebp-4h] BYREF
+
+    if (!RegOpenKeyExA(HKEY_LOCAL_MACHINE, "Software\\EA Games\\Need for Speed Underground 2", 0, 0x20019u, &phkResult))
+    {
+        Type = 4;
+        cbData = 4;
+        RegQueryValueExA(phkResult, "VERSION", 0, &Type, (LPBYTE)&pVERSION, &cbData);
+        cbData = 4;
+        Type = 4;
+        RegQueryValueExA(phkResult, "SIZE", 0, &cbData, (LPBYTE)&pSIZE, &Type);
+        cbData = 4;
+        Type = 4;
+        RegQueryValueExA(phkResult, "g_CarEnvironmentMapEnable", 0, &cbData, (LPBYTE)&g_CarEnvironmentMapEnable, &Type);
+        cbData = 4;
+        Type = 4;
+        RegQueryValueExA(phkResult, "g_CarEnvironmentMapUpdateData", 0, &cbData, (LPBYTE)&g_CarEnvironmentMapUpdateData, &Type);
+        cbData = 4;
+        Type = 4;
+        RegQueryValueExA(phkResult, "g_CarShadowEnable", 0, &cbData, (LPBYTE)&g_CarShadowEnable, &Type);
+        cbData = 4;
+        Type = 4;
+        RegQueryValueExA(phkResult, "g_CarHeadlightEnable", 0, &cbData, (LPBYTE)&g_CarHeadlightEnable, &Type);
+        cbData = 4;
+        Type = 4;
+        RegQueryValueExA(phkResult, "g_CarLightingEnable", 0, &cbData, (LPBYTE)&g_CarLightingEnable, &Type);
+        cbData = 4;
+        Type = 4;
+        RegQueryValueExA(phkResult, "g_CarDamageEnable", 0, &cbData, (LPBYTE)&g_CarDamageEnable, &Type);
+        cbData = 4;
+        Type = 4;
+        RegQueryValueExA(phkResult, "g_CrowdEnable", 0, &cbData, (LPBYTE)&g_CrowdEnable, &Type);
+        cbData = 4;
+        Type = 4;
+        RegQueryValueExA(phkResult, "g_RoadReflectionEnable", 0, &cbData, (LPBYTE)&g_RoadReflectionEnable, &Type);
+        cbData = 4;
+        Type = 4;
+        RegQueryValueExA(phkResult, "g_FogEnable", 0, &cbData, (LPBYTE)&g_FogEnable, &Type);
+        cbData = 4;
+        Type = 4;
     }
 }
 

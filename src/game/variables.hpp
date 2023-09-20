@@ -196,8 +196,15 @@ auto& D3D_VERTEX_DECL_1 = *reinterpret_cast<IDirect3DVertexDeclaration9**>(0x008
 auto& car_loader_size = *reinterpret_cast<int*>(0x007FA9D8);
 auto& LanguageCode = *reinterpret_cast<int*>(0x00864F24);
 auto& dword_7FCA00 = *reinterpret_cast<eLanguages*>(0x007FCA00);
+auto& dword_8693C0 = *reinterpret_cast<int*>(0x008693C0);
+auto& flt_7A0E48 = *reinterpret_cast<float*>(0x007A0E48);
+auto& flt_784D28 = *reinterpret_cast<float*>(0x00784D28);
+auto& pVERSION = *reinterpret_cast<char*>(0x00870CB0);
+auto& pSIZE = *reinterpret_cast<char*>(0x00870CB4);
 
 
 //Local memory
 auto D3D_DEPTH_STENCIL = 0;
 auto D3D_BACK_BUF_FMT = D3DFMT_A8R8G8B8;
+auto zero = 0.0f;
+auto one_thousand = 1000.0f;
