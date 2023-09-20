@@ -1580,7 +1580,7 @@ void __cdecl init(int argc, char* argv[])
         else if (!strcmp("--pause", *argv))
         {
             //Prevent game from running to attach debugger
-            MessageBoxA(nullptr, "Pause requested", "BB2", 0);
+            MessageBoxA(nullptr, "Pause requested", PROJECT_NAME, 0);
             continue;
         }
         else if (!strcmp("--windowed", *argv))

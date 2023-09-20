@@ -67,6 +67,7 @@ workspace(project_name)
 
 		defines {
 			"LOADED_BIN=\"".. loaded_bin .. "\"",
+			"PROJECT_NAME=\"".. project_name .. "\""
 		}
 
 		syslibdirs {
