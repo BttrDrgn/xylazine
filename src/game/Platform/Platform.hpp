@@ -59,7 +59,7 @@ std::uint32_t bSleep(std::uint32_t dwMilliseconds);
 void* bMalloc(int a1, int a2);
 char* bStrNCpy(char* to, const char* from, int m);
 int bFileSize(char* filename);
-void bInitMemoryPool(int pool_num, int* mem, int mem_size, const char* debug_name);
+void bInitMemoryPool(int pool_num, void* mem, int mem_size, const char* debug_name);
 
 void InitPlatform();
 bool PlatformCDCheckBinDat(bool a1);

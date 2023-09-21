@@ -31,6 +31,7 @@
 #include "EAGL/EAGLInternal.hpp"
 #include "Unsorted/CarLoader.hpp"
 #include "Unsorted/QueuedFIle.hpp"
+#include "FEng/cFEng.hpp"
 #include "thunks.hpp"
 #include "variables.hpp"
 
@@ -1468,6 +1469,38 @@ void InitAnimSkelSlotPool()
         AnimSkelSlotPool = bNewSlotPool(40, 8, "Anim_CAnimSkeleton_SlotPool", 0);
         AnimSkelSlotPoolInitialized = 1;
     }
+}
+
+//DONE : 0x0050BA20
+void InitFEngMemoryPool()
+{
+    if (FEngMemoryPoolNumber)
+    {
+        pFEngMemoryPoolMemory = bMalloc(FEngMemoryPoolSize, 0);
+        bInitMemoryPool(FEngMemoryPoolNumber, pFEngMemoryPoolMemory, FEngMemoryPoolSize, "FEngMemoryPool");
+        bSetMemoryPoolDebugTracing(FEngMemoryPoolNumber, FEngMemoryPoolTracingEnabled != 0);
+    }
+}
+
+//DONE : 0x00537830
+void FEngInitSystem()
+{
+    InitFEngMemoryPool();
+    InitLoadingScreen();
+    InitLoadingTipsScreen();
+    InitLoadingControllerScreen();
+    InitChyron();
+    InitFrontendSounds();
+    sub_50CEB0();
+
+    cFEng* cfeng = new cFEng();
+    if (cfeng)
+    {
+        cFEng::pInstance = cfeng;
+        cFEng::pInstance->mFEng->unk_0[208] = 2; // FEngSetButtonWrapMode__F16FEButtonWrapMode Inlined
+    }
+
+    InitMemoryCard();
 }
 
 //DONE : 0x0057ED10

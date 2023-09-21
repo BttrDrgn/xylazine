@@ -330,10 +330,52 @@ void InitializeSoundDriver()
     call<void()>(0x004859B0)();
 }
 
-//THUNK : 0x00537830
-void FEngInitSystem()
+//THUNK : 0x0050CEB0
+void sub_50CEB0()
 {
-    call<void()>(0x00537830)();
+    call<void()>(0x0050CEB0)();
+}
+
+//THUNK : 0x0050CF40
+void InitFrontendSounds()
+{
+    call<void()>(0x0050CF40)();
+}
+
+//THUNK : 0x004AC920
+void InitChyron()
+{
+    call<void()>(0x004AC920)();
+}
+
+//THUNK : 0x004A8610
+void InitLoadingControllerScreen()
+{
+    call<void()>(0x004A8610)();
+}
+
+//THUNK : 0x004A83F0
+void InitLoadingTipsScreen()
+{
+    call<void()>(0x004A83F0)();
+}
+
+//THUNK : 0x004A83D0
+void InitLoadingScreen()
+{
+    call<void()>(0x004A83D0)();
+}
+
+//THUNK : 0x00440A80
+void bSetMemoryPoolDebugTracing(int pool_num, bool on_off)
+{
+    call<void(int, bool)>(0x00440A80)(pool_num, on_off);
+}
+
+//THUNK : 0x004D9990
+void InitMemoryCard()
+{
+    call<void()>(0x004D9990)();
 }
 
 //THUNK : 0x004FF680

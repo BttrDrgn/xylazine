@@ -222,7 +222,7 @@ void sub_43E5B0()
 }
 
 //THUNK : 0x00440330
-void bInitMemoryPool(int pool_num, int* mem, int mem_size, const char* debug_name)
+void bInitMemoryPool(int pool_num, void* mem, int mem_size, const char* debug_name)
 {
     call<void(int, void*, int, const char*)>(0x00440330)(pool_num, mem, mem_size, debug_name);
 }
