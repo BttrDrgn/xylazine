@@ -487,3 +487,28 @@ int __cdecl bFileSize(char* filename)
     }
     return result;
 }
+
+//DONE : 0x0043E000
+std::uint16_t* bStrCpy(std::uint16_t* a1, char* a2)
+{
+    char* v2; // edx
+    uint16_t v3; // cx
+    uint16_t* result; // eax
+    uint16_t* v5; // esi
+    uint16_t v6; // cx
+
+    v2 = a2;
+    v3 = *a2;
+    result = a1;
+    *a1 = v3;
+    if (v3)
+    {
+        v5 = a1;
+        do
+        {
+            v6 = *++v2;
+            *++v5 = v6;
+        } while (v6);
+    }
+    return result;
+}

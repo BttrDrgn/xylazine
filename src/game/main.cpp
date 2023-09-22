@@ -32,6 +32,8 @@
 #include "Unsorted/CarLoader.hpp"
 #include "Unsorted/QueuedFIle.hpp"
 #include "FEng/cFEng.hpp"
+#include "MemoryCard/MemoryCard.hpp"
+#include "MemoryCard/MemoryCardImp.hpp"
 #include "thunks.hpp"
 #include "variables.hpp"
 
@@ -881,9 +883,7 @@ void InitStandardModels()
 //DONE : 0x005B9B70
 void PCCreateD3DDevice()
 {
-    HRESULT results; // esi
-
-    results = D3D->CreateDevice(D3D_ADAPTER_DEFAULT, D3DDEVTYPE_HAL, PCHwnd, D3DCREATE_MIXED_VERTEXPROCESSING, &D3D_PP, &D3D_DEVICE);
+     HRESULT results = D3D->CreateDevice(D3D_ADAPTER_DEFAULT, D3DDEVTYPE_HAL, PCHwnd, D3DCREATE_MIXED_VERTEXPROCESSING, &D3D_PP, &D3D_DEVICE);
 
     if (results != D3D_OK)
     {
@@ -1480,6 +1480,30 @@ void InitFEngMemoryPool()
         bInitMemoryPool(FEngMemoryPoolNumber, pFEngMemoryPoolMemory, FEngMemoryPoolSize, "FEngMemoryPool");
         bSetMemoryPoolDebugTracing(FEngMemoryPoolNumber, FEngMemoryPoolTracingEnabled != 0);
     }
+}
+
+//DONE : 0x004A83D0
+void InitLoadingScreen()
+{
+    LoadingScreenPtr = bMalloc(0x4C, 0);
+}
+
+//DONE : 0x004A83F0
+void InitLoadingTipsScreen()
+{
+    LoadingTipsScreenPtr = bMalloc(92, 0);
+}
+
+//DONE : 0x004A8610
+void InitLoadingControllerScreen()
+{
+    LoadingControllerScreenPtr = bMalloc(84, 0);
+}
+
+//DONE : 0x004AC920
+void InitChyron()
+{
+    ChyronScreenPtr = bMalloc(96, 0);
 }
 
 //DONE : 0x00537830

@@ -45,7 +45,7 @@ void AdvanceWorldTime()
 //THUNK : 0x005EA2B0
 void World::UpdateWorldPaused()
 {
-	call<void(World*)>(0x005EA2B0)(this);
+	reinterpret_cast<void(__thiscall*)(World*)>(0x005EA2B0)(this);
 }
 
 //THUNK : 0x00609CE0
@@ -57,7 +57,7 @@ void World::DoTimestep(float a2)
 //THUNK : 0x005EA320
 int World::IsWorldPaused()
 {
-	return call<bool(World*)>(0x005EA320)(this);
+	return reinterpret_cast<int(__thiscall*)(World*)>(0x005EA320)(this);
 }
 
 //THUNK : 0x004EC570

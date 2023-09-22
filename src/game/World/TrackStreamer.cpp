@@ -17,11 +17,11 @@ void TrackStreamer::ServiceNonGameState()
 //THUNK : 0x005E6A70
 void TrackStreamer::HandleLoading()
 {
-	call<void(TrackStreamer*)>(0x005E6A70)(this);
+	reinterpret_cast<void(__thiscall*)(TrackStreamer*)>(0x005E6A70)(this);
 }
 
 //THUNK : 0x005DF810
 void TrackStreamer::CheckLoadingBar()
 {
-	call<void(TrackStreamer*)>(0x005DF810)(this);
+	reinterpret_cast<void(__thiscall*)(TrackStreamer*)>(0x005DF810)(this);
 }

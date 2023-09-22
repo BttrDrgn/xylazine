@@ -203,8 +203,16 @@ auto& dword_7FCA00 = *reinterpret_cast<eLanguages*>(0x007FCA00);
 auto& dword_8693C0 = *reinterpret_cast<int*>(0x008693C0);
 auto& flt_7A0E48 = *reinterpret_cast<float*>(0x007A0E48);
 auto& flt_784D28 = *reinterpret_cast<float*>(0x00784D28);
+auto& flt_784268 = *reinterpret_cast<float*>(0x00784268);
 auto& pVERSION = *reinterpret_cast<char*>(0x00870CB0);
 auto& pSIZE = *reinterpret_cast<char*>(0x00870CB4);
+auto& LoadingScreenPtr = *reinterpret_cast<void**>(0x0083647C);
+auto& LoadingTipsScreenPtr = *reinterpret_cast<void**>(0x0083647C);
+auto& LoadingControllerScreenPtr = *reinterpret_cast<void**>(0x00836484);
+auto& ChyronScreenPtr = *reinterpret_cast<void**>(0x008364D8);
+std::uint16_t gSaveType0[32] = {};
+std::uint16_t gSaveType1[32] = {};
+std::uint16_t gSaveType2[16] = {};
 
 
 //Local memory

@@ -342,40 +342,10 @@ void InitFrontendSounds()
     call<void()>(0x0050CF40)();
 }
 
-//THUNK : 0x004AC920
-void InitChyron()
-{
-    call<void()>(0x004AC920)();
-}
-
-//THUNK : 0x004A8610
-void InitLoadingControllerScreen()
-{
-    call<void()>(0x004A8610)();
-}
-
-//THUNK : 0x004A83F0
-void InitLoadingTipsScreen()
-{
-    call<void()>(0x004A83F0)();
-}
-
-//THUNK : 0x004A83D0
-void InitLoadingScreen()
-{
-    call<void()>(0x004A83D0)();
-}
-
 //THUNK : 0x00440A80
 void bSetMemoryPoolDebugTracing(int pool_num, bool on_off)
 {
     call<void(int, bool)>(0x00440A80)(pool_num, on_off);
-}
-
-//THUNK : 0x004D9990
-void InitMemoryCard()
-{
-    call<void()>(0x004D9990)();
 }
 
 //THUNK : 0x004FF680
@@ -418,4 +388,43 @@ void sub_58BEF0()
 void sub_5883E0(unsigned char a1)
 {
     call<void(char)>(0x005883E0)(a1);
+}
+
+//THUNK : 0x004D9990
+void InitMemoryCard()
+{
+    call<void()>(0x004D9990)();
+
+    //MemoryCard::s_pThis = new MemoryCard();
+
+    //MemoryCard* v0; // eax
+
+    //v0 = (MemoryCard*)j__malloc(0x6Cu);          // Inlined MemoryCard::MemoryCard
+    //if (v0)
+    //{
+    //    *(_DWORD*)&v0->unk_0[24] = 0;
+    //    v0->unk_0[4] = 0;
+    //    *(_DWORD*)&v0->unk_0[96] = 0;
+    //    *(_DWORD*)&v0->unk_0[92] = 0;
+    //    *(_DWORD*)&v0->unk_0[80] = 0;
+    //    v0->unk_0[5] = 0;
+    //    v0->unk_0[6] = 0;
+    //    v0->unk_0[8] = 0;
+    //    *(_DWORD*)&v0->unk_0[16] = 0;
+    //    v0->unk_0[9] = 0;
+    //    v0->unk_0[10] = 0;
+    //    v0->unk_0[11] = 0;
+    //    v0->unk_0[12] = 0;
+    //}
+    //else
+    //{
+    //    v0 = 0;
+    //}
+
+    //MemoryCard::s_pThis = v0;
+    //bStrCpy(gSaveType0, "Profile");
+    //bStrCpy(gSaveType1, "Thumbnail");
+    //bStrCpy(gSaveType2, "Image");
+    //bStrCpy(MemoryCardImp::gContentName, "NFSU2SD");
+    //MemoryCard::s_pThis->Init();
 }

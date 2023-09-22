@@ -44,10 +44,10 @@ workspace(project_name)
 	--end
 
 	filter "Release"
-		defines "DEBUG"
-		optimize "debug"
+		defines "NDEBUG"
+		optimize "full"
 		runtime "release"
-		symbols "on"
+		symbols "off"
 
 	filter "Debug"
 		defines "DEBUG"
