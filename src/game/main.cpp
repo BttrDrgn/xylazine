@@ -1625,7 +1625,7 @@ void _main(int argc, char* argv[])
     _exit(0);
 }
 
-int init(int argc, char* argv[])
+void init(int argc, char* argv[])
 {
     while (*++argv != 0)
     {
@@ -1658,5 +1658,4 @@ int init(int argc, char* argv[])
 #endif
 
     replace(0x00580E00, (std::uint32_t)_main);
-    return 0;
 }
