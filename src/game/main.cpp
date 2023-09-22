@@ -876,7 +876,7 @@ void InitStandardModels()
 {
     StandardCubeModel->Init(0xC7395A8);
 
-    unsigned int hashed = bStringHash("DEBUG_LOD_CUBE");
+    std::uint32_t hashed = bStringHash("DEBUG_LOD_CUBE");
     StandardDebugModel->Init(hashed);
 }
 
@@ -943,20 +943,20 @@ void sub_5BE690()
 void InitSlotPools()
 {
     eAnimTextureSlotPool = bNewSlotPool(4, 256, "eAnimTextureSlotPool", 0);
-    eAnimTextureSlotPool->NumAllocatedSlots &= 0xFFFFFFFD;
+    eAnimTextureSlotPool->Flags = SLOTPOOL_FLAG_ZERO_ALLOCATED_MEMORY;
 
     eTextureBucketSlotPool = bNewSlotPool(32, 1024, "eTextureBucketSlotPool", 0);
-    eTextureBucketSlotPool->NumAllocatedSlots &= 0xFFFFFFFD;
+    eTextureBucketSlotPool->Flags = SLOTPOOL_FLAG_ZERO_ALLOCATED_MEMORY;
 
     eDataRenderSlotPool = bNewSlotPool(44, 4096, "eMeshRender", 0);
-    eDataRenderSlotPool->NumAllocatedSlots &= 0xFFFFFFFD;
+    eDataRenderSlotPool->Flags = SLOTPOOL_FLAG_ZERO_ALLOCATED_MEMORY;
 }
 
 //DONE : 0x005BDFB0
 void InitStripSlotPool()
 {
     eStripSlotPool = bNewSlotPool(1540, 32, "eStripSlotPool", 0);
-    eStripSlotPool->NumAllocatedSlots &= 0xFFFFFFFD;
+    eStripSlotPool->Flags = SLOTPOOL_FLAG_ZERO_ALLOCATED_MEMORY;
 }
 
 //TODO : 0x005BB220
@@ -1227,9 +1227,10 @@ void eInitEnginePlat()
     _controlfp(3u, 0x8001Fu);
 
     TextureHeaderSlotPool = bNewSlotPool(4, 1024, "g_textureHeaderPool", 0);
-    TextureHeaderSlotPool->NumAllocatedSlots &= 0xFFFFFFFD;
+    TextureHeaderSlotPool->Flags = SLOTPOOL_FLAG_ZERO_ALLOCATED_MEMORY;
+
     VertexBufferHeaderPool = bNewSlotPool(4, 1024, "g_vertexBufferHeaderPool", 0);
-    VertexBufferHeaderPool->NumAllocatedSlots &= 0xFFFFFFFD;
+    VertexBufferHeaderPool->Flags = SLOTPOOL_FLAG_ZERO_ALLOCATED_MEMORY;
 
     WNDCLASSEX wc = {};
     wc.cbSize = sizeof(WNDCLASSEX);
@@ -1361,7 +1362,7 @@ void eInitEngine()
     CurrentBufferEnd = (int)(FrameMemoryBuffer + 409600);
     FrameMallocAllocNum = 0;
     ePolySlotPool = bNewSlotPool(128, 32, "ePolySlotPool", 0);
-    ePolySlotPool->NumAllocatedSlots &= 0xFFFFFFFD;
+    ePolySlotPool->Flags = SLOTPOOL_FLAG_ZERO_ALLOCATED_MEMORY;
     eInitModels();
     eInitTextures();
     eInitSolids();
@@ -1380,8 +1381,7 @@ void afxInit()
 {
     AcidActiveGroupSlotPool = bNewSlotPool(44, 400, "AcidActiveGroupSlotPool", 0);
     AcidEmitterSlotPool = bNewSlotPool(208, 250, "AcidEmitterSlotPool", 0);
-    AcidActiveGroupSlotPool->NumAllocatedSlots &= 0xFFFFFFFE;
-    AcidActiveGroupSlotPool->NumAllocatedSlots &= 0xFFFFFFFD;
+    AcidActiveGroupSlotPool->Flags = SLOTPOOL_FLAG_WARN_IF_OVERFLOW | SLOTPOOL_FLAG_ZERO_ALLOCATED_MEMORY;
 }
 
 //DONE : 0x00570F80
@@ -1625,7 +1625,7 @@ void _main(int argc, char* argv[])
     _exit(0);
 }
 
-void __cdecl init(int argc, char* argv[])
+int init(int argc, char* argv[])
 {
     while (*++argv != 0)
     {
@@ -1658,4 +1658,5 @@ void __cdecl init(int argc, char* argv[])
 #endif
 
     replace(0x00580E00, (std::uint32_t)_main);
+    return 0;
 }
