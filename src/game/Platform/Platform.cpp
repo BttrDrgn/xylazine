@@ -6,30 +6,7 @@
 #include "Unsorted/MemoryPool.hpp"
 #include "memory.hpp"
 #include "ida_defs.hpp"
-
-int& PlatformSkipDRM = *reinterpret_cast<int*>(0x0079DC60);
-int& dword_00800B98 = *reinterpret_cast<int*>(0x00800B98);
-int& dword_008709CC = *reinterpret_cast<int*>(0x008709CC);
-int& dword_008284E4 = *reinterpret_cast<int*>(0x008284E4);
-char& a_char = *reinterpret_cast<char*>(0x0080057F);
-char& byte_008AD918 = *reinterpret_cast<char*>(0x008AD918);
-char& byte_00814580 = *reinterpret_cast<char*>(0x00814580);
-char& byte_0081437C = *reinterpret_cast<char*>(0x0081437C);
-float& flt_00784550 = *reinterpret_cast<float*>(0x00784550);
-float& flt_00828028 = *reinterpret_cast<float*>(0x00828028);
-float& flt_00786D84 = *reinterpret_cast<float*>(0x00786D84);
-float& flt_00786D80 = *reinterpret_cast<float*>(0x00786D80);
-bool& ThreadInitalized = *reinterpret_cast<bool*>(0x008AD408);
-bool& MemoryInitialized = *reinterpret_cast<bool*>(0x00828510);
-std::uint32_t*& dword_00828154 = *reinterpret_cast<std::uint32_t**>(0x00828154);
-std::uint32_t*& dword_00828218 = *reinterpret_cast<std::uint32_t**>(0x00828218);
-HANDLE& TargetHandle = *reinterpret_cast<HANDLE*>(0x008AD410);
-_DWORD& g_thMain = *reinterpret_cast<std::uint32_t*>(0x008AD40C);
-_DWORD& dword_008145E0 = *reinterpret_cast<std::uint32_t*>(0x008145E0);
-_DWORD& unk_008145C4 = *reinterpret_cast<std::uint32_t*>(0x008145C4);
-_DWORD& unk_008145DC = *reinterpret_cast<std::uint32_t*>(0x008145DC);
-char& unk_0081447D = *reinterpret_cast<char*>(0x0081447D);
-auto& funcs_6FBE26 = *reinterpret_cast<int(__cdecl**)(int, int)>(0x0081457C);
+#include "variables.hpp"
 
 //DONE : 0x005B7B20
 bool PlatformIsProcessRunning(char* exe, int count)
@@ -122,9 +99,9 @@ void bFree(char* a1)
 }
 
 //THUNK : 0x00440E60
-void bPListInit(int expected_nodes)
+void bPListInit(int num_expected_bpnodes)
 {
-    call<int(int)>(0x00440E60)(expected_nodes);
+    call<int(int)>(0x00440E60)(num_expected_bpnodes);
 }
 
 //DONE : 0x0043DBB0
@@ -170,12 +147,12 @@ std::uint32_t bStringHash(const char* string)
 }
 
 //DONE : 0x0043BDF0
-LONGLONG bGetTicker()
+std::uint64_t bGetTicker()
 {
     LARGE_INTEGER PerformanceCount; // [esp+0h] [ebp-8h] BYREF
 
     QueryPerformanceCounter(&PerformanceCount);
-    return PerformanceCount.QuadPart >> dword_008284E4;
+    return PerformanceCount.QuadPart >> dword_8284E4;
 }
 
 //THUNK : 0x0057A1A0
@@ -200,23 +177,23 @@ void sub_43BD90()
 
     QueryPerformanceFrequency(&Frequency);
     v0 = 0;
-    dword_008284E4 = 0;
-    v1 = flt_00784550 / Frequency.QuadPart;
-    flt_00828028 = v1;
-    v2 = v1 * flt_00786D84;
-    if (v2 < flt_00786D80)
+    dword_8284E4 = 0;
+    v1 = flt_784550 / Frequency.QuadPart;
+    flt_828028 = v1;
+    v2 = v1 * flt_786D84;
+    if (v2 < flt_786D80)
     {
         do
         {
             ++v0;
             v2 = v2 + v2;
-        } while (v2 < flt_00786D80);
-        dword_008284E4 = v0;
+        } while (v2 < flt_786D80);
+        dword_8284E4 = v0;
     }
 }
 
 //DONE : 0x0043E5B0
-void sub_43E5B0()
+void bInitTicker()
 {
     sub_43BD90();
 }
@@ -273,29 +250,29 @@ void sub_6FBE2C()
     _DWORD* v2;
     char* v3;
 
-    if (!byte_008AD918)
+    if (!byte_8AD918)
     {
-        byte_008AD918 = 1;
-        v0 = &byte_00814580;
+        byte_8AD918 = 1;
+        v0 = &byte_814580;
         do
         {
             *v0 = 0;
             v0 += 12;
-        } while ((int)v0 < (int)&dword_008145E0);
-        v1 = &byte_0081437C;
+        } while ((int)v0 < (int)&dword_8145E0);
+        v1 = &byte_81437C;
         do
         {
             *v1 = 0;
             v1 += 8;
         } while ((int)v1 < (int)&funcs_6FBE26);
-        v2 = &unk_008145C4;
+        v2 = &unk_8145C4;
         do
         {
             *(v2 - 1) = 0;
             *v2 = 0;
             v2 += 3;
-        } while ((int)v2 < (int)&unk_008145DC);
-        v3 = &unk_0081447D;
+        } while ((int)v2 < (int)&unk_8145DC);
+        v3 = &unk_81447D;
         do
         {
             *(_DWORD*)(v3 - 5) = 0;
@@ -338,27 +315,18 @@ void sub_5B7A70()
 }
 
 //DONE : 0x005B7690
-void InitPlatform()
+void InitPlatform(int argc, char* argv[])
 {
-    int v0 = 0;
-    int v1 = 0;
-
-    sub_43E5B0();
+    bInitTicker();
     bMemoryInit();
     sub_6FBE2C();
     THREAD_init();
     TIMER_init(100);
     sub_5B7A70();
-
     if (!PlatformDRM())
-    {
         _exit(0);
-    }
-
-    if (v0 > 1 && !bStrCmp(*(char**)(v1 + 4), "/s"))
-    {
-        dword_008709CC = 1;
-    }
+    if (argc > 1 && !bStrCmp(argv[1], "/s"))
+        dword_8709CC = 1;
 }
 
 //THUNK : 0x005BF450
@@ -374,13 +342,13 @@ bool PlatformDRM()
 
     while (1)
     {
-        if (!dword_00800B98)
+        if (!dword_800B98)
         {
             v0 = PlatformCDCheckBinDat(a_char);
 
             if (!v0)
             {
-                dword_00800B98 = 1;
+                dword_800B98 = 1;
                 goto LABEL_6;
             }
 
@@ -393,11 +361,11 @@ bool PlatformDRM()
         {
             v0 = 1;
         LABEL_5:
-            dword_00800B98 = 0;
+            dword_800B98 = 0;
             goto LABEL_6;
         }
 
-        dword_00800B98 = 1;
+        dword_800B98 = 1;
 
     LABEL_6:
         if (PlatformSkipDRM || v0 || bFileExists("foobar"))

@@ -47,7 +47,7 @@ workspace(project_name)
 		defines "NDEBUG"
 		optimize "full"
 		runtime "release"
-		symbols "off"
+		symbols "on"
 
 	filter "Debug"
 		defines "DEBUG"

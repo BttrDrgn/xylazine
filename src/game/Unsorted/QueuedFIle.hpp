@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Platform/Platform.hpp"
+
 enum QueuedFileStatus
 {
 	QWAITING = 0x0,
@@ -8,7 +10,7 @@ enum QueuedFileStatus
 	QERROR = 0x3,
 };
 
-class QueuedFile
+class QueuedFile : bTList<QueuedFile>
 {
 private:
 	/* 0x08 */ void* pBuf;

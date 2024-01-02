@@ -97,7 +97,7 @@ void DetermineAllPlayersInputModes()
 }
 
 //THUNK : 0x0057EAD0
-void sub_57EAD0(float a1)
+void PrepareRealTimestep(float a1)
 {
     call<void(float)>(0x0057EAD0)(a1);
 }
@@ -112,12 +112,6 @@ void sub_5BA610()
 void ShutdownTheGame()
 {
     call<void()>(0x005CF960)();
-}
-
-//THUNK : 0x005F1390
-bool sub_5F1390(World* a1)
-{
-    return call<bool(World*)>(0x005F1390)(a1);
 }
 
 //THUNK : 0x005EA360
@@ -136,6 +130,12 @@ void sub_585B20()
 void sub_5877D0()
 {
     call<void()>(0x005877D0)();
+}
+
+//THUNK : 0x0043E5C0
+float bGetTickerDifference(std::uint32_t start_tick)
+{
+    return call<float(std::uint32_t)>(0x0043E5C0)(start_tick);
 }
 
 //THUNK : 0x0058EBC0
@@ -223,9 +223,9 @@ void ServiceQueuedFiles()
 }
 
 //THUNK : 0x00580D90
-int InitJoylog()
+void InitJoylog()
 {
-    return call<int()>(0x00580D90)();
+    call<void()>(0x00580D90)();
 }
 
 //THUNK : 0x0057ECB0
@@ -256,12 +256,6 @@ void eInitLightFlarePool()
 void eInitEnvMap()
 {
     call<void()>(0x005C33D0)();
-}
-
-//THUNK : 0x005BE5A0
-void sub_5BE5A0()
-{
-    call<void()>(0x005BE5A0)();
 }
 
 //THUNK : 0x005BEEA0

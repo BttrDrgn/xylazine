@@ -97,3 +97,9 @@ float World::GetTimestep(float a2)
 	//non matching
 	return flt_007A5730 * a2;
 }
+
+//THUNK : 0x005F1390
+void World::UpdateAIDebugRendering()
+{
+	reinterpret_cast<void(__thiscall*)(World*)>(0x005F1390)(this);
+}

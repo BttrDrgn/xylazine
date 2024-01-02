@@ -49,7 +49,7 @@ void BlockUntilMemoryFileLoaded(void* memory_file)
 {
     if (memory_file)
     {
-        while (QueuedFileNumReadsInProgress || (int*)WaitingQueuedFileList != &WaitingQueuedFileList)
+        while (QueuedFileNumReadsInProgress || WaitingQueuedFileList != (bTList<QueuedFile>*)&WaitingQueuedFileList)
         {
             ServiceQueuedFiles();
         }
@@ -267,7 +267,7 @@ void LoadGlobalAChunks()
 
     r = CreateResourceFile("GLOBAL\\GLOBALA.BUN", RESOURCE_FILE_GLOBAL, 0, 0, 0);
     r->BeginLoading(0, 0);
-
+        
     while (NumResourcesBeingLoaded)
     {
         ServiceResourceLoading();
@@ -280,8 +280,8 @@ void sub_5BCFA0()
     int v0;
 
     v0 = dword_00872EE0;
-    memset(&dword_00872ED8, 0, 0x3Cu);
-    dword_00872F0C = v0;
+    memset(&dword_872ED8, 0, 0x3Cu);
+    dword_872F0C = v0;
 }
 
 //DONE : 0x0057CB70
@@ -312,7 +312,7 @@ bFile* sub_57CB70(char* path, int a2, int a3)
 }
 
 //DONE : 0x0057D860
-void sub_57D860(void* a1)
+void ServiceJoylog()
 {
     _DWORD* v1;
     int v2;
@@ -333,7 +333,6 @@ void sub_57D860(void* a1)
             }
         }
         dword_008650CC = 0;
-        nullsub(a1);
     }
 }
 
@@ -354,7 +353,7 @@ float sub_43BE20(int a1, int a2)
     a2a = a2 - a1;
     if (a2a < 0)
         a2a = 0;
-    return (double)(1 << dword_008284E4) * (double)a2a * flt_00828028;
+    return (double)(1 << dword_8284E4) * (double)a2a * flt_828028;
 }
 
 //DONE : 0x005F00F0
@@ -439,79 +438,43 @@ void AdvanceRealTime()
     ++RealLoopCounter;
 }
 
-//DONE : 0x005811C0
-void __cdecl MainLoop()
+//TODO : 0x005811C0
+void MainLoop()
 {
-    void* v0;
-    int ticker;
-    uint32_t* v2;
-    uint32_t* v3;
-    uint32_t* v4;
-    uint32_t* v5;
-    int v6;
-    int v8;
-    int v9;
-    float v10;
-    float v11;
-    void* v12;
-    void* v13;
-    void* v14;
-    void* v15;
-    void* v16;
-    void* v17;
-    void* v18;
-    bool v19;
-    float a2;
+    unsigned int ticker; // edi
+    void(__cdecl * v2)(_DWORD); // eax
+    void(__cdecl * v3)(_DWORD); // esi
+    void(__cdecl * v4)(_DWORD); // eax
+    void(__cdecl * v5)(_DWORD); // esi
+    int v7; // [esp+0h] [ebp-1Ch]
+    int v8; // [esp+0h] [ebp-1Ch]
+    float v9; // [esp+0h] [ebp-1Ch]
+    float Timestep; // [esp+0h] [ebp-1Ch]
+    bool v12; // [esp+10h] [ebp-Ch]
+    float v13; // [esp+18h] [ebp-4h]
 
     ticker = bGetTicker();
     if (!ExitTheGameFlag)
     {
-        v12 = v0;
-        do
+        while(!ExitTheGameFlag)
         {
             MainLoopTimingStartTime = bGetTicker();
             sub_5BCFA0();
             last_frame_count_8872 = FrameCounter;
-            sub_57D860(v12);
-            v2 = SingleFunction_Inlined;
+            ServiceJoylog();
+            v2 = (void(__cdecl*)(_DWORD))SingleFunction_Inlined;
             if (SingleFunction_Inlined)
             {
-                do
+                while ((void(__cdecl*)(_DWORD))SingleFunction_Inlined != v3 && SingleFunction_Inlined)
                 {
                     v3 = v2;
-                    v8 = dword_00865488;
+                    v7 = dword_865488;
                     SingleFunction_Inlined = 0;
-                    dword_00865488 = 0;
+                    dword_865488 = 0;
                     SingleFunctionState_Inlined = 0;
-                    ((void(__cdecl*)(int))v2)(v8);
-                    v2 = SingleFunction_Inlined;
-                } while (SingleFunction_Inlined != v3 && SingleFunction_Inlined);
-            }
-
-            if (unused_MainLoop_func)               // Never assgiend to?
-                unused_MainLoop_func();
-
-            UpdateReplayUserInterface();
-
-            if (pRaceCoordinator)
-            {
-                pRaceCoordinator->ExecuteQueuedMessages();
-                pRaceCoordinator->RCSendMessage(3, 0);
-            }
-            v4 = SingleFunction_Inlined;
-
-            if (SingleFunction_Inlined)
-            {
-                do
-                {
-                    v5 = v4;
-                    v9 = dword_00865488;
-                    SingleFunction_Inlined = 0;
-                    dword_00865488 = 0;
-                    SingleFunctionState_Inlined = 0;
-                    ((void(__cdecl*)(int))v4)(v9);
-                    v4 = SingleFunction_Inlined;
-                } while (SingleFunction_Inlined != v5 && SingleFunction_Inlined);
+                    v2(v7);
+                    v2 = (void(__cdecl*)(_DWORD))SingleFunction_Inlined;
+                }
             }
 
             if (unused_MainLoop_func)
@@ -519,7 +482,32 @@ void __cdecl MainLoop()
                 unused_MainLoop_func();
             }
 
-            nullsub(v13);
+            UpdateReplayUserInterface();
+            if (pRaceCoordinator)
+            {
+                pRaceCoordinator->ExecuteQueuedMessages();
+                pRaceCoordinator->RCSendMessage(3u, 0);
+            }
+
+            v4 = (void(__cdecl*)(_DWORD))SingleFunction_Inlined;
+            if (SingleFunction_Inlined)
+            {
+                while ((void(__cdecl*)(_DWORD))SingleFunction_Inlined != v5 && SingleFunction_Inlined)
+                {
+                    v5 = v4;
+                    v8 = dword_865488;
+                    SingleFunction_Inlined = 0;
+                    dword_865488 = 0;
+                    SingleFunctionState_Inlined = 0;
+                    v4(v8);
+                    v4 = (void(__cdecl*)(_DWORD))SingleFunction_Inlined;
+                }
+            }
+
+            if (unused_MainLoop_func)
+            {
+                unused_MainLoop_func();
+            }
 
             if (GameFlowManagerState != 6)
             {
@@ -532,91 +520,70 @@ void __cdecl MainLoop()
             {
                 pReplayManager->DoFancyJoylogDebugging();
             }
-
-            v6 = bGetTicker();
-            v10 = sub_43BE20(ticker, v6) * flt_0078435C;
-            sub_57EAD0(v10);
+            bGetTicker();
+            v9 = bGetTickerDifference(ticker) * flt_78435C;
+            PrepareRealTimestep(v9);
             ticker = bGetTicker();
             TheDragCameraManager->Update();
-            v19 = 1;
-
-#if DEBUG
-            static char callback[32];
-            static char prev_callback[32];
-            std::strcpy(callback, GameFlowCallback);
-
-            if (std::strcmp(callback, prev_callback))
+            v12 = 1;
+            if (!TheOnlineManager->sub_5F00F0() && pRaceCoordinator && pRaceCoordinator->State == 6)
             {
-                println("%s", callback);
-            }
-
-            std::strcpy(prev_callback, callback);
-#endif
-
-            if (!sub_5F00F0(&dword_0089CF48) && pRaceCoordinator && pRaceCoordinator->State == 6)
-            {
-                WorldTimeElapsed = pCurrentWorld->GetTimestep(0.0);
+                WorldTimeElapsed = TheOnlineManager->sub_601A60(0.0);
             }
             else
             {
                 if (GameFlowManagerState == 6)
                 {
                     pCurrentWorld->UpdateWorldPaused();
-
                     if (pCurrentWorld->IsWorldPaused() || pRaceCoordinator->State == 1)
                     {
-                        WorldTimeElapsed = pCurrentWorld->GetTimestep(0.0);
+                        WorldTimeElapsed = TheOnlineManager->sub_601A60(0.0);
                         NeedToPrepareWorldTimestep = 0;
                         GenerateJoyEvents();
-                        sub_5F1390(pCurrentWorld);
+                        pCurrentWorld->UpdateAIDebugRendering();
                     }
                     else
                     {
                         pReplayManager->BeginFrame();
                         if (pReplayManager->unk_28)
                         {
-                            WorldTimeElapsed = pCurrentWorld->GetTimestep(0.0);
+                            WorldTimeElapsed = TheOnlineManager->sub_601A60(0.0);
                             NeedToPrepareWorldTimestep = 0;
                             GenerateJoyEvents();
                         }
                         else
                         {
-                            v11 = sub_5EA360(pCurrentWorld);
-                            a2 = pCurrentWorld->GetTimestep(v11);
-                            WorldTimeElapsed = a2;
+                            Timestep = pCurrentWorld->GetTimestep((int)pReplayManager);
+                            v13 = TheOnlineManager->sub_601A60(Timestep);
+                            WorldTimeElapsed = v13;
                             NeedToPrepareWorldTimestep = 0;
                             GenerateJoyEvents();
                             sub_5F0130();
-                            pCurrentWorld->DoTimestep(a2);
-                            v19 = 0;
+                            pCurrentWorld->DoTimestep(v13);
+                            v12 = 0;
                         }
                         pReplayManager->EndFrame();
                     }
-
                     if (TweakerStepWorld)
                     {
                         TweakerStepWorld = 0;
-                        nullsub(v14);                       // bRefreshTweaker
+                        _return();
                     }
-
                     goto LABEL_38;
                 }
                 WorldTimeElapsed = RealTimeElapsed;
             }
-
             NeedToPrepareWorldTimestep = 0;
             GenerateJoyEvents();
         LABEL_38:
-            nullsub(v14);                             // ServicePlatform
-            nullsub(v15);                             // ServiceScenery
-            sub_60AEE0(&dword_0089CF48, v19);
+            TheOnlineManager->Update(v12);
             FEngUpdate();
             UpdatePlayersNonGameState();
             UpdateCameraMovers();
 
             if (g_pEAXSound)
             {
-                g_pEAXSound->EAXSound::Update(RealTimeElapsed);
+                g_pEAXSound->Update(RealTimeElapsed);
             }
 
             UpdatePortRumblers();
@@ -627,36 +594,35 @@ void __cdecl MainLoop()
             sub_5CE850();
             sub_5CE8A0();
             eDisplayFrame();
-            nullsub(v16);
-            nullsub(v17);
+            // MaybePrintUnusedTextures__Fv
+            // MaybeDoMemoryProfile__Fv
             AdvanceRealTime();
             AdvanceWorldTime();
 
-            if (!v19)
+            if (!v12)
             {
                 FrameRateLoop();
             }
 
-            nullsub(v18);
             MainLoopTimingLimitFrameRate = bGetTicker();
             DisplayDebugScreenPrints();
-            if (PrintOneShotProfile)                     // Possibly gutted memory watchers from console versions
+            if (PrintOneShotProfile)
             {
                 PrintOneShotProfile = 0;
-                nullsub(v12);
+                _return();
             }
-            if (PrintAccumulatedProfile)                     // Unused
+            if (PrintAccumulatedProfile)
             {
                 PrintAccumulatedProfile = 0;
-                nullsub(v12);
+                _return();
             }
-            if (ClearAccumulatedProfile)                     // Unused
+            if (ClearAccumulatedProfile)
             {
                 ClearAccumulatedProfile = 0;
-                nullsub(v12);
+                _return();
             }
             sub_5CEC80();
-        } while (!ExitTheGameFlag);
+        }
     }
 }
 
@@ -822,6 +788,68 @@ void PCGetResolution(LONG* width, LONG* height)
     }
 }
 
+//DONE : 0x005BE5A0
+void sub_5BE5A0()
+{
+    int v0; // ebp
+    UINT v1; // ebx
+    int v2; // eax
+    int v3; // esi
+    int v4; // edi
+    DWORD DeviceId; // edx
+    DWORD VendorId; // ecx
+    bool v7; // cc
+    int v8[4]; // [esp+30h] [ebp-10h] BYREF
+
+    D3D->GetAdapterIdentifier(D3DADAPTER_DEFAULT, 0, &D3D_IDENTIFIER);
+    memset(&dword_86E880, 0, 0x18u);
+    v0 = D3D->GetAdapterModeCount(D3DADAPTER_DEFAULT, D3DFMT_X8R8G8B8);
+    v1 = 0;
+    if (v0 > 0)
+    {
+        while (1)
+        {
+            v2 = D3D->EnumAdapterModes(D3DADAPTER_DEFAULT, D3DFMT_X8R8G8B8, v1, (D3DDISPLAYMODE*)v8);
+            if (!v2)
+                break;
+        LABEL_14:
+            if ((int)++v1 >= v0)
+                return;
+        }
+        v3 = v8[1];
+        v4 = v8[0];
+        DeviceId = D3D_IDENTIFIER.DeviceId;
+        VendorId = D3D_IDENTIFIER.VendorId;
+        while (1)
+        {
+            if (VendorId == 4318)
+            {
+                if (DeviceId == 416 && v2 > 4)
+                    goto LABEL_14;
+                if (DeviceId != 496)
+                    goto LABEL_10;
+                v7 = v2 <= 16;
+            }
+            else
+            {
+                if (VendorId != 4098 && v2 > 16)
+                    goto LABEL_14;
+                if (VendorId != 6346)
+                    goto LABEL_10;
+                v7 = v2 <= 8;
+            }
+            if (!v7)
+                goto LABEL_14;
+        LABEL_10:
+            if (v4 == *(int*)((char*)&dword_800538 + v2) && v3 == *(int*)((char*)&dword_800550 + v2))
+                *(uint32_t**)((char*)&dword_86E880 + v2) = (uint32_t*)1;
+            v2 += 4;
+            if (v2 >= 24)
+                goto LABEL_14;
+        }
+    }
+}
+
 //DONE : 0x005B9A60
 void PCEnableD3DFeatures(int width, int height)
 {
@@ -883,11 +911,11 @@ void InitStandardModels()
 //DONE : 0x005B9B70
 void PCCreateD3DDevice()
 {
-     HRESULT results = D3D->CreateDevice(D3D_ADAPTER_DEFAULT, D3DDEVTYPE_HAL, PCHwnd, D3DCREATE_MIXED_VERTEXPROCESSING, &D3D_PP, &D3D_DEVICE);
+     HRESULT results = D3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, PCHwnd, D3DCREATE_MIXED_VERTEXPROCESSING, &D3D_PP, &D3D_DEVICE);
 
     if (results != D3D_OK)
     {
-        results = D3D->CreateDevice(D3D_ADAPTER_DEFAULT, D3DDEVTYPE_HAL, PCHwnd, 32, &D3D_PP, &D3D_DEVICE);
+        results = D3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, PCHwnd, 32, &D3D_PP, &D3D_DEVICE);
     }
 
     if (results == D3D_OK)
@@ -1290,11 +1318,11 @@ void eInitEnginePlat()
     GetClientRect(PCHwnd, &PCClientRect);
 
     D3DDISPLAYMODE d3d_display;
-    D3D->GetAdapterDisplayMode(D3D_ADAPTER_DEFAULT, &d3d_display);
+    D3D->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3d_display);
     D3D_BACK_BUF_FMT = D3DFMT_A8R8G8B8;
 
     D3D->CheckDeviceMultiSampleType(
-        D3D_ADAPTER_DEFAULT,
+        D3DADAPTER_DEFAULT,
         D3DDEVTYPE_HAL,
         D3DFMT_A8R8G8B8,
         0,
@@ -1371,7 +1399,7 @@ void eInitEngine()
     elInitPlat();
     eInitLightFlarePool();
     eInitEnvMap();
-    _return();                                    // eEnvEffectsInit
+    // eEnvEffectsInit
     InitNFSAnimEngine();
     eInitEnginePlat();
 }
@@ -1530,26 +1558,22 @@ void FEngInitSystem()
 //DONE : 0x0057ED10
 void InitializeEverything(int argc, char* argv[])
 {
-    void* v2 = 0; // ecx
-    void* v3  = 0; // ecx
-    void* v4 = 0; // ecx
-    char* v5 = 0; // edx
-    _DWORD* v6 = 0; // ecx
-    _DWORD* v7 = 0; // eax
+    int v2; // edx
+    char* v3; // edx
+    int v4; // ecx
+    std::uint32_t v5; // eax
 
-    InitPlatform();
+    InitPlatform(argc, argv);
     InitBigFiles();
     TheDemoDiscManager->Init(argc, argv);
     bPListInit(0x1400);
-    nullsub(v2);
     InitJoylog();
     SeedRandomNumber();
     InitQueuedFiles();
     emEventManagerInit();
-    TheOnlineManager->InitOnline(argc, argv);
+    TheOnlineManager->Initialize(argc, argv);
     eMathInit();
     eInitEngine();
-    nullsub(v3);
     afxInit();
     InitResourceLoader();
     InitJoystick();
@@ -1559,7 +1583,6 @@ void InitializeEverything(int argc, char* argv[])
     InitLocalization();
     LoadGlobalChunks();
     InitializeSoundLoad();
-    nullsub(v4);
     InitCarRender();
     InitStandardModels();
     InitFrontendDatabase();
@@ -1571,22 +1594,22 @@ void InitializeEverything(int argc, char* argv[])
     InitAnimPartSlotPool();
     InitAnimSkelSlotPool();
     InitDragCameraManager();
-    unused_init_0 = 1;
-    unused_init_1 = 0;
+    byte_86534C = 1;
+    dword_865354 = 0;
 
-    while (QueuedFileNumReadsInProgress || (int*)WaitingQueuedFileList != &WaitingQueuedFileList)// IsQueuedFileBusy Inlined
+    while (QueuedFileNumReadsInProgress || WaitingQueuedFileList != (bTList<QueuedFile>*) & WaitingQueuedFileList)
     {
         ServiceQueuedFiles();
     }
 
-    v5 = (char*)GlobalMemoryFile;
+    v3 = GlobalMemoryFile;
     if (GlobalMemoryFile)
     {
-        v6 = *(_DWORD**)GlobalMemoryFile;
-        v7 = (_DWORD*)*((_DWORD*)GlobalMemoryFile + 1);
-        *v7 = *(_DWORD*)GlobalMemoryFile;
-        v6[1] = *(_DWORD*)v7;
-        bFree(v5);
+        v4 = *(std::uint32_t*)GlobalMemoryFile;
+        v5 = *((std::uint32_t*)GlobalMemoryFile + 1);
+        *(std::uint32_t*)v5 = *(std::uint32_t*)GlobalMemoryFile;
+        *(std::uint32_t*)(v4 + 4) = v5;
+        bFree(v3);
     }
     GlobalMemoryFile = 0;
 }

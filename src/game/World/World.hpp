@@ -9,6 +9,7 @@ public:
 	void DoTimestep(float a2);
 	int IsWorldPaused();
 	float GetTimestep(float a2);
+	void UpdateAIDebugRendering();
 };
 
 extern World*& pCurrentWorld;
